@@ -1,0 +1,86 @@
+#* ========================================================================
+ * Copyright (c) 2010 The University of Washington
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================================
+ *#
+
+##
+## Template for registry 'not owner' page
+##
+
+#parse ( "crumbs.vm" )
+
+##
+## ----- Left side content -----
+##
+
+<div id="PageContent">
+<table cellpadding="3" >
+<tr>
+<td valign="top" height="400" width="10"> </td>
+<td valign="top" align="left">
+
+
+<table cellpadding="8" border="0">
+
+<tr><td height="6" width="20"></td></tr>
+<tr><td/><td class="head" nowrap="nowrap" colspan="2">Not an owner</td></tr>
+<tr><td/><td height="6" width="20"></td><td align="left">
+Our records do not show you as an owner of the DMS name "...".
+If you think...
+</td></tr>
+<tr><td/><td/><td class="mainlink" align="left"><a href="https://wiki.cac.washington.edu/">Learn more about the registry</a></td></tr>
+<tr><td height="6" width="20"></td></tr>
+
+</table>
+
+
+
+
+
+##
+## ----- right side extra text ----
+##
+
+</td>
+
+<td width="20"></td>
+<td valign="top" align="left" width="35%">
+
+<p height="100px">&nbsp;</p>
+
+
+<table class="helptext" cellpadding="4px">
+<tr><th align="left" colspan="2"></td></tr>
+<tr><td width="10px"/><td valign="top">
+   </td></tr>
+</table>
+
+
+
+##
+## ----- end -----
+##
+
+</td></tr></table>
+
+
+</div>
+
+## error and status messages
+<div id="requestStatusDiv" class="notice">&nbsp;
+</div>
+<div class="status">${status}
+</div>
+

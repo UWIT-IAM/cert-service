@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-2.5.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <context:annotation-config />
+    <context:property-placeholder location="${cs.properties:/WEB-INF/cs.properties}"/>
+
+  <!-- the application context definition for the springapp DispatcherServlet -->
+
+    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/WEB-INF/velocity"/>
+    </bean>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+        <property name="cache" value="false"></property>
+        <property name="prefix" value=""></property>
+        <property name="suffix" value=".vm"></property>
+     </bean>
+
+
+    <bean id="cabroker" class="edu.washington.iam.ws.cabroker.ws.CBController"  init-method="init">
+        <property name="uwCertificateAuthority" ref="uwCertificateAuthority"/>
+        <property name="icCertificateAuthority" ref="icCertificateAuthority"/>
+        <property name="cbRegistry" ref="cbRegistry"/>
+        <property name="dnsVerifier" ref="comboDnsVerifier" />
+
+       <property name="browserRootPath" value="${cs.browserRoot}"/>
+        <property name="certRootPath" value="${cs.certRoot}"/>
+        <property name="loginCookie" value="cscookie"/>
+        <property name="logoutUrl" value="${cs.uwLogout}"/>
+        <property name="cryptKey" value="${cs.cookieCryptKey}"/>
+        <property name="standardDSLoginPath" value="/login"/>  <!-- dont have ds -->
+        <property name="eppnName" value="eppn"/>
+
+        <property name="myEntityId" value="${cs.myEntityId}"/>
+
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages"/>
+    </bean>
+
+<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <property name="messageConverters">
+      <util:list id="beanList">
+         <ref bean="stringHttpMessageConverter"/>
+         <ref bean="sourceHttpMessageConverter"/>
+      </util:list>
+    </property>
+</bean>
+
+<bean id="stringHttpMessageConverter"
+        class="org.springframework.http.converter.StringHttpMessageConverter"/>
+
+<bean id="sourceHttpMessageConverter"
+        class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+
+
+</beans>

@@ -1,0 +1,54 @@
+--
+-- certificate broker 
+---
+
+create table certificate (
+  id serial not null,
+  dn text,
+  cn text,
+  ca integer,
+  caid integer,
+  status integer,
+  requested timestamp with time zone,
+  issued timestamp with time zone,
+  expires timestamp with time zone,
+  revokepass text,
+  renewid text
+);
+
+ALTER TABLE public.certificate OWNER TO ca;
+ALTER TABLE ONLY certificate ADD CONSTRAINT certificate_id_key UNIQUE (id);
+-- ALTER INDEX public.certificate_cbid_key OWNER TO ca;
+
+create table name (
+  id integer not null,
+  name text
+);
+ALTER TABLE public.name OWNER TO ca;
+CREATE INDEX name_id_key ON name USING btree (id);
+CREATE INDEX name_name_key ON name USING btree (name);
+
+create table owner (
+  id integer not null,
+  netid text
+);
+ALTER TABLE public.owner OWNER TO ca;
+CREATE INDEX owner_id_key ON owner USING btree (id);
+CREATE INDEX owner_owner_key ON owner USING btree (owner);
+
+create table history (
+  id integer not null,
+  event int,
+  event_time timestamp with time zone,
+  netid text
+);
+ALTER TABLE public.history OWNER TO ca;
+CREATE INDEX history_id_key ON history USING btree (id);
+
+
+
+create table db_ts (
+  cert_update_time bigint
+);
+ALTER TABLE public.db_ts OWNER TO ca;
+

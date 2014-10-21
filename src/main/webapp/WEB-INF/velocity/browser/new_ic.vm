@@ -1,0 +1,120 @@
+#* ========================================================================
+ * Copyright (c) 2011 The University of Washington
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================================
+ *#
+
+##
+## new incommon request 
+##
+
+## InCommon cert request
+<div id=newiccert" dojoType="dijit.layout.ContentPane" title="New InCommon Certificate"  $hide>
+
+<table class="iamtable">
+
+ <tr><th colspan="3">Request InCommon certificate</th></tr>
+ <tr><td title="The PEM text of yout certificate request">CSR (PEM)</td>
+    <td><input class="csrbox" label="iclabel" title="ictitle"  id="ic_csr" rows="6" cols="66" dojoType="dijit.form.SimpleTextarea" 
+          style="border: 1px inset #202020;">
+        </input></td>
+     <td></tr>
+    <tr><td></td><td>
+       <ul>
+         <li>Your CSR must specify: C=US, ST=WA.</li>
+         <li>The CN and any Alternate names in your CSR must be fully qualified DNS names.</li>
+         <li>You must be a registered owner of all DNS names in your request.</li>
+         <li>If your request is for other than "*.uw.edu" or "*.washington.edu" your domain must be pre-registered
+             with InCommon.  For more information see
+             <a href="https://wiki.cac.washington.edu/x/_9ObAg">Request a New Domain...</a>.</li>
+         <li>The key length of your CSR must be at least 2048.</li>
+       </ul>
+      </td>
+  </tr>
+
+ <tr><td "Other dns names for yout certificate">AltNames</td>
+    <td><textarea class="altbox" name="altname" id="ic_altname" cols="44" dojoType="dijit.form.Textarea"></textarea></td>
+    </tr><tr><td></td>
+      <td>
+        <ul>
+         <li>If you specify altNames here those in the CSR will be ignored.</li>
+         <li>Alternate names in your CSR must be fully qualified DNS names.</li>
+         <li>Separate names with commas or spaces.</li>
+        </ul>
+     </td>
+  </tr>
+
+ <tr>
+     <td>Type</td>
+         <td><select id="ic_cert_type" dojoType="dijit.form.FilteringSelect">
+          <option value="1795" selected="selected">SSL</option>
+          </select>
+         </td>
+     <td></td>
+     </tr>
+
+ <tr><td>Server</td>
+         <td><select id="ic_server_type" dojoType="dijit.form.FilteringSelect">
+          <option value="2" selected="selected">Apache</option>
+          <option value="13" >Microsoft IIS 1.x to 4.x</option>
+          <option value="14" >Microsoft IIS 5.x and later</option>
+          <option value="24" >Tomcat</option>
+          <option value="-1" >Other</option>
+          </select>
+         </td>
+     <td></td>
+      </tr>
+
+
+ <tr><td>Number of servers</td>
+         <td><select id="ic_num_server" dojoType="dijit.form.FilteringSelect">
+          <option value="1" selected="selected">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">more</option>
+          </select>
+         </td>
+     <td></td>
+      </tr>
+
+
+ <tr>
+      <td>Lifetime</td>
+         <td><select id="ic_lifetime" dojoType="dijit.form.FilteringSelect">
+          <option value="12" >1 year</option>
+          <option value="24" >2 years</option>
+          <option value="36" selected="selected">3 years</option>
+          </select>
+         </td>
+     <td></td>
+     </tr>
+
+</table>
+
+      <button id="icSubmitButton" dojoType="dijit.form.Button" type="button">
+       Submit request
+       <script type="dojo/method" event="onClick" args="evt">
+          submitNewRequest('ic');
+       </script>
+      </button>
+
+<div id="icResult"></div>
+
+</div>
+

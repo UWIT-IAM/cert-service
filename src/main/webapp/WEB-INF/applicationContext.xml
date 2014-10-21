@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+               http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <context:annotation-config />
+    <context:property-placeholder location="${cs.properties:/WEB-INF/cs.properties}"/>
+
+
+    <bean id="uwCertificateAuthority" init-method="init" destroy-method="cleanup" class="edu.washington.iam.ws.cabroker.ca.uw.UWCertificateAuthority">
+        <property name="webClient" ref="webClient"/>
+        <property name="uwcaUrl" value="${cs.uwca.url}"/>
+        <property name="cbRegistry" ref="cbRegistry"/>
+         <property name="iamMailSender" ref="iamMailSender"/>
+         <property name="certIssuedMessage" ref="certIssuedMessage"/>
+         <property name="certWatcherMessage" ref="certWatcherMessage"/>
+        <property name="dnsVerifier" ref="comboDnsVerifier" />
+        <property name="watchForActivity" value="${cs.uwca.watch}" />
+        <property name="refreshInterval" value="600" />
+    </bean>
+
+    <bean id="icCertificateAuthority" init-method="init" destroy-method="cleanup" class="edu.washington.iam.ws.cabroker.ca.incommon.ICCertificateAuthority">
+        <property name="webClient" ref="webClient"/>
+        <property name="soapUrl" value="${cs.ic.url}"/>
+        <property name="cbRegistry" ref="cbRegistry"/>
+         <property name="iamMailSender" ref="iamMailSender"/>
+         <property name="certIssuedMessage" ref="certIssuedMessage"/>
+         <property name="certWatcherMessage" ref="certWatcherMessage"/>
+        <property name="dnsVerifier" ref="comboDnsVerifier" />
+        <property name="watchForActivity" value="${cs.uwca.watch}" />
+        <property name="refreshInterval" value="1800" />
+    </bean>
+
+    <bean id="cbRegistry" init-method="init" class="edu.washington.iam.ws.cabroker.registry.CBRegistry">
+        <property name="serverName" value="${cs.db.host}" />
+        <property name="databaseName" value="${cs.db.name}" />
+        <property name="user" value="${cs.db.user}" />
+        <property name="password" value="${cs.db.password}" />
+    </bean>
+
+
+
+    <bean id="webClient" init-method="init" class="edu.washington.iam.tools.WebClient">
+        <property name="certFile" value="${cs.webclient.certFile}" />
+        <property name="keyFile" value="${cs.webclient.keyFile}" />
+        <property name="caFile" value="${cs.webclient.caFile}" />
+    </bean>
+
+    <bean id="netactDnsVerifier" init-method="init" class="edu.washington.iam.tools.netact.NetactDNSVerifier">
+        <property name="webClient" ref="webClient"/>
+        <property name="hostUrl" value="https://umbra.cac.washington.edu/daw/json/DNS/v1/UWNetidsFromFQDN/fqdn/"/>
+        <property name="domainUrl" value="https://umbra.cac.washington.edu/daw/json/Net-Contacts/v1/UWNetidsFromDomain/domain/"/>
+    </bean>
+    <bean id="gwsDnsVerifier" init-method="init" class="edu.washington.iam.tools.gws.GWSDNSVerifier">
+        <property name="webClient" ref="webClient"/>
+        <property name="gwsMemberBase" value="https://iam-ws.u.washington.edu:7443/group_sws/v2/group/u_weblogin_dns-owners_"/>
+    </bean>
+    <bean id="comboDnsVerifier" init-method="init" class="edu.washington.iam.tools.ComboDNSVerifier">
+        <property name="netVerifier" ref="netactDnsVerifier"/>
+        <property name="gwsVerifier" ref="gwsDnsVerifier"/>
+    </bean>
+
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+      <property name="host" value="${cs.smtp.host}"/>
+    </bean>
+    <bean id="iamMailSender" class="edu.washington.iam.tools.IamMailSender">
+      <property name="active" value="false"/>
+      <property name="mailSender" ref="mailSender"/>
+      <property name="doNotMail">
+        <list>
+           <value>netops</value>
+           <value>ken</value>
+           <value>fox2</value>
+        </list>
+      </property>
+    </bean>
+
+<bean id="certIssuedMessage" class="edu.washington.iam.tools.IamMailMessage">
+  <property name="from" value="${cs.smtp.from}"/>
+  <property name="subject" value="Certificate #CERTID issued for CERTCN"/>
+  <property name="replyTo" value="help@uw.edu"/>
+  <property name="text" value="Certificate #CERTID for CERTCN has been issued by ISSUER.
+NLNLCertificate Details:
+NLDETAIL
+NLNLYou may retrieve the certificate from the UW Certificate Service website:
+NL  https://iam-tools.u.washington.edu/cs/cert?id=CERTID
+NLNL** Tip **
+: UW Certificate Services determines ownership of certificate requests and sends email notifications based on contact information in DNS
+managed by UW-IT. You are receiving this message because you requested this certificate or because you're a registered DNS contact for the
+certificate's common name or one of its alternative names. Requests for changes to the contact list for your DNS name(s) should be emailed to
+netops@uw.edu. "/>
+</bean>
+
+<bean id="certWatcherMessage" class="edu.washington.iam.tools.IamMailMessage">
+  <property name="from" value="UW Certificate Services &lt;somebody@iam-tools.u.washington.edu&gt;"/>
+  <property name="to" value="${cs.smtp.issuedTo}"/>
+  <property name="subject" value="Certificate #CERTID issued for CERTCN"/>
+  <property name="replyTo" value="help@uw.edu"/>
+  <property name="text" value="A certificate for CERTCN (#CERTID) has been issued by ISSUER.
+NLNLThis message is advisory.  No action is required."/>
+</bean>
+
+
+
+
+</beans>

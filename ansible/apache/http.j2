@@ -1,0 +1,11 @@
+
+#-------------------------------------------
+#
+# apache port 80 configuration for cert service
+#
+#-------------------------------------------
+
+RewriteCond %{SERVER_PORT} 80
+RewriteCond %{REQUEST_URI} ^/cs*
+RewriteRule ^(.*)$ https://{{ cluster_name }}/$1 [R,L]
+

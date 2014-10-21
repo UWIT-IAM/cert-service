@@ -1,0 +1,72 @@
+/* certservice style addenda */
+
+/* this prevents many cert list items from wrapping */
+.dojoxGrid .dojoxGridCell {
+    word-wrap: normal;
+}
+
+
+/* sub banner is a right-justified, shaded bar under the banner */
+
+#rightsubbanner {
+    background-color: #f8f4f0;
+    color: #000000;
+    font-family: "Helvetica","Arial",sans-serif;
+    font-size: 10pt;
+    margin: 0px;
+    padding: 0px 20px 15px 5px;
+}
+
+#rightsubbanner .sublist {
+    display: inline;
+    list-style: none outside none;
+    font-size: 9pt;
+    margin-right: 4px;
+}
+
+#rightsubbanner .dijitTextBox {
+    width: 120px;
+}
+    
+#rightsubbanner .dijitButtonNode {
+    color: #000000;
+    font-size: 9pt;
+    font-style: italic;
+    background: transparent;
+    border: 2px;
+}
+    
+#rightsubbanner .sublist a {
+    color: #00006b;
+    font-style: normal;
+    text-decoration: none;
+    border-left: 1px solid #202020;
+    margin: 0px 0px 0px 6px;
+    padding: 0px 0px 0px 6px;
+}
+#rightsubbanner  .sublist  a:hover {
+    border-bottom: 1px solid #ffe4b4;
+}
+
+
+
+.pageHeader {
+    font-family: "Helvetica","Arial",sans-serif;
+    color: #202020;
+    font-size: 16px;
+    padding: 0 20px 2px 0;
+    padding: 0 0 1px 0;
+    border-bottom: 3px solid #dcd0d0;
+    width: 100%;
+    height: 24px;
+}
+
+/* leftside display */
+
+#leftsideIndex {
+    width:30%;
+    margin-top: 12px;
+    margin: 6px 0 0 0;
+}
+
+

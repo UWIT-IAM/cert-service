@@ -1,0 +1,362 @@
+#* ========================================================================
+ * Copyright (c) 2010-2014 The University of Washington
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================================
+ *#
+
+## cert service (main page)
+
+#parse ( 'definitions.vm' )
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>Certificate Service</title>
+
+<script>
+dojoConfig = {
+   "async": true,
+   "parseOnLoad": false,
+   "isDebug": true,
+   packages: [{
+      name: "iam",
+      location: "/js"
+   }]
+};
+</script>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" data-dojo-config="async: true"></script>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/Grid.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claro.css"/>
+
+<link rel="stylesheet" type="text/css" href="/css/iam-dojo-2.css"/>
+<link rel="stylesheet" type="text/css" href="/css/cs.css"/>
+
+## add ie7 css if needed
+<script>
+    require(["dojo/query",
+     "dojo/dom-construct",
+     "dojo/NodeList-manipulate"], function(query, dom) {
+         var ie=document.documentMode;
+         if (typeof ie != 'undefined' && ie<8) {
+            var link = dom.create("link", {
+                  type  : "text/css",
+                  rel   : "stylesheet",
+                  href  : '/css/iam-ie.css'
+               });
+            console.log('adding css for ie7');
+            query("head").append(link);
+         }
+    });
+</script>
+
+
+<script type="text/javascript" src="/js/iam-dojo.js"></script>
+<script type="text/javascript" src="/js/cs.js"></script>
+
+
+<script>
+    require(["dojo/dom",
+     "dojo/parser",
+     "dijit/MenuBar",
+     "dijit/Menu",
+     "dijit/MenuItem",
+     "dijit/Dialog",
+     "dijit/TooltipDialog",
+     "dijit/PopupMenuBarItem",
+     "dijit/form/Button",
+     "dijit/form/TextBox",
+     "dijit/form/Textarea",
+     "dijit/form/Select",
+     "dijit/form/SimpleTextarea",
+     "dijit/form/FilteringSelect",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer",
+     "dijit/layout/BorderContainer",
+     "dojox/grid/DataGrid",
+     "dojox/data/XmlStore",
+     "iam/Dialog",
+     "dojo/domReady!"], function(dom,parser) {
+       parser.parse();
+       onLoad();
+ });
+</script>
+
+<script>
+v_root='$root';
+v_vers='$vers';
+v_remoteUser='$remote_user';
+v_xsrf = '${xsrf}';
+</script>
+
+</head>
+
+<body class="claro" id="documentbody">
+
+## banner
+
+<div id="helpTimeout" data-dojo-type="dijit/Dialog" title="Time's up" $hide>
+ <div class="dijitDialogPaneContentArea">
+   <p aligh="center">Your session with the <br/>Certificate Service<br/> has expired. <br/>Refresh the page to continue working.</p>
+ </div>
+ <div class="dijitDialogPaneActionBar">
+    <button dojoType="dijit.form.Button" type="button" onClick="location.reload()">Refresh</button>
+ </div>
+</div>
+
+
+<div id="helpAbout" data-dojo-type="dijit/Dialog" title="About" $hide>
+  <div class="dijitDialogPaneContentArea">
+    Identity and Access Management
+    <br/>
+    Certificate Services 2.2.0
+    <br/>
+    Revision 10/21/2014
+    <p/>
+    <a href="https://wiki.cac.washington.edu/x/KDaoAQ">Learn more about certificate services</a>
+  </div>
+ <div class="dijitDialogPaneActionBar">
+    <button dojoType="dijit.form.Button" type="button" onClick="iam_hideTheDialog('helpAbout')">Close</button>
+ </div>
+</div>
+
+
+
+## incommon intermedaite cert
+<div id="incDialog" dojoType="dijit.Dialog" title="InCommon intermediate" $hide>
+     <div dojoType="dijit.layout.ContentPane" title="PEM">
+      <pre><tt>
+-----BEGIN CERTIFICATE-----
+MIIEwzCCA6ugAwIBAgIQf3HB06ImsNKxE/PmgWdkPjANBgkqhkiG9w0BAQUFADBv
+MQswCQYDVQQGEwJTRTEUMBIGA1UEChMLQWRkVHJ1c3QgQUIxJjAkBgNVBAsTHUFk
+ZFRydXN0IEV4dGVybmFsIFRUUCBOZXR3b3JrMSIwIAYDVQQDExlBZGRUcnVzdCBF
+eHRlcm5hbCBDQSBSb290MB4XDTEwMTIwNzAwMDAwMFoXDTIwMDUzMDEwNDgzOFow
+UTELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUludGVybmV0MjERMA8GA1UECxMISW5D
+b21tb24xGzAZBgNVBAMTEkluQ29tbW9uIFNlcnZlciBDQTCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBAJd8x8j+s+kgaqOkT46ONFYGs3psqhCbSGErNpBp
+4zQKR6e7e96qavvrgpWPyh1/r3WmqEzaIGdhGg2GwcrBh6+sTuTeYhsvnbGYr8YB
++xdw26wUWexvPzN/ppgL5OI4r/V/hW0OdASd9ieGx5uP53EqCPQDAkBjJH1AV49U
+4FR+thNIYfHezg69tvpNmLLZDY15puCqzQyRmqXfq3O7yhR4XEcpocrFup/H2mD3
+/+d/8tnaoS0PSRan0wCSz4pH2U341ZVm03T5gGMAT0yEFh+z9SQfoU7e6JXWsgsJ
+iyxrx1wvjGPJmctSsWJ7cwFif2Ns2Gig7mqojR8p89AYrK0CAwEAAaOCAXcwggFz
+MB8GA1UdIwQYMBaAFK29mHo0tCb3+sQmVO8DveAky1QaMB0GA1UdDgQWBBRIT1r6
+L0qaXuBQ82t7VaXe9b40XTAOBgNVHQ8BAf8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB
+/wIBADARBgNVHSAECjAIMAYGBFUdIAAwRAYDVR0fBD0wOzA5oDegNYYzaHR0cDov
+L2NybC51c2VydHJ1c3QuY29tL0FkZFRydXN0RXh0ZXJuYWxDQVJvb3QuY3JsMIGz
+BggrBgEFBQcBAQSBpjCBozA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1
+c3QuY29tL0FkZFRydXN0RXh0ZXJuYWxDQVJvb3QucDdjMDkGCCsGAQUFBzAChi1o
+dHRwOi8vY3J0LnVzZXJ0cnVzdC5jb20vQWRkVHJ1c3RVVE5TR0NDQS5jcnQwJQYI
+KwYBBQUHMAGGGWh0dHA6Ly9vY3NwLnVzZXJ0cnVzdC5jb20wDQYJKoZIhvcNAQEF
+BQADggEBAJNmIYB0RYVLwqvOMrAp/t3f1iRbvwNqb1A+DhuzDYijW+7EpBI7Vu8G
+f89/IZVWO0Ex/uGqk9KV85UNPEerylwmrT7x+Yw0bhG+9GfjAkn5pnx7ZCXdF0by
+UOPjCiE6SSTNxoRlaGdosEUtR5nNnKuGKRFy3NacNkN089SXnlag/l9AWNLV1358
+xY4asgRckmYOha0uBs7Io9jrFCeR3s8XMIFTtmYSrTfk9e+WXCAONumsYn0ZgYr1
+kGGmSavOPN/mymTugmU5RZUWukEGAJi6DFZh5MbGhgHPZqkiKQLWPc/EKo2Z3vsJ
+FJ4O0dXG14HdrSSrrAcF4h1ow3BmX9M=
+-----END CERTIFICATE-----
+      </tt></pre>
+     </div>
+</div>
+
+## error display
+<div id="errorPopup" dojoType="dijit.Dialog" title="Error" $hide">
+</div>
+
+## page
+
+## loader flash
+<div role="presentation" id="theflash" data-dojo-type="dijit.layout.ContentPane" style="width: 100%; height:100%; z-index: 1001; display:block;">
+<div style="width: 100%; height:50%">
+</div>
+<div align="center"><img src="/img/circle_loader.gif">
+</div>
+</div>
+
+## real page
+<div id="thepage" data-dojo-type="dijit/layout/ContentPane"  style="width: 100%; height: 100%;overflow:hidden; opacity:0; padding:0px;">
+
+## banner
+
+<h1 class="hidden">CERTIFICATE SERVICE</h1>
+
+<div id="topbanner" data-dojo-type="dijit.layout.ContentPane">
+<span class="topleft"><a href="https://wiki.cac.washington.edu/x/lR4">IDENTITY AND ACCESS MANAGEMENT</a></span>
+<ul class="topright">
+ <li>Logged in: $remote_user</li>
+ <li>|</li>
+ <li><a href="javascript:document.location='${root}${vers}/logout/';">logout</a></li>
+ <li>|</li>
+ <li><a href="https://wiki.cac.washington.edu/x/KDaoAQ" target="sphelp">HELP</a></li>
+</ul>
+</div>##topbanner
+
+
+<div id="banner" data-dojo-type="dijit.layout.ContentPane" >
+    <span id="title"><a tabindex=-1 href="javascript:showHomePage()">CERTIFICATE SERVICE</a></span>
+##     <span id="banner_notice"></span>
+    <ul id="ident">
+        <li></li>
+    </ul>
+</div>
+
+<h2 class="hidden">Actions</h2>
+    <ul id="rightsubbanner">
+      <li class="sublist">
+         Search
+          <input id="simplesearch" aria-label="search" data-dojo-type="dijit.form.TextBox" />
+      </li>
+      <li class="sublist">
+        <a aria-role="button" href="javascript:showMyCerts()">Favorites</a>
+      </li>
+      <li class="sublist">
+      </li>
+      <li class="sublist">
+        <a aria-role="button" href="javascript:showNewIC()">New InCommon certificate</a>
+      </li>
+      <li aria-role="button" class="sublist">
+        <a href="javascript:showNewUW()">New UWCA certificate</a>
+      </li>
+      <li aria-role="button" class="sublist">
+        <a href="javascript:showVerify()">Verify DNS ownership</a>
+      </li>
+    </ul>
+
+##  </div>
+
+## end banner
+
+## notice popup
+<div id="bannerNotice" data-dojo-type="dijit.layout.ContentPane" role="alert" $hide></div>
+
+<div id="titlebar" class="pageHeader" dojoType="dijit.layout.ContentPane" style="width:100%;margin-top:10px;" >
+<table width="100%"><tr>
+ <td id="searchTitlePane" align="left"></td>
+ <td id="selectTitlePane" align="right" style="padding-right:60px"></td>
+</tr></table>
+</div>
+
+
+
+<script>
+  function onLoad() {
+    require(["dojo/dom", "dijit/registry", "dojo/on", "dojo/domReady!"], function(dom, registry, on) {
+
+      iam_setLocalSizer(setPaneSizes);
+      iam_setPanelSizes();
+      var onresize = window.onresize;
+      dojo.connect( window, "onresize", iam_setPanelSizes);
+
+      on(dom.byId('simplesearch'), 'keyup', checkSimpleSearch);
+
+      // start with My Certs
+      showMyCerts();
+      ref_interval = setInterval(refreshCertsIfNeeded, 600000);
+      #if ($timeLeft)
+      to_interval = setInterval(function(){
+         dijitRegistry.byId('helpTimeout').show();
+         clearInterval(to_interval);
+         clearInterval(ref_interval);
+        }, ${timeLeft}000);
+      console.log('session timeout in  ${timeLeft}000 ms');
+      #end
+
+      // drop the cover sheet
+      dom.byId('theflash').style.display = 'none';
+      iam_fadeOutIn([],['thepage']);
+
+  });
+
+}
+
+</script>
+
+
+## page content
+
+
+<div id="cscontent"  dojoType="dijit.layout.BorderContainer" style="width:100%;height:100%" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true">
+
+<div id="leftsideIndex" dojoType="dijit.layout.ContentPane" style="width:50%;border:0px;" data-dojo-props="splitter:true, region:'leading'">
+<h3 class="hidden">Certificate list</h3>
+    <div class="searchresult" id="searchResult" dojoType="dijit.layout.ContentPane" style="overflow:auto">
+    </div>
+</div>
+
+<div id="certDisplay" dojoType="dijit.layout.ContentPane"   style="border:0px;" data-dojo-props="splitter:true, region:'center'">
+<h3 class="hidden">Detail</h3>
+
+<div id="certDisplayIntro" data-dojo-type="dijit.layout.ContentPane">
+<p>
+<h4>Need a certificate?</h4>
+<p>
+<ul>
+<p>
+   Certificate Service allows University of Washington DNS domain contacts to request and manage certificates for their 
+web servers and applications.
+<p>
+ <ul>
+ <li>
+  InCommon certificates are most efficacious for web servers. 
+ </li>
+ <li>
+   UWCA certificates are necessary for some server-to-server communications.
+ </li>
+ </ul>
+<p>
+  <a href="https://wiki.cac.washington.edu/x/KDaoAQ" target="cshelp" style="text-decoration:underline">Learn more about Certificate Services</a>.
+<p>
+</div>
+
+
+<div id="certDisplayDetail" data-dojo-type="dijit.layout.ContentPane" $hide>
+</div>
+
+#parse ( 'browser/new_ic.vm' )
+#parse ( 'browser/new_uw.vm' )
+
+</div>
+</div>
+
+## footer
+ 
+
+<div id="footer" data-dojo-type="dijit.layout.ContentPane"  style="position:absolute;bottom:0px">
+    <span id="footlogo"><a href="http:/www.uw.edu/" title="University of Washington">
+       &copy;&nbsp;2013&nbsp;UNIVERSITY OF WASHINGTON
+       </a></span>
+    <span id="footcenter">
+    <ul id="navigation">
+        <li><a href="mailto:help@uw.edu">CONTACT US</a></li>
+        <li>|</li>
+        <li><a href="http://www.washington.edu/online/privacy/">PRIVACY</a></li>
+        <li>|</li>
+        <li><a href="http://www.washington.edu/online/terms/">TERMS</a></li>
+    </ul>
+    </span>
+    <span id="footright">
+    <ul id="navigation">
+        <li><a href="javascript:iam_showTheDialog('helpAbout');">Cert service 2.2</a></li>
+    </ul>
+    </span>
+</div>
+
+
+</div>
+
+
+</body>
+</html>
+

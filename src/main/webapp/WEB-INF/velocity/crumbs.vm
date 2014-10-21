@@ -1,0 +1,128 @@
+#* ========================================================================
+ * Copyright (c) 2011 The University of Washington
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================================
+ *#
+
+##
+## Crumb Template for cert service
+##
+
+#if ($selname || $selowner)
+ #set ($showca = true)
+#else
+ #set ($showca = false)
+#end
+
+<script language="javascript">
+var seluw = #if ($seluw) 'y' #else 'n' #end ;
+var selic = #if ($selic) 'y' #else 'n' #end ;
+var selname = '$!{selname}';
+#if ($selowner)
+  var selowner = '$!{selowner}';
+#else
+  var selowner = '$!{remote_user}';
+#end
+
+function crumbSearch() {
+#if ($showca)
+  if ( document.getElementById('checkuw').checked ) seluw = 'y';
+  else seluw  ='n';
+  if ( document.getElementById('checkic').checked ) selic = 'y';
+  else selic  ='n';
+#else
+  seluw  ='y';
+  selic  ='y';
+#end
+  selname = document.getElementById('checkname').value.trim();
+  url = "${root}${vers}/search?owner=" + selowner + "&name=" + selname + "&seluw=" + seluw + "&selic=" + selic;
+  goTo(url);
+}
+
+</script>
+  
+
+ <form action="javascript:crumbSearch()">
+<table class="crumbtop" cellpadding="0" cellspacing="0" width="100%" id="crumbbox" onKeyPress="hotkey(event)">
+<tr><td colspan="99" height="0" width="100%"></td></tr>
+<tr align="left">
+ <td><table cellpadding="0" cellspacing="0" width="100%">
+     <tr>
+     <td class="crumb" align="left" valign="bottom" nowrap="nowrap">
+      <a class="" href="${root}${vers}">Home</a>
+        &nbsp;|&nbsp;
+      <a class="" href="${root}${vers}/req">New certificate</a>
+        &nbsp;|&nbsp;
+      <a class="" href="javascript:crumbSearch()">My certificates</a>
+        &nbsp;|&nbsp;
+      Search:<input type="text" id="checkname" size="20" value="">
+        &nbsp;|&nbsp;
+#if ($showca)
+      <input type="checkbox" id="checkuw" onClick="crumbSearch()" #if ($seluw) $checked #end>UWCA</a>
+        &nbsp;|&nbsp;
+      <input type="checkbox" id="checkic" onClick="crumbSearch()" #if ($selic) $checked #end>InCommon</a>
+        &nbsp;|&nbsp;
+#end
+<span id="requestStatusDiv" class="notice"></span>
+     </td>
+
+ <td align="center" class="crumblogout" valign="bottom" nowrap="nowrap">
+     <a class="" href="${root}${vers}/logout/">Log Out</a></td>
+
+
+    </tr></table>
+ </td></tr>
+</table>
+</form>
+
+<div class="infobox" name="popin" id="Hotkeys">
+<table width="100%">
+<tr><td align="center" class="groupindenttitle">Keyboard shortcuts</td>
+<td align="right" class="groupindenttitle">
+<a href="#cPref" onClick="document.getElementById('Hotkeys').style.display = 'none';"/><img src="/close.png" alt="close"/></a></td>
+</tr>
+</table>
+<table class="infoboxt">
+<tr><th>key</th><th align="left">action</th></tr>
+<tr><td align="center" class="infoboxk">I</td><td>Import certificate from CA</td></tr>
+<tr><td align="center" class="infoboxk">N</td><td>New certificate request view</td></tr>
+<tr><td align="center" class="infoboxk">M</td><td>My certificates</td></tr>
+<tr><td colspan="3"><hr></td></tr>
+<tr><td align="left" class="infoboxk"><i>Esc</i></td><td>close popins</td></tr>
+<tr><td align="left" class="infoboxk">?</td><td>this help text</td></tr>
+</table>
+</div>
+
+
+<div class="infobox" name="popin" id="Import">
+<table width="100%">
+<tr><td align="center" class="groupindenttitle">Import certificate from CA</td>
+<td align="right" class="groupindenttitle">
+<a href="#cPref" onClick="document.getElementById('Import').style.display = 'none';"/><img src="/close.png" alt="close"/></a></td>
+</tr>
+</table>
+<p>
+Select a CA and enter the CA's certificate ID.
+<p>
+<form method="get" action="${root}${vers}/cert">
+<input type="hidden" name="id" value="0"/>
+<select name="ca">
+   <option value="ic">InCommon</option>
+   <option value="uw">UWCA</option>
+</select>
+&nbsp;&nbsp;ID&nbsp;<input type="text" name="caid" length="10" value=""/>
+<p>
+<input type="submit" name=submit" value="Import"/>
+</form>
+</div>

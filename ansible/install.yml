@@ -1,0 +1,91 @@
+#
+# certservice install playbook
+#
+
+- hosts: "{{ target }}"
+  serial: 1
+  max_fail_percentage: 10
+
+  tasks:
+  - include_vars: "local_vars.yml"
+
+  - name: create properties yml file
+    local_action: property_to_yml cs {{ cluster_type }}
+
+  - include_vars: "properties.yml"
+
+  # copy cs properties file
+  # change restarts tomcat
+  - name: copy properties file
+    copy: "src=../cs.properties.{{ cluster_type }}  dest={{ cs_root }}/cs.properties group=iam-dev mode=664"
+    notify: restart tomcat
+ 
+  # configure tomcat startup properties
+  # change restarts tomcat
+  - name: tomcat startup params
+    daemon_config: "service=tomcat key=cs.properties value=file:{{ cs_root }}/cs.properties"
+    notify: restart tomcat
+
+  # update http and https config
+  # change restarts apache
+  - include: "tasks/apache_config.yml file=https prod=cs"
+  - include: "tasks/apache_config.yml file=http prod=cs"
+
+  # copy js files
+  - name: copy js files
+    copy: "src=../src/main/webapp/cs.js dest=/www/js/cs.js group=iam-dev mode=664"
+    when: non_standard_apache is not defined
+
+  # copy css files
+  - name: copy css files
+    copy: "src=../src/main/webapp/cs.css dest=/www/css/cs.css group=iam-dev mode=664"
+    when: non_standard_apache is not defined
+
+  # update certs and keys (used by cs)
+  # change restarts tomcat
+  - name: copy certs and keys
+    copy: "src={{ item.src }} dest={{ item.dest }} group=iam-dev mode=664 "
+    with_items:
+       - { src: '{{local_webclient_certFile}}', dest: '{{cs_webclient_certFile}}' }
+       - { src: '{{local_webclient_keyFile}}', dest: '{{cs_webclient_keyFile}}' }
+       - { src: '{{local_webclient_caFile}}', dest: '{{cs_webclient_caFile}}' }
+    when: have_local_certs is defined and item.src != ""
+    notify: restart tomcat
+
+  # update the cs.war file
+  - name: copy war
+    copy: "src=../target/cs.war dest=/data/webapps/cs.war group=iam-dev mode=664"
+    notify: restart tomcat
+
+  # run any handlers 
+  - meta: flush_handlers
+
+  # always run the test
+  - name: run service tests
+    local_action:  "command wget  -q -O /dev/null
+           --certificate={{local_webclient_certFile}} 
+           --private-key={{local_webclient_keyFile}} 
+           --ca-certificate={{local_webclient_caFile}} 
+           --no-check-certificate
+           https://{{inventory_hostname}}/cs/ws/status"
+    register: wget_result
+    changed_when: "wget_result.rc != 0"
+
+
+  # idle loadr if test fails
+  - name: idle loadr on test fail
+    command: /usr/bin/nohup /data/local/bin/ansible_command loadr idle
+    when: "wget_result.rc != 0"
+      
+  # fail if test fails
+  - name: fail on test fail
+    fail: msg="API service test fails after install"
+    when: "wget_result.rc != 0"
+      
+
+  # handlers mostly standard from iam-ansible
+
+  handlers:
+    - include: "tasks/iam_handlers.yml"
+
+

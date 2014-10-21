@@ -1,0 +1,75 @@
+#* ========================================================================
+ * Copyright (c) 2009-2011 The University of Washington
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================================
+ *#
+
+##
+## Template for login failed messages
+##
+
+#parse ( "crumbs.vm" )
+
+<script>
+v_sectionType = 'nologin';
+</script>
+
+##
+## ----- Left side content -----
+##
+
+#pageStart
+
+<p class="title" align="left">Login failed</p>
+
+<p/>
+
+Your login service did not provide enough information for the SP-Registry
+to authenticate you.  Please contact the administrators where you log in
+and ask them to send the attribute "<tt>eduPersonPrincipalName</tt>" (ePPN) to us.
+<p/>
+<table cellpadding="4">
+<tr><td>Your provider's id:</td><td><tt>$!{provider}</tt></td></tr>
+<tr><td>SP registry's id:</td><td><tt>$!{myEntityId}</tt></td></tr>
+<tr><td>Attribute:</td><td><tt>eduPersonPrincipalName</tt></td></tr>
+</table>
+
+#pageMiddle
+
+##
+## ----- right side extra text ----
+##
+<p height="100px">&nbsp;</p>
+
+
+<table class="helptext" cellpadding="4px">
+<tr><th align="left" colspan="99">Federated login</td></tr>
+<tr><td width="10px"/><td valign="top" colspan="2">Federated login is not
+  yet all that it will be.
+   </td></tr>
+
+<tr><td width="10px"/><td valign="top" colspan="2">Identity providers must
+  be configured to send the necessary information to service providers.
+   </td></tr>
+</table>
+
+
+#pageEnd
+
+## error and status messages
+<div id="requestStatusDiv" class="notice">&nbsp;
+</div>
+<div class="status">$!{status}
+</div>
+

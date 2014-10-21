@@ -1,0 +1,157 @@
+#* ========================================================================
+ * Copyright (c) 2011 The University of Washington
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================================
+ *#
+
+##
+## cert detail 
+##
+
+
+<div id="pemDialog" dojoType="dijit.Dialog" title="PEM" $hide>
+     <div dojoType="dijit.layout.ContentPane" title="PEM">
+      <pre><tt>
+$!{cert.pemCert}
+      </tt></pre>
+     </div>
+</div>
+
+#if ($cert.expires)
+  #set ( $displayExp = $dateFormatter.format($cert.expires) )
+#end
+
+<table class="iamtable">
+
+ <tr><td>CN</td><td><tt>$!{cert.cn}</tt></td></tr>
+ <tr><td valign="baseline">altnames</td><td>
+    #foreach ($an in $cert.names )
+      $an<br/>
+    #end
+     </td></tr>
+ <tr><td>status</td><td>$cert.statusText</td></tr>
+ <tr><td>no.</td><td>$!{cert.id}</td></tr>
+ <tr><td>DN</td><td>$!{cert.cleanDn}</td></tr>
+ <tr><td>Issuer</td><td>$!{cert.caName}</td></tr>
+ <tr><td nowrap="nowrap">Issuer's id</td><td>$!{cert.caId}</td></tr>
+
+#if ($cert.keySize>0)
+ <tr><td nowrap="nowrap">key length</td><td>$!{cert.keySize}</td></tr>
+#end
+#if ($cert.expires)
+ <tr><td>expires</td><td>$!{displayExp}</td></tr>
+#end
+#if ($cert.renewId)
+ <tr><td>renewId</td><td>$!{cert.renewId}</td></tr>
+#end
+
+#if ($cert.cn && !$cert.isOwner($remote_user))
+ <tr><td>favorites</td><td id="addLink"><a href="javascript:addFav()">add to Favorites</a></td></tr>
+#end
+#if ($cert.cn && $cert.isOwner($remote_user))
+ <tr><td>favorites</td><td id="remLink"><a href="javascript:remFav()">remove from Favorites</a></td></tr>
+#end
+
+## #if ($expdays && $expdays>0 && $expdays<100)
+#if ((!$cert.sha1) && $expdays && $expdays>(-30))
+ <tr><td>action</td><td><a href="javascript:submitRenewRequest('$cert.id')">renew this certificate</a>
+ #if ($expdays>0)
+    (expires in ${expdays} days)
+ #else
+    (expired)
+ #end
+</td></tr>
+#end
+
+</table>
+
+#if ($cert.status==2)
+<p>
+      <button id="pemButton" dojoType="dijit.form.Button" type="button">
+       Get PEM
+       <script type="dojo/method" event="onClick" args="evt">
+          dijit.byId('pemDialog').set('title', 'PEM for ${cert.cn}');
+          dijit.byId('pemDialog').show();
+       </script>
+      </button>
+      <button id="pkcsButton" dojoType="dijit.form.Button" type="button">
+       Get PKCS7 
+       <script type="dojo/method" event="onClick" args="evt">
+          window.location = "$root$vers/pkcs7/${cert.cn}.pkcs7?id=${cert.id}"
+       </script>
+      </button>
+#*
+   #if ($cert.ca==2)
+      <button id="incButton" dojoType="dijit.form.Button" type="button">
+       Get InCommon Intermediate PEM
+       <script type="dojo/method" event="onClick" args="evt">
+          dijit.byId('incDialog').show();
+       </script>
+      </button>
+   #end
+ *#
+
+
+ <p>
+ <h3>Notes</h3>
+  <p>
+ <ul>
+ #if ($cert.ca==1)
+  <li>Apache: cut and paste the PEM representation of your certificate to your <tt>SSLCertificateFile</tt>.</li>
+  <li>IIS: download the PKCS7 format.</li>
+ #end
+ #if ($cert.ca==2)
+  <li>Apache install:
+   <ul>
+    <li>Cut and paste the PEM certificate into your <tt>SSLCertificateFile</tt>.</li>
+    <li>Add the <a href="https://wiki.cac.washington.edu/x/_Nb5Aw">InCommon intermediate certificates</a> to your <tt>SSLCertificateChainFile</tt>.</li>
+   </ul>
+  </li>
+  <li>IIS install: download the PKCS7 format.</li>
+  <li>Downloads: Go to <a href="https://cert-manager.com/customer/InCommon/ssl?action=download&sslId=$!{cert.caId}">InCommon</a>
+      for more download options.</li>
+  </ul>
+ #end
+  <li>Revocation: If you believe the certificate's private key has been compromised send mail to <a href="mailto:iam-support@uw.edu">IAM Support</a> requesting the certificate be revoked.  Be sure to
+    specify the certificate number and CN and the reason for revocation.
+    You do not need to revoke the certificate if you don't want it any longer.  Just remove it from your favorites.</li>
+  </ul>
+
+#end  ## end if status==2
+
+
+#if ($cert.getHistory().size()>0)
+<p>
+<h3>History</h3>
+<p>
+<table cellpadding="2" border="0">
+#foreach ( $ev in $cert.getHistory() )
+  #set ( $displayEv = $dateFormatter.format($ev.eventTime) )
+  <tr><td>$displayEv</td><td>
+  #if ($ev.event==1)
+   Requested by 
+  #end
+  #if ($ev.event==2)
+   Renewed by 
+  #end
+  #if ($ev.event==3)
+   Revoked by
+  #end
+   <tt>$ev.netid</tt> </td></tr>
+#end
+</table>
+#end
+
+
+

@@ -1,0 +1,117 @@
+#* ========================================================================
+ * Copyright (c) 2011 The University of Washington
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================================
+ *#
+
+##
+## cert list template
+##
+
+#parse ( "crumbs.vm" )
+
+<script>
+v_sectionType = 'certs';
+
+
+function getCert(id) {
+  window.location = "$root$vers/cert?id=" + id;
+}
+
+</script>
+
+##
+## ----- Left side content -----
+##
+
+#pageStart
+
+<p class="title">
+#if ($seluw && $selic) 
+#elseif ($seluw) UWCA
+#elseif ($selic) InCommon
+#end
+
+#if ($selname && $selname!='')
+Certificates matching (*<tt>$selname</tt>*)
+#else
+ 'My certificates'
+#end
+
+</p>
+<ul>
+<li>Click on any certificate to refresh its information, to see more detail, or to retrieve the certificate.
+</ul>
+<p>
+
+<table cellpadding="2" border="2">
+
+<tr><th>no.</th><th>CA</th><th>CA&nbsp;id</th><th>CN (<i>altNames</i>)</th><th>status</th><th>expires</th></tr>
+
+#foreach ( $cert in $certs )
+ 
+#set ($cas='uw')
+#if ($cert.ca==2) #set ($cas='ic') #end
+
+#set ($crtcl="")
+#if ($cert.status==1) #set ($crtcl='reqip') #end
+#if ($cert.status==2) #set ($crtcl='reqok') #end
+#if ($cert.status==3) #set ($crtcl='reqip') #end
+#if ($cert.status==5) #set ($crtcl='reqex') #end
+
+#if ($cert.expires) 
+  #set ( $displayExp = $dateFormatter.format($cert.expires) )
+#else
+  #set ($displayExp='')
+#end
+
+ <tr class="${cas}${crtcl}" onClick="getCert('$!{cert.id}');" onMouseOver="this.style.cursor='pointer';">
+ ## <tr class="${cas}${crtcl}">
+   ## <td valign="baseline"><a href="javascript:getCert('$!{cert.id}');">$cert.id</a></td>
+   <td valign="baseline">$cert.id</td>
+   <td valign="baseline">$cert.caName</td>
+   <td valign="baseline">$cert.caId</td>
+   <td valign="baseline">$cert.cn
+    #set ( $ans = $cert.names.size() - 1 )
+    #if ( $ans>0 )
+    <i>
+    #foreach ($i in [1..$ans] )
+      <br>&nbsp;$cert.names.get($i)
+    #end
+    </i>
+    #end
+    </td>
+   <td valign="baseline">$!{cert.statusText}</td>
+   <td nowrap valign="baseline">$!{displayExp}</td>
+ </tr>
+#end
+
+</table>
+
+#pageMiddle
+
+##
+## ----- right side extra text ----
+##
+
+## skip right side
+
+#pageEnd
+
+## error and status messages
+<div id="requestStatusDiv" class="notice">&nbsp;
+</div>
+<div class="status">$!{status}
+</div>
+
