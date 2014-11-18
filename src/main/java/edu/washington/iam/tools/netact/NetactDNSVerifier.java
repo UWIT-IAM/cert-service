@@ -54,7 +54,10 @@ public class NetactDNSVerifier implements DNSVerifier {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    /* Netact rest service provides ownership list */
+    /* Netact rest service provides ownership list.
+       It is undocumented.  Seems that we have to check for host and domain whether  
+       or not the target is a host or a domain.
+       */
 
     private static String hostUrl = null;
     private static String domainUrl = null;
@@ -69,49 +72,47 @@ public class NetactDNSVerifier implements DNSVerifier {
      */
 
     public boolean isOwner(String dns, String id, List<String> owners) throws DNSVerifyException  {
-       return _isOwner(true, dns, id, owners);
-    }
-
-    private boolean _isOwner(boolean ishost, String dns, String id, List<String> owners) throws DNSVerifyException  {
 
        boolean isOwner = false;
        if (id==null) id = "";
        log.debug("looking for owner (" + id + ") in " + dns);
 
        try {
-          String url = (ishost? hostUrl:domainUrl) + dns;
-          String respString = webClient.simpleRestGet(url);
-          log.debug("got: " + respString);
+          String[] urls = { hostUrl, domainUrl };
+          for ( String url : urls ) {
+             String respString = webClient.simpleRestGet(url + dns);
+             log.debug("got: " + respString);
 
-          JsonParser parser = new JsonParser();
-          JsonElement ele = parser.parse(respString);
-          if (ele.isJsonObject()) {
-            JsonObject resp = ele.getAsJsonObject();
-            if (resp.get("table").isJsonObject()) {
-               JsonObject tbl = resp.getAsJsonObject("table");
-               if (tbl.get("row").isJsonArray()) {
-                  JsonArray ids = tbl.getAsJsonArray("row");
-                  for (int i = 0; i < ids.size(); i++) {
-                     JsonObject idi = ids.get(i).getAsJsonObject();
-                     JsonPrimitive oidu = idi.getAsJsonPrimitive("uwnetid");
-                     if (oidu==null) continue;
-                     String oid = oidu.getAsString();
-                     if (oid.equals(id)) {
-                        if (owners==null) return true;  // done
-                        isOwner = true;
-                     }
-                     if (owners!=null && !owners.contains(oid)) owners.add(oid);
-                  }
-               } else {
-                  String oid = tbl.getAsJsonObject("row").getAsJsonPrimitive("uwnetid").getAsString();
-                  if (oid.equals(id)) {
-                     if (owners==null) return true;  // done
-                     isOwner = true;
-                  }
-                  if (owners!=null && !owners.contains(oid)) owners.add(oid);
-               }
-            }
-         }
+             JsonParser parser = new JsonParser();
+             JsonElement ele = parser.parse(respString);
+             if (ele.isJsonObject()) {
+                JsonObject resp = ele.getAsJsonObject();
+                if (resp.get("table").isJsonObject()) {
+                   JsonObject tbl = resp.getAsJsonObject("table");
+                   if (tbl.get("row").isJsonArray()) {
+                      JsonArray ids = tbl.getAsJsonArray("row");
+                      for (int i = 0; i < ids.size(); i++) {
+                         JsonObject idi = ids.get(i).getAsJsonObject();
+                         JsonPrimitive oidu = idi.getAsJsonPrimitive("uwnetid");
+                         if (oidu==null) continue;
+                         String oid = oidu.getAsString();
+                         if (oid.equals(id)) {
+                            if (owners==null) return true;  // done
+                            isOwner = true;
+                         }
+                         if (owners!=null && !owners.contains(oid)) owners.add(oid);
+                      }
+                   } else {
+                      String oid = tbl.getAsJsonObject("row").getAsJsonPrimitive("uwnetid").getAsString();
+                      if (oid.equals(id)) {
+                         if (owners==null) return true;  // done
+                         isOwner = true;
+                      }
+                      if (owners!=null && !owners.contains(oid)) owners.add(oid);
+                   }
+                }
+             }
+          }
 
        } catch (Exception e) {
           log.debug("netact dns lookup error: " + e);
@@ -123,7 +124,7 @@ public class NetactDNSVerifier implements DNSVerifier {
        // log.debug("do substrings: " + dns);
        int p = dns.indexOf(".");
        if (p>0) { 
-          if (_isOwner(false, dns, id, owners)) {
+          if (isOwner(dns, id, owners)) {
              if (owners==null) return true;  // done
              isOwner = true;
           }
@@ -132,7 +133,7 @@ public class NetactDNSVerifier implements DNSVerifier {
     }
 
     public boolean isOwner(String dns, String id) throws DNSVerifyException  {
-        return _isOwner(true, dns, id, null);
+        return isOwner(dns, id, null);
     } 
 
     public void setWebClient(WebClient v) {

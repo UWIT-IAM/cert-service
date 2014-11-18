@@ -94,6 +94,8 @@ public final class PEMHelper {
             cert.dnC = (String)(cns.get(0));
             cns = dn.getValues(X509Name.ST);
             cert.dnST = (String)(cns.get(0));
+            cns = dn.getValues(X509Name.O);
+            cert.dnO = (String)(cns.get(0));
          } catch (Exception e) {
             log.debug("get cn error: " + e);
             throw new CBParseException("invalid CSR");

@@ -320,7 +320,7 @@ public class CBRegistry {
        log.debug("db put cert");
        Connection conn = null;
        Statement stmt = null;
-       int ret = 1;
+       int ret = 0;
        String emsg = null;
        try {
           conn = dataSource.getConnection();

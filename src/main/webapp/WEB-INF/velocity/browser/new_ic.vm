@@ -32,7 +32,7 @@
      <td></tr>
     <tr><td></td><td>
        <ul>
-         <li>Your CSR must specify: C=US, ST=WA.</li>
+         <li>Your CSR must specify: C=US, ST=WA, O=University&nbsp;of&nbsp;Washington.</li>
          <li>The CN and any Alternate names in your CSR must be fully qualified DNS names.</li>
          <li>You must be a registered owner of all DNS names in your request.</li>
          <li>If your request is for other than "*.uw.edu" or "*.washington.edu" your domain must be pre-registered

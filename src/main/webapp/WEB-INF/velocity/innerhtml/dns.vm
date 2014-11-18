@@ -18,11 +18,15 @@
 ## Template for dns verify html (not a page)
 ##
 
+#set ($sub = 'You are')
+#if ( $id )
+  #set ($sub = $id + 'is')
+#end
 <div>
   #if ( $owner )
-   <p>You are an owner of the domain and may order certificates for it.
+   <p>$sub an owner of the domain and may order certificates for it.
   #else
-    <p>You are NOT an owner of the domain.
+    <p>$sub NOT an owner of the domain.
   #end
 </div>
 

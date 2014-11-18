@@ -679,6 +679,7 @@ public class CBController {
            // do some quick validation
            if (!cert.dnC.equals("US")) throw new CBParseException("Country must be 'US'");
            if (!(cert.dnST.equals("WA")||cert.dnST.equals("Washington"))) throw new CBParseException("State must be 'WA' or 'Washington'");
+           if (!cert.dnO.equals("University of Washington")) throw new CBParseException("Organization must be 'University of Washington'");
            if (cert.keySize>0 && cert.keySize<2048 &&
                cert.ca==CBCertificate.IC_CA) throw new CBParseException("Key length must be 2048");
            verifyOwnership(cert, session.remoteUser);
@@ -837,8 +838,9 @@ public class CBController {
 
     @RequestMapping(value="/ajax/verify", method=RequestMethod.GET)
     public ModelAndView ajaxMember(@RequestParam(value="dns", required=true) String paramDns,
-               HttpServletResponse response,
-               HttpServletRequest request) {
+            @RequestParam(value="id", required=false) String optId,
+            HttpServletResponse response,
+            HttpServletRequest request) {
 
         int status = 404;
         CBSession session = processRequestInfo(request, response, false);
@@ -851,8 +853,13 @@ public class CBController {
 
         String dns = cleanString(paramDns);
         mv.addObject("dns", dns);
+        String tid = session.remoteUser;
+        if (optId!=null) {
+           tid = cleanString(optId);
+           mv.addObject("id", tid);
+        }
         try {
-           if (dnsVerifier.isOwner(dns, session.remoteUser, null) ) status = 200; // not found
+           if (dnsVerifier.isOwner(dns, tid, null) ) status = 200; // not found
         } catch (DNSVerifyException e) {
            mv.addObject("alert", "Could not verify ownership:\n" + e.getCause());
            response.setStatus(500);

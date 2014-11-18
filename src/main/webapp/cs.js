@@ -384,16 +384,16 @@ function assembleRequestXml(type) {
    if (type=='uw') cert_ca = '1';
    else cert_ca = '2';
 
-   var ct = dijit.byId(type + '_cert_type').attr('value');
-   var st = dijit.byId(type + '_server_type').attr('value');
-   var lt = dijit.byId(type + '_lifetime').attr('value');
-   var ns = dijit.byId(type + '_num_server').attr('value');
+   var ct = dijit.byId(type + '_cert_type').get('value');
+   var st = dijit.byId(type + '_server_type').get('value');
+   var lt = dijit.byId(type + '_lifetime').get('value');
+   var ns = dijit.byId(type + '_num_server').get('value');
 
    var xml = '<sslCertRequest certCa="' + cert_ca + '" certType="' + ct +
       '" serverType="' + st + '" lifetime="' + lt + '" numServer="' + ns + '">';
 
    // add the csr
-   csr = dijit.byId(type + '_csr').attr('value').trim();
+   csr = dijit.byId(type + '_csr').get('value').trim();
    if (csr=='') {
       iam_showTheNotice("You must provide a csr");
       return '';
@@ -409,10 +409,10 @@ function assembleRequestXml(type) {
 
    // add altnames
    if (type=='ic') {
-      altnames = dijit.byId(type + '_altname').attr('value').trim().split(/[\s,]+/);
+      altnames = dijit.byId(type + '_altname').get('value').trim().split(/[\s,]+/);
       xml = xml + '<altNames>';
       dojo.forEach(altnames, function(alt) {
-         if (alt.indexOf('&')||alt.indexOf('<')||alt.indexOf('>')) {
+         if (alt.indexOf('&')>=0||alt.indexOf('<')>=0||alt.indexOf('>')>=0) {
             iam_showTheNotice("Not valid altnames");
             return '';
          }
@@ -499,17 +499,24 @@ function checkDnsLookup(e)
 }
 
 function doDnsTest() {
-   name = dijit.byId('dnsname').attr('value');
+   name = dijit.byId('dnsname').get('value').trim();
    if (name=='') return true;
    dojo.byId('dnsResult').innerHTML = "verifying";
+   url = v_root + '/ajax/verify?dns=' + name;
+   sub = 'You are';
+   if ((s=name.indexOf(' '))>0) {
+      url = v_root + '/ajax/verify?dns=' + name.substring(s+1).trim() + '&id=' + name.substring(0,s).trim();
+      sub = name.substring(0,s).trim() + ' is';
+   }
+   console.log('dns lookup url: ' + url);
    dojo.xhrGet({
-     url: v_root + '/ajax/verify?dns=' + name,
+     url: url,
      handleAs: 'text',
      load: function(data, args) {
-        dojo.byId('dnsResult').innerHTML = "You are an owner of that domain.";
+        dojo.byId('dnsResult').innerHTML = sub + " an owner of that domain.";
       },
      error: function(data, args) {
-        if (args.xhr.status==404) dojo.byId('dnsResult').innerHTML = "You are not an owner of that domain.";
+        if (args.xhr.status==404) dojo.byId('dnsResult').innerHTML = sub + " not an owner of that domain.";
         else dojo.byId('dnsResult').innerHTML = "DNS verification failed with status: " + args.xhr.status==404;
       }
    });

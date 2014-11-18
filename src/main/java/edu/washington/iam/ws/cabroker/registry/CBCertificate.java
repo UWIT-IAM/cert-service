@@ -45,8 +45,9 @@ public class CBCertificate {
    public String pemCert;
    public String remHash;
    public CBRegistry registry;
-   public String dnC;  // country code
+   public String dnC;   // country code
    public String dnST;  // state 
+   public String dnO;   // org 
    public int keySize;
    public List<CBHistory> history;
    public String requestor;

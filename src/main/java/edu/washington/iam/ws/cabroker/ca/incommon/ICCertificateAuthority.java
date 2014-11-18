@@ -120,6 +120,17 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private static String getCollectStatusBody = "<tns:getCollectStatus xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
        "<id>ID</id></tns:getCollectStatus>";
 
+   // SHA-2 types
+   private String singleSSLType = "<certType><id>224</id><name>InCommon SSL (SHA-2)</name>" +
+        "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
+   
+   private String multiSSLType = "<certType><id>226</id><name>InCommon Multi Domain SSL (SHA-2)</name>" +
+        "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
+
+   private String wildcardSSLType = "<certType><id>227</id><name>InCommon Wildcard SSL Certificate (SHA-2)</name>" +
+        "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
+
+/** SHA-1 types 
    private String singleSSLType = "<certType><id>62</id><name>InCommon SSL</name>" +
         "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
 
@@ -129,16 +140,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private String wildcardSSLType = "<certType><id>63</id><name>InCommon Wildcard SSL Certificate</name>" + 
         "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
 
-/** old types ?
-   private String singleSSLType = "<certType><id>1798</id><name>InCommon SSL</name>" +
-        "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
-
-   private String multiSSLType = "<certType><id>1795</id><name>InCommon Multi Domain SSL</name>" + 
-        "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
-
-   private String wildcardSSLType = "<certType><id>1796</id><name>InCommon Wildcard SSL Certificate</name>" + 
-        "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
-  **/
+**/
 
    private static String enrollBody = "<tns:enroll xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
        "ORGANDSECRET" +

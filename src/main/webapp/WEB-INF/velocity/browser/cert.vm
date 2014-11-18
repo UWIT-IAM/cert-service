@@ -21,6 +21,12 @@
 
 
 <div id="pemDialog" dojoType="dijit.Dialog" title="PEM" $hide>
+#if ($cert.ca==2)
+<div style="color:#8b0000;">
+Note: InCommon created new intermediate certificates on 10/1/2014.
+<br>You may need to download and install the new ones on your system.
+</div>
+#end
      <div dojoType="dijit.layout.ContentPane" title="PEM">
       <pre><tt>
 $!{cert.pemCert}
@@ -52,9 +58,9 @@ $!{cert.pemCert}
 #if ($cert.expires)
  <tr><td>expires</td><td>$!{displayExp}</td></tr>
 #end
-#if ($cert.renewId)
- <tr><td>renewId</td><td>$!{cert.renewId}</td></tr>
-#end
+## #if ($cert.renewId)
+##  <tr><td>renewId</td><td>$!{cert.renewId}</td></tr>
+## #end
 
 #if ($cert.cn && !$cert.isOwner($remote_user))
  <tr><td>favorites</td><td id="addLink"><a href="javascript:addFav()">add to Favorites</a></td></tr>
@@ -64,7 +70,7 @@ $!{cert.pemCert}
 #end
 
 ## #if ($expdays && $expdays>0 && $expdays<100)
-#if ((!$cert.sha1) && $expdays && $expdays>(-30))
+#if (($cert.ca==1 || !$cert.sha1) && $expdays && $expdays>(-30))
  <tr><td>action</td><td><a href="javascript:submitRenewRequest('$cert.id')">renew this certificate</a>
  #if ($expdays>0)
     (expires in ${expdays} days)
@@ -91,17 +97,6 @@ $!{cert.pemCert}
           window.location = "$root$vers/pkcs7/${cert.cn}.pkcs7?id=${cert.id}"
        </script>
       </button>
-#*
-   #if ($cert.ca==2)
-      <button id="incButton" dojoType="dijit.form.Button" type="button">
-       Get InCommon Intermediate PEM
-       <script type="dojo/method" event="onClick" args="evt">
-          dijit.byId('incDialog').show();
-       </script>
-      </button>
-   #end
- *#
-
 
  <p>
  <h3>Notes</h3>
@@ -121,7 +116,6 @@ $!{cert.pemCert}
   <li>IIS install: download the PKCS7 format.</li>
   <li>Downloads: Go to <a href="https://cert-manager.com/customer/InCommon/ssl?action=download&sslId=$!{cert.caId}">InCommon</a>
       for more download options.</li>
-  </ul>
  #end
   <li>Revocation: If you believe the certificate's private key has been compromised send mail to <a href="mailto:iam-support@uw.edu">IAM Support</a> requesting the certificate be revoked.  Be sure to
     specify the certificate number and CN and the reason for revocation.
