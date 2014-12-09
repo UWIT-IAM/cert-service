@@ -998,11 +998,10 @@ public class CBController {
        boolean wc = false;
        for (int i=0; i<cert.names.size(); i++) {
           String cn = cert.names.get(i);
-          if (i==0 && cn.startsWith("*.")) {
+          if (cn.startsWith("*.")) {
              wc = true;
              cn = cn.substring(2);
           }
-          // if (wc && i>0) throw new NoPermissionException("mix of wildcard and altnames not allowed");
           if (cn.indexOf("*")>=0) throw new NoPermissionException("invalid wildcard");
           if (!cn.matches("([\\w]+[\\w\\-]*\\.)+[a-z]+")) throw new DNSVerifyException("CN or altName not valid");
           if (!dnsVerifier.isOwner(cn, user, i==0?cert.owners:null)) {
@@ -1017,7 +1016,6 @@ public class CBController {
              wc = true;
              cn = cn.substring(2);
           }
-          // if (wc) throw new NoPermissionException("mix of wildcard and altnames not allowed");
           if (cn.indexOf("*")>=0) throw new NoPermissionException("invalid wildcard");
           if (!cn.matches("([\\w]+[\\w\\-]*\\.)+[a-z]+")) throw new DNSVerifyException("CN or altName not valid");
           if (!dnsVerifier.isOwner(cn, user, null)) {

@@ -70,7 +70,7 @@
       <property name="host" value="${cs.smtp.host}"/>
     </bean>
     <bean id="iamMailSender" class="edu.washington.iam.tools.IamMailSender">
-      <property name="active" value="false"/>
+      <property name="active" value="true"/>
       <property name="mailSender" ref="mailSender"/>
       <property name="doNotMail">
         <list>

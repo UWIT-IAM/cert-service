@@ -9,25 +9,6 @@
 # ----------------------------------------------------------------------
 #
 
-# if login and user's session starter is on remote host, proxy there
-{% for host in cluster_hosts %}
-{% if host == ansible_nodename %}
-{% else %}
-{% set ck = host.split(".")[0] %} 
-# sessions on {{ host }}
-RewriteCond %{REQUEST_URI} /login-iam [OR]
-RewriteCond %{REQUEST_URI} /securelogin-iam
-RewriteCond %{HTTP_COOKIE} uwsphost={{ ck }}x
-RewriteRule ^/(.*)$ https://{{ host }}/$1 [P]
-
-{% endif %}
-{% endfor %}
-
-# else maybe set session to us
-RewriteCond %{REQUEST_URI} /Shibboleth.sso
-RewriteRule ^(.*)$  - [CO=uwsphost:{{ selfck }}x:{{ cluster_name }}:3:/:secure]
-
-
 ProxyPass /cs ajp://localhost:8009/cs
 
 # browser authn
