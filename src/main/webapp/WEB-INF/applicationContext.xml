@@ -49,6 +49,7 @@
         <property name="certFile" value="${cs.webclient.certFile}" />
         <property name="keyFile" value="${cs.webclient.keyFile}" />
         <property name="caFile" value="${cs.webclient.caFile}" />
+        <property name="queryTimeLimit" value="${cs.webclient.queryTimeLimit}" />
     </bean>
 
     <bean id="netactDnsVerifier" init-method="init" class="edu.washington.iam.tools.netact.NetactDNSVerifier">

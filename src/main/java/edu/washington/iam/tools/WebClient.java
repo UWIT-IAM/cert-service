@@ -90,7 +90,7 @@ public class WebClient {
     DefaultHttpClient soapclient = null;
     DefaultHttpClient restclient = null;
 
-    HttpParams httpParams = null;
+    HttpParams httpParams = null;  // configured atinit
 
     // 
     private String soapHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
@@ -117,7 +117,7 @@ public class WebClient {
        // log.debug("do soap: " + action);
        Element ele = null;
        // DefaultHttpClient soapclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, new BasicHttpParams());
-       if (soapclient==null) soapclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, new BasicHttpParams());
+       if (soapclient==null) soapclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, httpParams);
        // soapclient.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false); 
 
        try {
@@ -167,7 +167,7 @@ public class WebClient {
        // log.debug("do rest get");
        Element ele = null;
        // restclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, new BasicHttpParams());
-       if (restclient==null) restclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, new BasicHttpParams());
+       if (restclient==null) restclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, httpParams);
        try {
 
           // log.debug(" rest get, url: " + url);
@@ -218,7 +218,7 @@ public class WebClient {
 
        log.debug("do rest put");
        Element ele = null;
-       if (restclient==null) restclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, new BasicHttpParams());
+       if (restclient==null) restclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, httpParams);
        try {
 
           log.debug(" rest url: " + url);
@@ -255,12 +255,12 @@ public class WebClient {
 
        log.debug("simple rest get");
        try {
-          HttpParams httpParams = new BasicHttpParams();
-          HttpConnectionParams.setConnectionTimeout(httpParams, queryTimeLimit);
-          HttpConnectionParams.setSoTimeout(httpParams, queryTimeLimit);
+          // HttpParams httpParams = new BasicHttpParams();
+          // HttpConnectionParams.setConnectionTimeout(httpParams, queryTimeLimit);
+          // HttpConnectionParams.setSoTimeout(httpParams, queryTimeLimit);
           DefaultHttpClient httpclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, httpParams);
 
-          log.debug(" url: " + url);
+          // log.debug(" url: " + url);
 
           HttpGet httpget = new HttpGet(url);
           HttpResponse response = httpclient.execute(httpget);
@@ -273,7 +273,7 @@ public class WebClient {
              throw new WebClientException("httpclient post exception");
           }
           String resp = EntityUtils.toString(entity);
-          log.debug(" got: " + resp);
+          // log.debug(" got: " + resp);
           return (resp);
        } catch (IOException e) {
           log.error("io error " + e.getMessage());
