@@ -2,18 +2,6 @@
 
 # run the cert expiry notifier
 
-[[ -x /data/local/bin/iam_functions.sh ]] && {
-  . /data/local/bin/iam_functions.sh
-  ret=check_master iam-tools.u.washington.edu
-  [[ ret -eq 1 ]] && {
-    echo "not master"
-    exit 0
-  }
-}
-
-echo master
-exit 0
-
 cd /logs/cs
 
 date 

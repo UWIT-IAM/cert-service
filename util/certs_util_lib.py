@@ -1,12 +1,6 @@
 # library for the utilities
 
-# postgres DB classes
-import psycopg2
-
-# mailer classes
-import smtplib
-
-import subprocess
+import sys
 import dateutil.parser
 import string
 import time
@@ -14,6 +8,41 @@ import re
 import os.path
 from sys import exit
 import signal
+
+import psycopg2
+import smtplib
+
+
+import json
+import urllib3
+
+def _add_owners(owners, url):
+    try:
+        http = urllib3.PoolManager()
+        resp = http.request('GET', url)
+        jdata = json.loads(resp.data)
+        table = jdata['table']
+        if not 'row' in table:
+            return
+        row = table['row']
+        if type(row) is dict:
+            if row['uwnetid'] not in owners:
+                owners.append(row['uwnetid'] + '@uw.edu')
+        else:
+            for o in row:
+                if o['uwnetid'] not in owners:
+                    owners.append(o['uwnetid'] + '@uw.edu')
+    except Exception as e:
+        print e
+
+def _add_host_owners(owners, dns):
+    return _add_owners(owners, 'https://umbra.cac.washington.edu/daw/json/DNS/v1/UWNetidsFromFQDN/fqdn/%s' % dns)
+
+def _add_domain_owners(owners, dns):
+    return _add_owners(owners, 'https://umbra.cac.washington.edu/daw/json/Net-Contacts/v1/UWNetidsFromDomain/domain/%s' % dns)
+
+
+
 
 class CertificateHelper:
 
@@ -52,17 +81,17 @@ class CertificateHelper:
       return owners
 
 
-   def find_dns_owners(self, id):
-      owners = []
-      proc = subprocess.Popen(['/data/local/bin/all-dns-owners.sh', id], stdout=subprocess.PIPE)
-      while True:
-        line = proc.stdout.readline().strip()
-        if line != '':
-           if line.find('@')<0: owners.append(line + '@uw.edu')
-           else: owners.append(line)
-        else:
-           break
-      return owners
+   def find_dns_owners(self, dns):
+       owners = []
+       dots = string.split(dns, '.')
+       if len(dots) < 2:
+          return owners
+       for i in range(len(dots)-1):
+           if i == 0:
+               _add_host_owners(owners, dns)
+           else:
+               _add_domain_owners(owners, string.join(dots[i:], '.'))
+       return owners
     
    # send mail 
 
