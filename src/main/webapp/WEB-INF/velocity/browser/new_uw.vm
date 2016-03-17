@@ -32,9 +32,10 @@
      </tr><tr><td></td>
      <td>
        <ul>
-         <li>Your CSR must specify: C=US, ST=WA.</li>
+         <li>Your CSR must specify: C=US, ST=WA, O=University of Washington.</li>
          <li>The CN and any Alternate names in your CSR must be fully qualified DNS names.</li>
          <li>You must be a registered owner of all DNS names in your request.</li>
+		 <li>If your application requires a SHA-1 certificate (this is rare), please email <a href="mailto:help@uw.edu">help@uw.edu</a>.</li>
        </ul>
       </td>
   </tr>
