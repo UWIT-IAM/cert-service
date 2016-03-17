@@ -51,17 +51,28 @@ class CertificateHelper:
          
       return owners
 
-
-   def find_dns_owners(self, id):
-      owners = []
-      proc = subprocess.Popen(['/data/local/bin/all-dns-owners.sh', id], stdout=subprocess.PIPE)
-      while True:
-        line = proc.stdout.readline().strip()
-        if line != '':
-           if line.find('@')<0: owners.append(line + '@uw.edu')
-           else: owners.append(line)
+   def _add_owners(url):
+        global owners
+        # try:
+        f = urllib.urlopen(url)
+        data = f.read()
+        f.close()
+        jdata = json.loads(data)
+        row = jdata['table']['row']
+        if type(row) is dict:
+            if row['uwnetid'] not in owners:
+                owners.append(row['uwnetid'])
         else:
-           break
+            for o in row:
+                if o['uwnetid'] not in owners:
+                    owners.append(o['uwnetid'])
+        #except urllib3.exceptions.ConnectionError as e:
+        #sys.stderr.write()
+
+   def find_dns_owners(self, dns):
+      owners = []
+      _add_owners('https://umbra.cac.washington.edu/daw/json/DNS/v1/UWNetidsFromFQDN/fqdn/%s' % dns)
+      _add_owners('https://umbra.cac.washington.edu/daw/json/Net-Contacts/v1/UWNetidsFromDomain/domain/%s' % dns)
       return owners
     
    # send mail 

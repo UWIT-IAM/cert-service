@@ -75,9 +75,12 @@ public final class PEMHelper {
 
       try {
          PEMReader  pRd = new PEMReader(new StringReader(cert.pemRequest));
+         log.debug("pRd ok");
          PKCS10CertificationRequest request = (PKCS10CertificationRequest)pRd.readObject();
+         log.debug("req ok");
          if (request==null) throw new CBParseException("invalid CSR (request)");
          CertificationRequestInfo info = request.getCertificationRequestInfo();
+         log.debug("info ok");
          if (info==null) throw new CBParseException("invalid CSR (info)");
    
          X509Name dn = info.getSubject();

@@ -1,6 +1,8 @@
 # get a renewed certificate by renewid
 
 import sys
+import logging
+logging.basicConfig()
 
 # wsdl 
 from suds.client import Client

@@ -136,12 +136,14 @@ public class WebClient {
 
           if (response.getStatusLine().getStatusCode()>=400) {
               log.error("soap error: "  + response.getStatusLine().getStatusCode() + " = " + response.getStatusLine().getReasonPhrase());
+              response.close();
               throw new WebClientException("soap error");
           } 
           HttpEntity entity = response.getEntity();
 
           // null is error - should get something
           if (entity == null) {
+             response.close();
              throw new WebClientException("soapclient post exception");
           }
 
@@ -152,8 +154,10 @@ public class WebClient {
           ele = XMLHelper.getElementByName(doc.getDocumentElement(), "Body");
           if (ele == null) {
              log.error("no body element");
+             response.close();
              throw new WebClientException("no body element?");
           }
+          response.close();
        } catch (Exception e) {
           log.error("exception " + e);
        }
