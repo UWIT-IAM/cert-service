@@ -49,18 +49,19 @@ done
 [[ -z $target ]] && target=$value
 [[ -n "$target" ]] || usage
 
-# get iam-ansible location
+# get ansible-tools
 
-. ./install.properties
-[[ -z $iam_ansible/hosts ]] && {
-   echo "iam_ansible installation directory is missing from install.properties"
-   exit 1
+[[ -d ansible-tools ]] || {
+   echo "installing ansible-tools tools"
+   git clone ssh://git@git.s.uw.edu/iam/ansible-tools.git
+   quick="notneeded"
+}
+[[ -z $quick ]] && {
+      cd ansible-tools
+      git pull origin master
+      cd ..
 }
 
-[[ -L tasks ]] || {
-  echo "creating tasks link"
-  ln -s ${iam_ansible}/tasks .
-}
 export ANSIBLE_LIBRARY=${iam_ansible}/modules:/usr/share/ansible
 
 # make sure the war file was generated

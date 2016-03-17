@@ -5,6 +5,8 @@
 - hosts: "{{ target }}"
   serial: 1
   max_fail_percentage: 10
+  gather_facts: false
+
 
   tasks:
   - include_vars: "local_vars.yml"
@@ -18,6 +20,7 @@
   # change restarts tomcat
   - name: copy properties file
     copy: "src=../cs.properties.{{ cluster_type }}  dest={{ cs_root }}/cs.properties group=iam-dev mode=664"
+    when: have_local_properties is defined
     notify: restart tomcat
  
   # configure tomcat startup properties

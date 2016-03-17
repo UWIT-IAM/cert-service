@@ -11,16 +11,6 @@ On your build host:
 
    via git:  git clone https://github.com/ansible/ansible.git
 
-2) iam-ansible tools
-
-   git clone ssh://git@git.s.uw.edu/iam/ansibletools.git
-
-3) echo "iam_ansible=<your ansibletools install path>" > install.properties
-
-4) httest
-
-   see: http://htt.sourceforge.net/cgi-bin/cwiki/bin/public
-
 
 
 On the target:
@@ -46,10 +36,13 @@ On the target:
 Install
 --------
 
-1) Be sure there is a spreg.properties.xxx file for the type of host
-   you're installing.  xxx = prod | eval | dev
+2) Create local_vars.yml with:
+
+    have_local_properties: Fals
+    have_local_certs: False
+
    
-2) Make the package.  In base product directory: 
+2) Make the package.  In base product directory:  ( with a java 1.8 compiler )
 
    $ mvn clean package
 
