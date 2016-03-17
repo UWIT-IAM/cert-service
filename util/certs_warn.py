@@ -30,9 +30,9 @@ def warn_expiring(config):
    certs = certificateHelper.find_expiring()
    if len(certs)==0: print 'no warnings'
    for cert in certs:
-     owners = certificateHelper.find_dns_owners(cert[1])
-     msg = warn_text % (cert[1], cert[0], warn_days)
-     certificateHelper.send_mail(owners, 'Certificate expiration warning', msg)
+       owners = certificateHelper.find_dns_owners(cert[1])
+       msg = warn_text % (cert[1], cert[0], warn_days)
+       certificateHelper.send_mail(owners, 'Certificate expiration warning', msg)
 
 
 
