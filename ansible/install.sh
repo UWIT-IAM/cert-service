@@ -62,7 +62,7 @@ done
       cd ..
 }
 
-export ANSIBLE_LIBRARY=${iam_ansible}/modules:/usr/share/ansible
+export ANSIBLE_LIBRARY=ansible-tools/modules:/usr/share/ansible
 
 # make sure the war file was generated
 [[ -f ../target/cs.war ]] || {
@@ -84,5 +84,5 @@ export ANSIBLE_LIBRARY=${iam_ansible}/modules:/usr/share/ansible
 # run the installer 
 
 vars="target=${target} "
-ansible-playbook ${playbook} $verbose  -i ${iam_ansible}/hosts  --extra-vars "${vars}"
+ansible-playbook ${playbook} $verbose  -i ansible-tools/hosts  --extra-vars "${vars}"
 
