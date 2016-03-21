@@ -17,13 +17,6 @@
 
   - include_vars: "properties.yml"
 
-  # copy cs properties file
-  # change restarts tomcat
-  - name: copy properties file
-    copy: "src=../cs.properties.{{ cluster_type }}  dest={{ cs_root }}/cs.properties group=iam-dev mode=664"
-    when: have_local_properties is defined
-    notify: restart tomcat
- 
   # configure tomcat startup properties
   # change restarts tomcat
   - name: tomcat startup params
