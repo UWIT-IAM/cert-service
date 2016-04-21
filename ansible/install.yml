@@ -21,10 +21,16 @@
 
   - include_vars: "properties.yml"
 
+  - name: check for secrets file
+    stat: path={{ cs_root }}/cs-secrets.properties
+    register: cssecrets
+  - fail: msg="secrets file not preloaded on target"
+    when: not cssecrets.stat.exists
+
   # configure tomcat startup properties
   # change restarts tomcat
   - name: tomcat startup params
-    daemon_config: "service=tomcat key=cs.properties value=file:{{ cs_root }}/cs.properties"
+    daemon_config: "service=tomcat key=cs.properties.path value=file:{{ cs_root }}"
     notify: restart tomcat
 
   # copy cs properties file

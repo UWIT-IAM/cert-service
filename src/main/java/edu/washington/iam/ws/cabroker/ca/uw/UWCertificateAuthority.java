@@ -102,6 +102,7 @@ public class UWCertificateAuthority implements CertificateAuthority {
          Element certE = XMLHelper.getElementByName(resp, "pem");
          if (certE!=null) cert.pemCert = certE.getTextContent();
          if (cert.pemCert!=null) PEMHelper.parseCert(cert);
+         if (cert.status==CBCertificate.CERT_STATUS_EXPIRED) status = 7;  // got cert but it is expired
 
       } catch (NullPointerException e) {
          // due to invalid uwca response

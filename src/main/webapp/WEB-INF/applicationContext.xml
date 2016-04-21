@@ -9,7 +9,15 @@
                http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
     <context:annotation-config />
-    <context:property-placeholder location="${cs.properties:/WEB-INF/cs.properties}"/>
+    <bean id="csPropertiesPlaceholder"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>${cs.properties.path:/WEB-INF}/cs.properties</value>
+                <value>${cs.properties.path:/WEB-INF}/cs-secrets.properties</value>
+            </list>
+        </property>
+    </bean>
 
 
     <bean id="uwCertificateAuthority" init-method="init" destroy-method="cleanup" class="edu.washington.iam.ws.cabroker.ca.uw.UWCertificateAuthority">

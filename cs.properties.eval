@@ -1,0 +1,42 @@
+# EVAL certservice properties 
+#
+# cs will look for this file first in the cs directory
+# if that is undefined or not found this installed copy will be used
+#
+cs.version=2.2.2
+cs.versionDate=04/20/2016
+
+# location of the properties file
+cs.root=/data/local/cs
+
+# database parameters
+cs.db.host=iamdb11.cac.washington.edu
+cs.db.name=certservice
+cs.db.user=ca
+
+# remote ca parameters
+cs.uwca.url=https://certs.cac.washington.edu/rest/
+cs.uwca.watch=false
+
+cs.ic.url=https://cert-manager.com:443/ws/EPKIManagerSSL
+cs.ic.watch=false
+
+cs.webclient.certFile=/data/local/cs/urizen3.crt
+cs.webclient.keyFile=/data/local/cs/urizen3.key
+cs.webclient.caFile=/data/local/cs/uwca.crt
+cs.webclient.queryTimeLimit=120000
+
+# mail settings
+cs.smtp.host=appsubmit.cac.washington.edu
+cs.smtp.from=UW Certificate Services <somebody@iam-tools.u.washington.edu>
+cs.smtp.issuedTo=fox@uw.edu
+
+cs.uwLogout=https://idp.u.washington.edu/idp/logout
+cs.googleEntityId=https://idp.u.washington.edu/google
+
+cs.myEntityId=https://iamtools-test.u.washington.edu/shibboleth
+cs.csUrl=https://iam-tools-test.u.washington.edu/cs/
+cs.browserRoot=/cs
+cs.certRoot=/cs/ws
+
+
