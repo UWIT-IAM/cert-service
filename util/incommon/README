@@ -1,22 +1,29 @@
-These are some scripts we use at the University of Washington to
-manually access the incommon API---mostly for diagnostics.
+These are some scripts to manually access the incommon API---mostly for diagnostics.
 
 They assume a password file: /data/local/etc/comodo.pw
 which contains:
 
   <authData><customerLoginUri>InCommon</customerLoginUri><login>your_id</login><password>your_password</password></authData>
 
-Our app for user cert requests is a java web application.  Thus no cert request here.
 
-If you wanted to add one you might need another file:  /data/local/etc/comodo.os
-containing:
-  
-  <orgId>your_org</orgId><secretKey>your_secret</secretKey>
+Note you need the vertual env from ..
 
-and process it in a similar manner to the password file.
+getCertTypes.py
 
-Jim Fox
-Univ of Washington
+  lists authorized certificate types.
+  this is handy way to verify the password is correct
+
+getCert.py
+
+  gets a certificate
+  arg is the cert's Comodo's issuer id
 
 
+getStatus.py
 
+  gets the status of a request
+
+
+test_pw.sh
+
+  invokes getCertTypes.py in a convenient shell script

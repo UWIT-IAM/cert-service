@@ -2,9 +2,14 @@
 
 # run the cert expiry notifier
 
-cd /logs/cs
+. ./certlib.sh
+[[ `cron_status certs_warn.sh` == 'backup' ]] && {
+   echo "not master"
+   exit 0
+}
 
 date 
-export PYTHONPATH=/data/local/lib/python2.6/site-packages/
-/usr/local/bin/python2.6 /data/local/bin/certs_warn.pyc -c /data/local/etc/certs_warn.conf
+cd /data/local/cs/util
+. env/bin/activate
+python certs_warn.py
 

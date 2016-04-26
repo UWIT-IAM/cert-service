@@ -1,0 +1,68 @@
+#
+# certservice utils install playbook
+#
+
+- hosts: "{{ target }}"
+  serial: 1
+  max_fail_percentage: 10
+  gather_facts: true
+  remote_user: iamcert
+
+
+  tasks:
+
+  - name: show cluster
+    debug: msg="cluster type = {{ cluster_type }}"
+
+  - name: create properties yml file
+    local_action: "property_to_yml name=cs type={{ cluster_type }}"
+
+  - include_vars: "properties.yml"
+
+  - name: create util dir
+    file: "path={{ cs_root }}/{{item}} group=iam-dev mode=2755 state=directory"
+    with_items:
+      - util
+      - util/incommon
+
+  - name: copy files
+    copy: "src=../util/{{ item.name }} dest={{ cs_root }}/util/{{ item.name }} group=iam-dev mode={{ item.mode }}"
+    with_items:
+      - { name: 'requirements.txt', mode: '644' }
+      - { name: 'certs_warn.sh', mode: '755' }
+      - { name: 'trim_logs.sh', mode: '755' }
+      - { name: 'certs_warn.py', mode: '644' }
+      - { name: 'certs_util_lib.py', mode: '644' }
+      - { name: 'owners.py', mode: '644' }
+      - { name: 'settings.py', mode: '644' }
+      - { name: 'incommon/README', mode: '644' }
+      - { name: 'incommon/comodo_lib.py', mode: '644' }
+      - { name: 'incommon/getCertTypes.py', mode: '644' }
+      - { name: 'incommon/getCert.py', mode: '644' }
+      - { name: 'incommon/getRenewed.py', mode: '644' }
+      - { name: 'incommon/getStatus.py', mode: '644' }
+      - { name: 'incommon/test_pw.sh', mode: '755' }
+
+  - name: copy scripts
+    template: "src=../util/{{item}}.j2 dest={{ cs_root }}/util/{{item}} group=iam-dev mode=755"
+    with_items:
+      - certlib.sh
+
+  - name: setup python virtual env
+    pip: 
+       requirements: "{{cs_root}}/util/requirements.txt"
+       virtualenv_command: /usr/local/bin/virtualenv-2.7
+       virtualenv: "{{ cs_root }}/util/env"
+    environment:
+       PATH: /usr/local/pgversion/bin:{{ansible_env.PATH}}
+
+  - name: certs warn crontab
+    cron: name="certswarn" hour="01" minute="01" job="{{ cs_root }}/util/certs_warn.sh >> /dev/null 2>&1"
+
+  - name: log trim crontab
+    cron: name="logtrim" hour="00" minute="01" job="{{ cs_root }}/util/trim_logs.sh >> /dev/null 2>&1"
+
+  handlers:
+    - include: "tasks/iam_handlers.yml"
+
+

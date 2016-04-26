@@ -12,9 +12,9 @@ import signal
 import psycopg2
 import smtplib
 
-
 import json
 import urllib3
+urllib3.disable_warnings()
 
 def _add_owners(owners, url):
     try:
@@ -27,11 +27,11 @@ def _add_owners(owners, url):
         row = table['row']
         if type(row) is dict:
             if row['uwnetid'] not in owners:
-                owners.append(row['uwnetid'] + '@uw.edu')
+                owners.add(row['uwnetid'])
         else:
             for o in row:
                 if o['uwnetid'] not in owners:
-                    owners.append(o['uwnetid'] + '@uw.edu')
+                    owners.add(o['uwnetid'])
     except Exception as e:
         print e
 
@@ -46,17 +46,16 @@ def _add_domain_owners(owners, dns):
 
 class CertificateHelper:
 
-   def __init__(self, config):
+   def __init__(self, settings):
 
-      self.db_conn = psycopg2.connect(config['db_access'])
+      self.db_conn = psycopg2.connect(settings.db_access)
       self.netid_cursor = self.db_conn.cursor()
-      self.warn_days = config['warn_days']
+      self.warn_days = settings.warn_days
 
-
-      self.mail_server = config['mail_server']
-      self.mail_from_addr = config['mail_from_addr']
-      self.mail_reply_to = config['mail_reply_to']
-      self.mail_tip_text = config['mail_tip_text']
+      self.mail_server = settings.mail_server
+      self.mail_from_addr = settings.mail_from_addr
+      self.mail_reply_to = settings.mail_reply_to
+      self.mail_tip_text = settings.mail_tip_text
 
    # find soon to expire certs (30 days)
   
@@ -64,42 +63,17 @@ class CertificateHelper:
 
       self.netid_cursor.execute("select id,cn,expires from certificate where status=2 and date_trunc('day',expires) = date_trunc('day',now() + interval '%d days');" % (self.warn_days))
       certlist = self.netid_cursor.fetchall()
-      for cert in certlist:
-         print cert
-         
       return certlist
 
-   # find owners of a cert
-  
+   # find owners of a cert by favorites
    def find_fav_owners(self, id):
-
       self.netid_cursor.execute("select netid from owner where id='%s';" % (id))
       owners = self.netid_cursor.fetchall()
-      for owner in owners:
-         print owner
-         
       return owners
 
-   def _add_owners(url):
-        global owners
-        # try:
-        f = urllib.urlopen(url)
-        data = f.read()
-        f.close()
-        jdata = json.loads(data)
-        row = jdata['table']['row']
-        if type(row) is dict:
-            if row['uwnetid'] not in owners:
-                owners.append(row['uwnetid'])
-        else:
-            for o in row:
-                if o['uwnetid'] not in owners:
-                    owners.append(o['uwnetid'])
-        #except urllib3.exceptions.ConnectionError as e:
-        #sys.stderr.write()
-
+   # find owners of a dns
    def find_dns_owners(self, dns):
-       owners = []
+       owners = set()
        dots = string.split(dns, '.')
        if len(dots) < 2:
           return owners
@@ -111,7 +85,6 @@ class CertificateHelper:
        return owners
     
    # send mail 
-
    def send_mail(self, to_addrs, subject, message):
 
       mail_text = '\n'.join(['To: %s' % ','.join(to_addrs),

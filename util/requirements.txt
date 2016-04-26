@@ -1,0 +1,5 @@
+python-dateutil
+psycopg2
+urllib3
+six
+suds

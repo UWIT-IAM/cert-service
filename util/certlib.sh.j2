@@ -1,0 +1,19 @@
+# cert service common functions
+
+# crontab test if master
+function cron_status {
+   self=`hostname -s`
+   for peer in {% for h in cluster_hosts %}{{h}} {% endfor%}
+
+   do
+      [[ $peer < $self ]] && {
+         ct="`ssh $peer 'crontab -l' | egrep -e \"^[^#].*/$1\"`" 
+         [[ -n $ct ]] && {
+             echo "backup"
+             return
+         }
+      }
+   done
+   echo "master"
+}
+
