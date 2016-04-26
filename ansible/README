@@ -8,7 +8,6 @@ On your build host:
 1) Ansible
 
    see: http://docs.ansible.com/
-
    via git:  git clone https://github.com/ansible/ansible.git
 
 
@@ -22,34 +21,32 @@ On the target:
    see: (ansibletools)/host-tools
 
 
-2) Directories to be chgrp to 'pubcookie' and chmod g+w
+2) Directories to be chown to 'iamcert.iam-dev'
 
    /etc/daemons/tomcat
    /data/webapps
-   /data/conf
-   /data/conf/apache-http.d/
-   /data/conf/apache-https.d/
-   /logs/spreg (writeable by tomcat)
+   /data/conf/apache.conf.d/
+   /logs/cs/
+   /www/ (?)
+   /data/local/cs
+  
+3) configure tomcat to run as user=iamcert
 
 ---------------------
 
 Install
 --------
 
-2) Create local_vars.yml with:
-
-    have_local_properties: Fals
-    have_local_certs: False
-
    
-2) Make the package.  In base product directory:  ( with a java 1.8 compiler )
+1) Make the package.  In base product directory:  ( with a java 1.8 compiler )
 
    $ mvn clean package
 
-3) Run installer.  In this directory:
-
+2) To install the service: 
+   ( host_type = tools_dev | tools_eval | tools_prod )
+  
    $ ./install.sh <host_type>
 
-   host_type = tools_dev | tools_eval | tools_prod
+3) To install the utilities:
 
-
+   $ ./install.sh -p install-util.yml <host_type>
