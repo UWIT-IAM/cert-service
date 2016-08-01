@@ -8,7 +8,6 @@
   gather_facts: true
   remote_user: iamcert
 
-
   tasks:
 
   - name: show cluster
@@ -58,14 +57,18 @@
     environment:
        PATH: /usr/local/pgversion/bin:{{ansible_env.PATH}}
 
+  - name: set live crontab if prod
+    set_fact: "cron_status=''"
+    when: "'{{cluster_type}}' == 'prod'"
+
   - name: certs warn crontab
-    cron: name="certswarn" hour="01" minute="01" job="{{ cs_root }}/util/certs_warn.sh >> /dev/null 2>&1"
+    cron: name="certswarn" disabled={{cluster_type != 'prod'}} hour="01" minute="01" job="{{ cs_root }}/util/certs_warn.sh >> /dev/null 2>&1"
 
   - name: log trim crontab
     cron: name="logtrim" hour="00" minute="01" job="{{ cs_root }}/util/trim_logs.sh >> /dev/null 2>&1"
 
   - name: pw notify corntab
-    cron: name="pwnotify" hour="01" minute="01" day="01" month="1,3,5,7,9,11" job="{{ cs_root }}/util/pw-notify.sh >> /dev/null 2>&1"
+    cron: name="pwnotify" disabled={{cluster_type != 'prod'}} hour="01" minute="01" day="01" month="1,3,5,7,9,11" job="{{ cs_root }}/util/pw-notify.sh >> /dev/null 2>&1"
 
   handlers:
     - include: "tasks/iam_handlers.yml"

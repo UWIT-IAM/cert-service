@@ -2,18 +2,15 @@
 
 # notify interested parties that incommon password should be changed
 
+cd /data/local/cs/util
+
 . ./certlib.sh
-[[ `cron_status certs_warn.sh` == 'backup' ]] && {
-   echo "not master"
-   exit 0
-}
+exit_if_not_master
 
-/usr/sbin/sendmail -f "iam-tools" -t  << END
-To: iam-support@uw.edu
-Subject: Reset incommon password
+/usr/bin/Mail -s "Reset incommon password" iam-support@uw.edu  << END
 
-Reminder to change the InCommon certificate service password 
-before it expires.  If fox isn't around to do this someone else 
+Reminder to change the InCommon certificate service password
+before it expires.  If fox isn't around to do this someone else
 will have to.  Instructions in:
 
  iam-tools:/data/local/cs/util/README.password

@@ -1,6 +1,9 @@
 # cert service common functions
 
 # crontab test if master
+# looks for cron entry in more 'primary' hosts
+# $1 is script name
+
 function cron_status {
    self=`hostname -s`
    for peer in {% for h in cluster_hosts %}{{h}} {% endfor%}
@@ -15,5 +18,22 @@ function cron_status {
       }
    done
    echo "master"
+}
+
+# exit if caller script is not master
+function exit_if_not_master {
+  [[ `cron_status ${0##*/}` == 'backup' ]] && {
+    echo "not master"
+    exit 0
+  }
+}
+
+# message mailer
+# $1 = recipients
+# $2 = subject
+# $3 = message
+
+function send_mail {
+   echo "$3" | /usr/bin/Mail -s "$2" $1
 }
 

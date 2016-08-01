@@ -28,8 +28,7 @@ def warn_expiring():
    for cert in certs:
        owners = certificateHelper.find_dns_owners(cert[1])
        msg = warn_text % (cert[1], cert[0], warn_days)
-       # certificateHelper.send_mail(map(_uwmail, owners.difference(settings.nomail)), 'Certificate expiration warning', msg)
-       print('would send to {}'.format(map(_uwmail, owners.difference(settings.nomail)), 'Certificate expiration warning', msg))
+       certificateHelper.send_mail(map(_uwmail, owners.difference(settings.nomail)), 'Certificate expiration warning', msg)
 
 #  
 # ---------------- warn main -------------------------

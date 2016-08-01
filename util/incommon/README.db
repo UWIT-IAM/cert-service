@@ -1,0 +1,35 @@
+Manually adding a cert to the database.
+
+For example, Incommon get the request, but the connection died before we got a response.
+Symptom.  Cert in in the incommon manager, but not local
+
+id: auto
+dn: from log or request
+cn: from log or request
+ca: 2=incommon
+status: 1=issued
+caid: (from manager: Self-Enrollment Certificate ID)
+expires: (from manager: Expires)
+renewid: (from getCert.py)
+
+
+example: humanities.washington.edu, lots of antnames
+
+[ certificate ]
+# insert into certificate (dn,cn,ca,caid,status,expires,renewid) values ('C=US,ST=WA,L=Seattle,PostalCode=98195,STREET=4545 15th Ave NE,O=University of Washington,OU=UW-IT,CN=humanities.washington.edu','humanities.washington.edu',2,624878,1,'07/29/2017','lXiHrrND5RBilUBXhTUD');
+
+note the new id = 9870
+
+[ name ]
+# insert into name values (9870, 'humanities.washington.edu');
+... for each alt name
+
+
+[ owner ]
+# insert into owner values (9870, 'rwhite');
+... for each cn 'owner'
+
+[ history ]
+# insert into history values (9870, 1, '07/29/2017', 'morgen');
+
+

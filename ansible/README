@@ -45,8 +45,9 @@ Install
 2) To install the service: 
    ( host_type = tools_dev | tools_eval | tools_prod )
   
-   $ ./install.sh <host_type>
+   $ ./install.sh app <host_type>
 
 3) To install the utilities:
 
-   $ ./install.sh -p install-util.yml <host_type>
+   $ ./install.sh util <host_type>
+

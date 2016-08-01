@@ -6,7 +6,7 @@ which contains:
   <authData><customerLoginUri>InCommon</customerLoginUri><login>your_id</login><password>your_password</password></authData>
 
 
-Note you need the vertual env from ..
+Note you need the vertual env from .. ( if this is from an ansible install )
 
 getCertTypes.py
 
