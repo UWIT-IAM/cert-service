@@ -16,10 +16,10 @@ cs.db.user=ca
 
 # remote ca parameters
 cs.uwca.url=https://certs.cac.washington.edu/rest/
-cs.uwca.watch=false
+cs.uwca.watch=true
 
 cs.ic.url=https://cert-manager.com:443/ws/EPKIManagerSSL
-cs.ic.watch=false
+cs.ic.watch=true
 
 cs.webclient.certFile=/data/local/cs/urizen3.crt
 cs.webclient.keyFile=/data/local/cs/urizen3.key

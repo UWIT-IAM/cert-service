@@ -40,7 +40,7 @@
          <property name="certIssuedMessage" ref="certIssuedMessage"/>
          <property name="certWatcherMessage" ref="certWatcherMessage"/>
         <property name="dnsVerifier" ref="comboDnsVerifier" />
-        <property name="watchForActivity" value="${cs.uwca.watch}" />
+        <property name="watchForActivity" value="${cs.ic.watch}" />
         <property name="refreshInterval" value="1800" />
     </bean>
 
