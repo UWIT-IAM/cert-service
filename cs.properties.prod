@@ -24,7 +24,7 @@ cs.ic.watch=true
 cs.webclient.certFile=/data/local/cs/urizen3.crt
 cs.webclient.keyFile=/data/local/cs/urizen3.key
 cs.webclient.caFile=/data/local/cs/uwca.crt
-cs.webclient.queryTimeLimit=120000
+cs.webclient.queryTimeLimit=240000
 
 # mail settings
 cs.smtp.host=appsubmit.cac.washington.edu
