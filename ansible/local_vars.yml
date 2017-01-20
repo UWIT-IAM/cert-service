@@ -1,0 +1,10 @@
+#
+# local x315 settings
+#
+
+# have_local_certs: True
+
+local_webclient_certFile: /home/fox/certs/urizen3.crt
+local_webclient_keyFile: /home/fox/certs/urizen3.key
+# local_webclient_caFile: /home/fox/certs/uw-incommon-ca.crt
+local_webclient_caFile: /home/fox/certs/uwca.crt
