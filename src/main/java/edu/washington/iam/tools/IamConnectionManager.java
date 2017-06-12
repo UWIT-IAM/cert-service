@@ -79,7 +79,7 @@ public class IamConnectionManager {
       initManagers();
 
       try {
-         SSLContext ctx = SSLContext.getInstance("TLSv1.2");
+         SSLContext ctx = SSLContext.getInstance("TLS");
          ctx.init(keyManagers, trustManagers, null);
          socketFactory = new SSLSocketFactory(ctx);
          Scheme scheme = new Scheme(protocol, socketFactory, port);
