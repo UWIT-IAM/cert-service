@@ -36,11 +36,10 @@ def _add_owners(owners, url):
         print e
 
 def _add_host_owners(owners, dns):
-    return _add_owners(owners, 'https://umbra.cac.washington.edu/daw/json/DNS/v1/UWNetidsFromFQDN/fqdn/%s' % dns)
+    return _add_owners(owners, 'https://umbra.cac.washington.edu/daw/json/DNS_TOOLS/v1/UWNetidsFromFQDN/fqdn/%s' % dns)
 
 def _add_domain_owners(owners, dns):
-    return _add_owners(owners, 'https://umbra.cac.washington.edu/daw/json/Net-Contacts/v1/UWNetidsFromDomain/domain/%s' % dns)
-
+    return _add_owners(owners, 'https://umbra.cac.washington.edu/daw/json/DNS_TOOLS/v1/UWNetidsFromDomain/domain/%s' % dns)
 
 
 
@@ -74,6 +73,7 @@ class CertificateHelper:
    # find owners of a dns
    def find_dns_owners(self, dns):
        owners = set()
+       #owners.add('mattjm') # use to cc yourself on all notifications
        dots = string.split(dns, '.')
        if len(dots) < 2:
           return owners
