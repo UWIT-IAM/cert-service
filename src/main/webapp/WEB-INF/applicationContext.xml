@@ -62,8 +62,8 @@
 
     <bean id="netactDnsVerifier" init-method="init" class="edu.washington.iam.tools.netact.NetactDNSVerifier">
         <property name="webClient" ref="webClient"/>
-        <property name="hostUrl" value="https://umbra.cac.washington.edu/daw/json/DNS/v1/UWNetidsFromFQDN/fqdn/"/>
-        <property name="domainUrl" value="https://umbra.cac.washington.edu/daw/json/Net-Contacts/v1/UWNetidsFromDomain/domain/"/>
+        <property name="hostUrl" value="https://umbra.cac.washington.edu/daw/json/DNS_TOOLS/v1/UWNetidsFromFQDN/fqdn/"/>
+        <property name="domainUrl" value="https://umbra.cac.washington.edu/daw/json/DNS_TOOLS/v1/UWNetidsFromDomain/domain/"/>
     </bean>
     <bean id="gwsDnsVerifier" init-method="init" class="edu.washington.iam.tools.gws.GWSDNSVerifier">
         <property name="webClient" ref="webClient"/>

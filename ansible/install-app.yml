@@ -17,7 +17,7 @@
     when: local_vars_stat.stat.exists
 
   - name: create properties yml file
-    local_action: property_to_yml cs {{ cluster_type }}
+    local_action: property_to_yml name=cs type={{ cluster_type }}
 
   - include_vars: "properties.yml"
 
