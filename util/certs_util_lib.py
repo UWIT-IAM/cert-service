@@ -81,6 +81,7 @@ class CertificateHelper:
        for i in range(len(dots)-1):
            if i == 0:
                _add_host_owners(owners, dns)
+               _add_domain_owners(owners, dns)
            else:
                _add_domain_owners(owners, string.join(dots[i:], '.'))
        return owners
