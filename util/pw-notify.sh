@@ -9,11 +9,14 @@ exit_if_not_master
 
 /usr/bin/Mail -s "Reset incommon password" iam-support@uw.edu  << END
 
-Reminder to change the InCommon certificate service password
-before it expires.  If fox isn't around to do this someone else
-will have to.  Instructions in:
+Forward to IAM Certificate Services.
 
- iam-tools:/data/local/cs/util/README.password
+Reminder to change the InCommon certificate service password
+before it expires.  Matt, this means you.  Instructions in:
+
+   iam-tools:/data/local/cs/util/README.password
+
+on either iamtools11 or iamtools12.
 
 You have a week or so to get this done.
 
