@@ -36,14 +36,14 @@ dojoConfig = {
 };
 </script>
 
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" data-dojo-config="async: true"></script>
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css"/>
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css"/>
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/Grid.css"/>
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claro.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js" data-dojo-config="async: true"></script>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/resources/dojo.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/claro/claro.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojox/grid/resources/Grid.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojox/grid/resources/claroGrid.css"/>
 
-<link rel="stylesheet" type="text/css" href="/css/iam-dojo-2.css"/>
-<link rel="stylesheet" type="text/css" href="/css/cs.css"/>
+<link rel="stylesheet" type="text/css" href="/cs/css/iam-dojo-2.css"/>
+<link rel="stylesheet" type="text/css" href="/cs/css/cs.css"/>
 
 ## add ie7 css if needed
 <script>
@@ -64,8 +64,8 @@ dojoConfig = {
 </script>
 
 
-<script type="text/javascript" src="/js/iam-dojo.js"></script>
-<script type="text/javascript" src="/js/cs.js"></script>
+<script type="text/javascript" src="/cs/js/iam-dojo.js"></script>
+<script type="text/javascript" src="/cs/js/cs.js"></script>
 
 
 <script>
@@ -145,7 +145,7 @@ v_xsrf = '${xsrf}';
 <div role="presentation" id="theflash" data-dojo-type="dijit.layout.ContentPane" style="width: 100%; height:100%; z-index: 1001; display:block;">
 <div style="width: 100%; height:50%">
 </div>
-<div align="center"><img src="/img/circle_loader.gif">
+<div align="center"><img src="/cs/img/circle_loader.gif">
 </div>
 </div>
 

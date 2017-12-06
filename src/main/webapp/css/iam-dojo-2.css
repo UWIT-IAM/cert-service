@@ -1,0 +1,1246 @@
+/* iam generic style */
+
+* {
+    outline: medium none;
+}
+a:focus {
+    outline: #000000 dotted thin;
+}
+span:focus {
+    outline: #000000 dotted thin;
+}
+button:focus {
+    outline: #000000 dotted thin;
+}
+input:focus {
+    outline: #000000 dotted thin;
+}
+img:focus {
+    outline: #000000 dotted thin;
+}
+div:focus {
+    outline: #000000 dotted thin;
+}
+tr:focus {
+    outline: #000000 dotted thin;
+}
+select:focus {
+    outline: #000000 dotted thin;
+}
+
+body {
+    background: none repeat scroll 0 0 #f8f4f0;
+    color: #333333;
+    font: 14px Arial,Helvetica,sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+body, html { width:100%; height:100%; margin:0; padding:0; overflow:hidden; }
+
+h1, h2, h3, h4, h5, h6, p, blockquote, code, pre, div, form, table {
+    vertical-align: baseline;
+}
+
+h1 {font-family: "Helvetica","Arial",sans-serif;
+    color: #202020;
+    font-size: xx-large
+    font-weight: bold;
+    margin: 10px 0 12px 8px;
+    padding: 0 0 0 0;
+}
+
+
+h2 {font-family: "Helvetica","Arial",sans-serif;
+    color: #303030;
+    font-size: x-large
+    margin: 8px 0 8px 4px;
+    padding: 0 0 0 0;
+}
+   
+h3 {font-family: "Helvetica","Arial",sans-serif;
+    color: #303030;
+    font-size: 1.3em;
+    margin: 8px 0 8px 4px;
+    padding: 0 0 0 0;
+}
+   
+h4 {font-family: "Helvetica","Arial",sans-serif;
+    color: #303030;
+    font-size: 1.1em;
+    margin: 4px 0 6px 0px;
+    padding: 0 0 0 0;
+}
+
+.accessibility {
+    display: none;
+    visibility: visible;
+}
+hr {
+    background: none repeat scroll 0 0 #DDDDDD;
+    border: medium none;
+    height: 1px;
+    margin: 10px 0;
+    width: auto;
+}
+em, i {
+    font-style: italic;
+}
+strong, b {
+    font-weight: bold;
+}
+
+/* fieldsets */
+
+fieldset .h3 {font-family: "Helvetica","Arial",sans-serif;
+    color: #303030;
+    font-size: 1.3em;
+    margin: 6px 0 2px 4px;
+    padding: 0 0 0 0;
+}
+   
+fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
+    color: #303030;
+    font-size: 1.0em;
+    font-weight: bold;
+    margin: 4px 0 0px 0px;
+    padding: 0 0 0 0;
+}
+/* visually hidden filed */
+.hidden {
+   position: absolute;
+   left: -10000px;
+   overflow: hidden;
+}
+
+/* required field notices */
+.rnotice {
+   font-size: .8em;
+   font-shape: italic;
+}
+.rstar {
+   color: #ff2020;
+   padding: 0 1px 0 1px;
+}
+
+/* generic adjustments to tundra style */
+
+.tundra .dijitContentPane {
+    padding: 2px;
+}
+.tundra .dijitTabPaneWrapper {
+    border: 0px solid #ffffff;
+}
+.tundra .dijitDialog {
+    font-size: .9em;
+    border: 5px ridge #aca0a0;
+    background-color: #e0e0e0;
+}
+.tundra .dijitDialogTitleBar {
+    background-color: #5a4f6f;
+}
+.tundra .dijitDialogPaneContent {
+    background-color: #f3f0f0;
+}
+.tundra .dijitButtonNode  {
+    background-color: #dcd0d0;
+    border: 2px solid #aca0a0;
+}
+.tundra .dijitMenuPassive, .tundra .dijitMenuItemHover,.tundra .dijitMenuItemSelected {
+        background-color: #5a4f6f;
+        color:#fff;
+}
+.tundra .subjectSearchDialog .dijitDialogPaneContent {
+    background-color: #f8fff8;
+}
+
+
+.tundra .iamDialog .dijitButtonNode {
+   border: 1pt dotted #404040;
+   font-style: italic;
+   font-size: smaller;
+   font-weight: 300;
+   color: #042004;
+}
+
+/* top of page banner */
+
+#topbanner {
+   /* background: url("/img/iam-banner.gif") repeat-x scroll left top transparent; */
+   /* height: 16px; */
+   background-color: #f8f4f0;
+   font-weight:200;
+   padding: 2px 0 0 0;
+}
+#topbanner .topleft {
+   float: left;
+   color:#404040;
+   font-size: .7em;
+   margin:0 0 0 6px;
+   padding:0;
+}
+#topbanner .topleft a {
+   color:#303030;
+   text-decoration: none;
+}
+#topbanner .topright {
+   float: right;
+   color:#303030;
+   font-size: .7em;
+   margin:0 12px 0 0;
+}
+#topbanner .topright li {
+   display: inline;
+   list-style: none outside none;
+   padding-right: 4px;
+   margin:0 0 0 0;
+}
+
+#topbanner .topright li a {
+   color:#303030;
+   text-decoration: none;
+}
+
+#banner {
+    /* background: url("/img/iambanner-3.jpg") repeat-x scroll left transparent; */
+    border-bottom: 4px solid #606060;
+    background-color: #d0d0d0;
+    border: 2px solid #b2b2b2;
+    border-bottom: 2px solid #daedff;
+    margin: 0 0 0 0;
+    padding: 2px;
+    width: 100%;
+    overflow: hidden;
+}
+#banner #title {font-family: georgia,serif;
+    color: #808080;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 0 0 0 0;
+    padding: 0 0 0 60px;
+    float: left;
+}
+#banner #title a {font-family: verdana,arial,sans-serif;
+    color: #303030;
+    font-size: .95em;
+    text-decoration: none;
+}
+#banner #title:focus {
+    outline: #ffffff dotted thin;
+}
+
+
+#banner #apptitle a {
+    font-family: verdana,arial,sans-serif;
+    color: #303030;
+    font-size: large;
+    margin: 10px 0 0 0;
+    padding: 0 0 0 140px;
+    text-decoration: none;
+}
+
+
+#banner #banner_notice {
+    float: left;
+    font-family: "Helvetica","Arial",sans-serif;
+    color: #303030;
+    font-size: medium;
+    margin: 12px 0 0 0;
+    padding: 0 0 0 440px;
+    text-decoration: none;
+}
+#banner #banner_notice a {
+    color: #303030;
+    text-decoration: none;
+}
+#banner #banner_notice  a:hover {
+    border-bottom: 2px solid #ffff00;
+}
+
+#banner #ident {
+    color: #303030;
+    font: medium "Helvetica","Arial",sans-serif;
+    margin: 0px 20px 0px 0px;
+    float: right;
+}
+#banner #ident li {
+    color: #303030;
+    display: inline;
+    list-style: none outside none;
+}
+#banner #ident a {
+    color: #303030;
+    font-style: italic;
+    font-size: smaller;
+    text-decoration: none;
+}
+#banner #ident li .user {
+    margin-right: 14px;
+}
+
+
+#banner #navigate {
+    background-color: #ffffff;
+    color: #000000;
+    font: medium "Helvetica","Arial",sans-serif;
+    position: relative;
+    top: 42px;
+    margin: 0px;
+    padding: 0 0 0 120px;
+    border: 0px;
+    z-index: -1;
+}
+#banner #navigate li {
+    color: #000000;
+    display: inline;
+    list-style: none outside none;
+    padding: 0px 3px 0px 2px;
+}
+#banner #navigate li a {
+    color: #000000;
+    text-decoration: none;
+    font-size: smaller;
+    font-style: italic;
+}
+#banner #navigate li a:focus {
+    outline: #000000 dotted thin;
+}
+#banner #navigate li a:hover {
+    border-bottom: 1px solid #000000;
+}
+
+#banner .dijitButtonNode {
+   background: none repeat scroll 0 0 transparent;
+   border: 0;
+   color: #f0ffff;
+   font-size: medium;
+}
+
+/* sub banner is a right-justified, shaded bar under the banner */
+
+#banner #subsubbanner {
+    background-color: #ffffff;
+    color: #404040;
+    font-family: "Helvetica","Arial",sans-serif;
+    font-size: small;
+    position: absolute;
+    right: 0px;
+    top: 70px;
+    border: 0px 0px 0px 0px;
+    margin: 0px;
+    padding: 0 20px 0 15px;
+}
+
+#banner #subsubbanner .sublist {
+    display: inline;
+    list-style: none outside none;
+    font-size: medium;
+    margin-right: 4px;
+}
+#banner #subbanner {
+    background-color: #f8f6f4;
+    color: #000000;
+    font-family: "Helvetica","Arial",sans-serif;
+    font-size: small;
+    position: absolute;
+    left: 150px;
+    top: 42px;
+    border-bottom: 2px solid #bcb0b0;
+    margin: 0px;
+    padding: 0 20px 0 15px;
+}
+
+#banner #subbanner .sublist {
+    display: inline;
+    list-style: none outside none;
+    font-size: 1.0em;
+    margin-right: 4px;
+}
+
+#banner #subbanner .dijitTextBox {
+    width: 120px;
+}
+    
+#banner #subbanner .dijitButtonNode {
+    color: #000000;
+    font-size: medium;
+    font-style: italic;
+    background: transparent;
+    border: 2px;
+}
+    
+#banner #zzzsubbanner  ul li a {
+    color: #000000;
+    display: inline;
+    position: absolute;
+    top: 44px;
+    right: 10px;
+}
+#banner #subbanner  li {
+    display: inline;
+    color: #000000;
+}
+#banner #subbanner  ul li a {
+    text-decoration: none;
+}
+#banner #subbanner  ul li a:hover {
+    border-bottom: 1px solid #ffe4b4;
+}
+
+/* bottom of page footer */
+
+
+#footspacer {
+    height: 64px;
+}
+
+#footer {
+    /* background: url("/img/iambanner-2.jpg") repeat-x scroll left transparent;  */
+    background-color: #808080;
+    /* border: 2px solid #b2b2b2; */
+    border: 0px;
+    margin: 0 0 0 0;
+    padding: 0;
+    width: 100%;
+    height: 30px;
+    position: absolute;
+    bottom: 0px;
+}
+#footer .container {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    height: 30px;
+}
+#footer #footlogo {
+    display: inline-block;
+    position: absolute;
+    bottom: 5px;
+    padding: 0 0 0 10px;
+}
+#footer #footlogo a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+#footer #footlogo a img {
+    border: medium none;
+}
+
+#footcenter {
+    color: #ffffff;
+    list-style: none outside none;
+    font-size: small;
+    font-weight: 500;
+    position: absolute;
+    bottom: 5px;
+    left: 300px;
+}
+
+#footcenter ul {
+    color: #ffffff;
+    display: inline;
+    list-style: none outside none;
+    text-decoration: none;
+}
+
+#footcenter ul li {
+    color: #ffffff;
+    display: inline;
+    list-style: none outside none;
+    font-size: smaller;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 0 14px 0 0;
+}
+
+#footcenter ul li a:link, #footcenter ul li a:visited, #footcenter ul li a:hover, #footcenter ul li a:active {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+#footright {
+    color: #514268;
+    position: absolute;
+    right: 30px;
+    bottom: 5px;
+}
+#footright ul {
+    color: #fff4f0;
+    display: inline;
+    list-style: none outside none;
+    text-decoration: none;
+    padding: 0;
+}
+#footright ul li {
+    color: #fff4f0;
+    display: inline;
+    font-size: .75em;
+    list-style: none outside none;
+    text-decoration: none;
+    padding: 0 8px 0 0;
+}
+
+#footright ul li a:link, #footcenter ul li a:visited, #footcenter ul li a:hover, #footcenter ul li a:active {
+    color: #fff4f0;
+    text-decoration: none;
+}
+
+#footer ul li a:hover {
+    border-bottom: 1px solid #f0f0f0;
+}
+#footer ul li.active a {
+    border-bottom: 1px solid #f0f0b4;
+}
+
+
+#bannerNotice {
+    background-color: #d0ffd0;
+    color: #000000;
+    font-family: "Helvetica","Arial",sans-serif;
+    font-size: .9em;
+    position: absolute;
+    right: 60px;
+    top: 46px;
+    border: 2px inset #003000;
+    border-radius: 15px;
+    margin: 0px;
+    padding: 3px 9px 3px 9px;
+    opacity: 0.0;
+}
+
+/* page header - under the banner */
+
+.pageHeader {
+    font-family: "Helvetica","Arial",sans-serif;
+    color: #202020;
+    font-size: 1em;
+    padding: 0 20px 2px 0;
+    padding: 0 0 1px 0;
+    border-bottom: 3px solid #dcd0d0;
+    width: 100%;
+    height: 24px;
+}
+
+.buttonBar {
+    /*
+    background-color: #daedff;
+    border: 2px solid #b0c6dd;
+    border-radius: 15px; */
+    color: #000000;
+    margin: 0px 8px 0px 4px;
+    padding: 2px 6px 2px 6px;
+    font-size: .7em;
+}
+
+.buttonBar li {
+    display: inline;
+    list-style: none outside none;
+}
+
+
+#displayContainer {
+    overflow: hidden;
+    padding:0;
+    margin:0;
+    border:0;
+    position:absolute;
+}
+
+#groupDisplay {
+    padding: 0 0 0 0;
+    width:100%;
+}
+
+/* leftside display */
+
+#indexPanel {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width:30%;
+    background-color: #f8f4f0;
+    overflow: hidden;
+    border: 0px;
+    padding: 6px;
+    font-size:smaller;
+}
+#indexPanel h3 {
+   color: #3a304a;;
+   font-size: 1.2em;
+   font-weight:60%;
+   padding: 6px 4px 4px 6px;
+}
+
+#indexPanel .actions {
+   padding:1px;
+}
+
+#indexPanel hr {
+    margin:12px 0px 12px 0px;
+    height:4px;
+    background-color: #9a90aa;
+    width:100%;
+}
+
+#indexPanel a {
+    color:  #00005b;
+    font-style: italic;
+    text-decoration: none;
+}
+#indexPanel a:hover {
+    border-bottom: 1px solid #202020;
+}
+
+#indexPanel .help {
+    float: right;
+}
+
+#indexPanel .listitem {
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid #ffffff;
+}
+#indexPanel .dim0 {
+    color: #000000;
+}
+#indexPanel .dim1 {
+    color: #202020;
+}
+#indexPanel .dim2 {
+    color: #404040;
+}
+#indexPanel .dim3 {
+    color: #606060;
+}
+#indexPanel .dim4 {
+    color: #808080;
+}
+#indexPanel .listitemhover {
+    border: 1px solid #111111;
+}
+
+
+#findGroupsForm  {
+    white-space: nowrap;
+}
+
+
+/* rightside display */
+
+#displayPanel {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    width:65%;
+    background-color: #f8f4f0;
+    overflow: hidden;
+}
+
+#displayPanel .displayTitle {
+   font-size:1.0em;
+   font-weight:60%;
+   color:#006400;
+   padding-bottom:4px;
+   border: 0px;
+   margin-bottom:18px;
+}
+
+#groupSubjectFinder {
+   background-color: #f8f4f0;
+   position: absolute;
+   top: 1em;
+   right: 10px;
+   width:300px;
+   height: 400px;
+   z-index: 10;
+}
+
+
+#spDisplay {
+   margin: 0px 0px 6px 4px;
+   font-size: .9em;
+   overflow:hidden;
+}
+#spDisplay #spTitle {
+   font-size:1.0em;
+   font-weight:60%;
+   color:#606060;
+   padding-bottom:4px;
+   border: 0px;
+   margin-bottom:12px;
+}
+
+.groupList {
+    background-color: #f8f6f4;
+    color: #000000;
+    border: 0px;
+    margin: 0px;
+    padding: 2px 2px 2px 3px;
+}
+.groupList ul {
+    padding: 2px;
+}
+
+.groupList ul li {
+    color: #fff4f0;
+    display: inline;
+    font-size: small;
+    padding: 0px;
+    list-style: none outside none;
+    border-bottom: 1px solid #5a4f6f;
+}
+
+.groupList ul li div:focus {
+    outline: #000000 dotted medium;
+}
+
+.groupList .groupitem {
+    color: #000000;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    border-bottom: 0px;
+}
+.groupList .groupitemhover {
+    outline: #ffe4b4 dotted thin;
+}
+
+.groupList dl dt {
+    float: left;
+    clear: left;
+    font-family: monospace;
+    font-size:x-small;
+    color: #404000;
+    width: 2em;
+    text-align: left;
+    cursor: pointer;
+}
+
+.groupList dl dd {
+    // white-space: nowrap;
+    margin: 0 0 0 2.5em;
+}
+
+.groupList .sub {
+    color: #006400;
+    font-style: italic;
+    font-size: 95%;
+    margin-left: 10px;
+}
+
+/* list of items in the left-side panel */
+
+.spList {
+    background-color: #ffffff;
+    border: 1px solid:4a405a;
+    padding: 2px;
+    margin: 0 0 0 0;
+    min-height: 200px;
+    color: #404040;
+    white-space: nowrap;
+}
+
+
+
+#findGroupsPanelResult {
+    min-height: 400px;
+}
+
+#findGroupsForm {
+    font-size: 90%;
+    border-bottom: 5px solid #5a4f6f;
+}
+
+#showGroupCn {
+    height:12px;
+}
+
+#myMembersPane {
+    background-color: #f8f6f4
+    color: #000000;
+    border-top: 5px ridge #bcb0b0;
+    border-right: 0px ridge #bcb0b0;
+    border-bottom: 5px solid #bcb0b0;
+    border-left: 5px solid #bcb0b0;
+    margin: 0px;
+    padding: 0 0 0 0;
+}
+#myMembersPane #myMembersTitle {
+    background: url("/img/iam-bg7.jpg") repeat-x scroll left bottom transparent;
+    height:60px;
+    margin: 0px 0px -40px 0px;
+    font-family: verdana,arial,sans-serif;
+    font-size:.87em;
+    color: #ffffff;;
+    padding: 3px 6px 4px 6px;
+    border: 0;
+}
+#myMembersPane #myMembersPanel {
+    background-color: #f8f6f4;
+    color: #000000;
+    border: 0px;
+    margin: 0px;
+    padding: 2px 3px 2px 2px;
+}
+
+
+.tabbox {
+    background-color: #ffffff;
+    color: #000090;
+    font-family: "Helvetica","Arial",sans-serif;
+    font-size: small;
+    margin: 2px 0 0 10px;
+    padding: 0 0 0 0;
+    border: 0;
+}
+
+.tabbox .sublist {
+    display: inline;
+    list-style: none outside none;
+    font-size: small;
+}
+.tabbox .sublist select {
+    background-color: #f6fff6;
+}
+.tabbox .sublist input {
+    background-color: #f6fff6;
+}
+.tabbox .sublist img {
+    vertical-align: middle;
+}
+
+.tabbox .dijitTextBox {
+    width: 120px;
+}
+    
+.tabbox .dijitButtonNode {
+    color: #000000;
+    font-size: medium;
+    font-style: italic;
+    background: transparent;
+    border: 2px;
+}
+    
+.tabbox  ul {
+    white-space: nowrap;
+    margin: 2px 0 1px 10px;
+    padding: 0 0 0 0;
+}
+.tabbox  ul li {
+    display: inline;
+    list-style: none outside none;
+    font-size: small;
+    color: #303030;
+    margin: 0px;
+    padding:1px;
+}
+.tabbox  ul li a {
+    color: #000060;
+    font-style: italic;
+    margin: 0px 2px 1px 2px;
+}
+.tabbox  ul li a:focus,a:hover {
+    outline: #000000 dotted thin;
+}
+
+.historytable {
+    color: #203020;
+    background-color: #f0f0f0;
+    padding: 0px 0px 0px 0px;
+    border: 2px solid #f0f0f0;
+    font-family: helvetica, arial, sans-serif;
+}
+
+.historytable .w {
+    background-color: #ffffff;
+}
+.historytable .b {
+    background-color: #f0f0f0;
+}
+
+.historytable td {
+       padding: 0px 3px 2px 4px;
+}
+
+.prevnext {
+   float:right;
+   font-size:.7em;
+   font-style: italic;
+}
+.prevnext a {
+    color: #000090;
+    margin: 0 10px 0 10px;
+}
+.prevnext a:focus {
+    outline: #000000 dotted thin;
+}
+
+.mygroupitem a:link, a:visited, a:active {
+    color: #000000;
+    text-decoration: none;
+}
+.mygroupitem a:hover {
+    background-color: #e0e0e0;
+}
+.mygroupitemselected {
+    background-color: #e0e0e0;
+}
+
+.iamlist {
+   border: 0 0 0 0;
+   padding: 0 0 0px 0;
+   margin: 0px 0 0px 0px;
+   text-align: left;
+   overflow: hidden;
+   padding:2px 2px 2px 0px;
+    list-style: none outside none;
+    text-decoration: none;
+}
+.iamlist .dt {
+   clear: both;
+   float: left;
+   display: inline;
+   width: 7em;
+   font-weight: bold;
+   font-size: 1em;
+   white-space: nowrap;
+   margin: 4px 0px 0px 0px;
+}
+.iamlist .dt a {
+   font-size:.9em;
+   font-style: italic;
+   font-weight: normal;
+}
+
+.iamlist .dtcb {
+   margin-top: .5em;
+   width: 1.1em;
+   font-weight: normal;
+}
+.iamlist .dt9 {
+   width: 9em;
+}
+.iamlist .dt12 {
+   width: 12em;
+}
+.iamlist .dt15 {
+   width: 15em;
+}
+.iamlist .dt2 {
+   width: 1.5em;
+   font-weight: normal;
+}
+.iamlist .dt3 {
+   width: 4em;
+   font-weight: normal;
+}
+.iamlist h4 {
+   font-weight: bold;
+   font-size: .9em;
+   margin: 4px 0 0 0;
+}
+.iamlist .dd {
+   margin-left: 1em;
+   float:left;
+   padding: 0px 0 0px 0;
+   overflow:auto;
+   margin-top: 4px;
+}
+.iamlist .ddtext {
+   width:30em;
+}
+
+.iamlist .dd a {
+   font-size:.85em;
+   font-style: italic;
+   font-weight: normal;
+   color: #483d8b;
+}
+.iamlist .ddnl {
+   clear: both;
+   margin-left: 2em;
+   padding: 0px 0 0px 0;
+   overflow:auto;
+   margin-top: 4px;
+}
+.iamlist .dd2 {
+   margin-left: 1em;
+}
+.iamlist .dd input {
+   font-size: 1.0em;
+}
+.ddbutton {
+   font-size:.75em;
+}
+.claro .xbutton .dijitButtonNode {
+   border-width: 1px;
+   border-color: #0000a0;
+   border-radius:4px;
+   font-size:.75em;
+   color: #000000;
+   padding:0px;
+}
+.claro .xbutton .dijitButtonText {
+   padding:0 .25em 0 .25em
+}
+   
+.iamtable {
+    border-collapse: collapse;
+    border: 0 0 0 0;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    text-align: left;
+}
+
+.iamtable tr {
+    margin: 0 0 3px 0;
+    border-bottom: 1px dotted #808080;
+}
+
+.iamtable th {
+    padding: 2px 8px 2px 4px;
+    margin: 4px 0 4px 0;
+    font-size: 1.2em;
+    font-weight: normal;
+    color: #000000;
+    background-color: #f0f0f6;
+}
+
+.iamtable th a {
+    margin: 0 6 0 0;
+    font-size: small;
+    font-weight: normal;
+    font-style: italic;
+    color: #000090;
+}
+.iamtable th a:hover {
+    border-bottom: 2px solid #000040;
+}
+.iamtable th a:focus {
+    outline: #000000 dotted thin;
+}
+
+.iamtable td {
+    padding: 4px 4px 4px 4px;
+    font-size: .9em;
+    color: #000000;
+    ## background-color: #ffffff;
+    margin: 0 0 6px 0;
+    vertical-align: baseline;
+}
+.iamtable td.label {
+    padding: 6px 4px 8px 6px;
+    font-size: .9em;
+    font-weight: normal;
+    color: #000000;
+    ## background-color: #ffffff;
+    vertical-align: baseline;
+}
+.iamtable td a {
+    color: #00008b;
+    margin: 0 0 0 0;
+}
+.iamtable td a:hover {
+    border-bottom: 1px solid #0000b8;
+}
+.iamtable td a:focus {
+    outline: #000000 dotted thin;
+}
+
+.iamtable tr td table.innertable  {
+    background-color: #e8e8e8;
+}
+
+.iamtable tr td .dijitTextBox {
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    width: 100%;
+}
+.iamtable tr td .dijitTextArea {
+    border: 1px inset #000000;
+    background-color: #ffffff;
+    width: 100%;
+    font: inherit;
+    padding: 0 0 0 0;
+}
+.iamtable .certbox {
+    font-family: monospace;
+    font-size:xx-small;
+    color: #404000;
+}   
+.iamtable .altname {
+    font-style: italic;
+    font-size: 1.0em;
+}
+
+.iamtable td .infokey {
+   padding: 0px;
+   margin: 2px;
+   border: 1px solid #000000;
+}
+.iamtable tr td .infokey {
+   padding: 0px;
+   margin: 2px;
+   border: 1px solid #000000;
+}
+
+.iamtable tr td .innertable {
+    border-collapse: collapse;
+    border-width: 0 0 0 0;
+    padding: 1px;
+    margin: 0 0 0 0;
+    background-color: #fafafa;
+}
+.iamtable tr td .innertable tr td {
+    padding: 1px 8px 0 1px;
+    background-color: #fafafa;
+    border-bottom: 1px dotted #808080;
+}
+
+.popupchooser {
+   margin:4px;
+   border: 3px inset #808080;
+   height: 300px;
+}
+
+.smallnotes {
+    font-size: .62em;
+    color: #e0ffe0";
+}
+
+.memberlist td {
+  padding: 0 3px 0 1px;
+  color: #000000;
+  text-decoration: none;
+}
+.memberlist td a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.memberlistselected td {
+  background: #f0f0ff;
+}
+
+.memberlist td a:hover {
+   border-bottom: 1px solid #808080;
+}
+
+.friendlyname {
+    font-size:90% 
+}
+
+.plaintable td a:link, td .plaintable a:visited, td .plaintable a:hover, td .plaintable a:active {
+    color: #333333;
+    font-family: Lucida Sans,Lucida Grande,Arial;
+    font-size: small;
+    text-decoration: none;
+}
+
+
+.csrbox {
+    font-size: 60%; vertical-align: top;
+        font-family: monospace, typewriter, courier;
+        overflow: auto;
+        border-color: #101010;
+        border-width: 2px;
+        background-color: #e0e0e0;
+           }
+
+.altbox {
+    font-size: 90%; vertical-align: top;
+    font-family: monospace, typewriter, courier;
+    overflow: auto;
+    border-color: #101010;
+    border-width: 2px;
+           }
+
+.notice {
+    border: 2px solid #10b010;
+    color: #002f00;
+    font-size: .87em;
+    font-family: "Helvetica","Arial",sans-serif;
+    margin: 10px 20px 10px 100px;
+    padding: 12px;
+}
+
+#explorerPane {
+    width: 30%;
+    height:80%;
+}
+
+.ca_uw {
+    color: #300740; 
+}
+
+.ca_uw {
+    color: #300740; 
+}
+.ca_ic {
+    color: #004032;
+}
+
+.indentLeft {
+   margin: 2px 2px 2px 12px;
+}
+#layoutPriorityBorderContainer { width: 100%; height: 100%; }
+
+.subjectSearchList tr:focus {
+    outline: #000000 dotted thin;
+}
+#subjectSearchString {
+   width:300px;
+}
+#subjectSearchContent {
+   height:300px;
+   overflow:auto;
+   background-color: #f8f8f8;
+   border: 3px inset #000000;
+}
+
+.iamsup {
+    font-size: 60%;
+    vertical-align: super;
+}
+
+.certbox {
+    font-family: monospace;
+    font-size:.5em;
+    color: #404000;
+}   
+    
+.plainlink a:link a:visited a:active {color: #00008b;
+   font-style: italic;
+   text-decoration: underline;
+}
+
+.loginform {
+   margin: 10px;
+}
+
+.loginform dl {
+    margin-bottom:3em;
+}
+
+.loginform dl dt {
+    background:#ffffff;
+    color:#000000;
+    float:left;
+    clear: both;
+    font-weight:bold;
+    padding:5px;
+    width:100px;
+}
+
+.loginform dl dt a {
+   font-size: 1em;
+}
+
+.loginform dl dd {
+    margin:2px 0;
+    padding:5px 0;
+}
+
+
