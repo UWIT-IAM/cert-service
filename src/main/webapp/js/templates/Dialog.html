@@ -1,0 +1,21 @@
+<div class="dijitDialog iamDialog" role="dialog" aria-labelledby="${id}_title">
+    <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+      <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title" role="heading" level="1"></span>
+      <span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
+           data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabIndex="-1">
+         <span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+      </span>
+   </div>
+   <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent"></div>
+   <div class="dijitDialogTitleBar dijitDialogTitle" style="padding:4px 4px 3px 4px;border-top:1px solid #222222; margin-top:2px;" role="navigation">
+       <button class="dijitReset dijitInline dijitButtonNode iamDialogButton" style="margin-left:4px" data-dojo-attach-point="submitButtonNode"
+            data-dojo-attach-event="ondijitclick: clickSubmit">
+          ${submitLabel}
+       </button>
+       <button class="dijitReset dijitInline dijitButtonNode iamDialogButton" style="margin-left:10px" data-dojo-attach-point="cancelButtonNode"
+            data-dojo-attach-event="ondijitclick: clickCancel">
+          ${cancelLabel}
+       </button>
+   </div>
+</div>
+

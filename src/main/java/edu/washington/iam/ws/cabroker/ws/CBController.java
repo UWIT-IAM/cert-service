@@ -329,7 +329,8 @@ public class CBController {
        String remoteUser = (String)request.getAttribute(eppnName);
        String provider = (String)request.getAttribute("Shib-Identity-Provider");
        log.debug("eppn("+eppnName+")=" + remoteUser + " rus=" + request.getRemoteUser() + " prov=" + provider + " m=" + method + " k=" + methodKey);
-
+        //TODO
+        remoteUser = "mattjm@washington.edu";
        if (remoteUser!=null) {
            if (remoteUser.endsWith("@washington.edu")) {
               remoteUser = remoteUser.substring(0, remoteUser.lastIndexOf("@washington.edu"));

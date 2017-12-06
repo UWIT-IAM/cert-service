@@ -178,7 +178,7 @@ function iam_bannerNotice(msg) {
    jele.set('content', msg);
    jele.set('aria-hidden', 'false');
     dojoStyle.set(ele, 'display', '');
-    dojoStyle.set(e, 'opacity', '1.0');
+    dojoStyle.set(ele, 'opacity', '1.0');
    require(["dojo/_base/fx"], function(fx){
       fx.fadeOut({
         node: ele,

@@ -31,7 +31,7 @@ dojoConfig = {
    "isDebug": true,
    packages: [{
       name: "iam",
-      location: "/js"
+      location: "/cs/js"
    }]
 };
 </script>
