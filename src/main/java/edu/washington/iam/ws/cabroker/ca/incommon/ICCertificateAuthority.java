@@ -84,8 +84,11 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private Thread activityWatcher = null;
    private int refreshInterval = 0;
 
-   private static String authDataFile = "/data/local/etc/comodo.pw";
-   private static String orgAndSecretFile = "/data/local/etc/comodo.os";
+   //TODO
+   //private static String authDataFile = "/data/local/etc/comodo.pw";
+   //private static String orgAndSecretFile = "/data/local/etc/comodo.os";
+   private static String authDataFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.pw";
+   private static String orgAndSecretFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.os";
    private long authDataModified = 0;
    private long orgAndSecretModified = 0;
 
@@ -156,8 +159,8 @@ public class ICCertificateAuthority implements CertificateAuthority {
 
        // "<subjAltNames xsi:type=\"xsd:string\">ALTNAMES</subjAltNames>" +
    
-   private static String renewBody = "<tns:renew xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
-       "<renewId>RENEWID</renewId></tns:renew>";
+   private static String renewBody = "<tns:renewById xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
+       "<id>RENEWID</id></tns:renewById>";
 
  
    public int getCertificate(CBCertificate cert) throws CertificateAuthorityException, CBNotFoundException {
@@ -206,7 +209,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
             }
          }
          if (status==2 && oldStatus!=2) {
-            sendNotices(cert);
+            // sendNotices(cert);
          }
          cert.updateDB();
          if (status==(-21)) cert.addHistory(CBHistory.CB_HIST_REV, new Date(), "somebody");
@@ -301,7 +304,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
             }
          } 
          if (status==0 && oldStatus!=CBCertificate.CERT_STATUS_ISSUED) {
-            sendNotices(cert);
+            // sendNotices(cert);
             cert.status = CBCertificate.CERT_STATUS_ISSUED;
          }
          cert.updateDB();
@@ -424,10 +427,10 @@ public class ICCertificateAuthority implements CertificateAuthority {
    public int renewCertificate(CBCertificate cert) throws CertificateAuthorityException {
       log.debug("renew " + cert.caId);
       refreshSecrets();
-      String body = renewBody.replaceFirst("AUTHDATA",authData).replaceFirst("RENEWID",cert.renewId);
+      String body = renewBody.replaceFirst("AUTHDATA",authData).replaceFirst("RENEWID", Integer.toString(cert.caId));
       Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
       if (resp==null) throw new CertificateAuthorityException("IO error to CA");
-      Element cr = XMLHelper.getElementByName(resp, "renewResponse");
+      Element cr = XMLHelper.getElementByName(resp, "renewByIdResponse");
       Element ret = XMLHelper.getElementByName(cr, "return");
       int status = Integer.parseInt(ret.getTextContent());
       log.debug("status: " + status);
