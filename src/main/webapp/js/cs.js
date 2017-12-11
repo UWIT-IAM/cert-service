@@ -274,13 +274,17 @@ function _showCerts() {
      selectionMode: 'single',
      loadingMessage: 'searching for certificates',
      rowsPerPage: '20',
-     autoWidth: true
    });
     dojoOn(certsGrid, 'CellFocus', setFocusStyle );
     dojoOn(certsGrid, 'RowClick', doRowAction);
     dojoOn(certsGrid, 'StyleRow', styleRow );
     dojoOn(certsGrid, '_FetchComplete', setPaneSizes);
    var tgt = dijitRegistry.byId('searchResult').containerNode.appendChild(certsGrid.domNode);
+   // adjust height for footer
+   parent = dojoDom.byId('searchResult');
+   dojoStyle.set(certsGrid.domNode, {
+        height: dojoStyle.get(parent, 'height') - 20 + 'px'
+    });
    certsGrid.startup();
 }
 
@@ -326,6 +330,11 @@ function _showMyCerts() {
    dojoOn(certsGrid, '_FetchComplete', setPaneSizes);
    var tgt = dijitRegistry.byId('searchResult').containerNode.appendChild(certsGrid.domNode);
    console.log(tgt);
+    // adjust height for footer
+    parent = dojoDom.byId('searchResult');
+    dojoStyle.set(certsGrid.domNode, {
+        height: dojoStyle.get(parent, 'height') - 20 + 'px'
+    });
    certsGrid.startup();
 }
 
