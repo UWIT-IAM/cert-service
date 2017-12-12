@@ -98,7 +98,8 @@ function setPaneSizes() {
    console.log('left: w=' + cw + ', h=' + ch)
    pan = dojoDom.byId('leftsideIndex');
    if (pan!=null) dojoStyle.set(pan, {
-      height: ch + 'px'
+      height: ch + 'px',
+       left: 20 + 'px'
    });
 
    var sw = cw - 20;
