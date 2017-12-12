@@ -36,7 +36,7 @@ cs.googleEntityId=https://idp.u.washington.edu/google
 
 cs.myEntityId=https://iamtools-test.u.washington.edu/shibboleth
 cs.csUrl=https://iam-tools-test.u.washington.edu/cs/
-cs.errorUrl=https://wiki.cac.washington.edu/x/vwz-B
+cs.errorUrl=https://wiki.cac.washington.edu/x/6wz-B
 cs.browserRoot=/cs
 cs.certRoot=/cs/ws
 
