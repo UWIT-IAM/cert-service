@@ -17,7 +17,7 @@
     when: local_vars_stat.stat.exists
 
   - name: create properties yml file
-    local_action: property_to_yml name=cs type={{ cluster_type }}
+    local_action: "property_to_yml name=cs type={{ cluster_type }}"
 
   - include_vars: "properties.yml"
 
@@ -41,8 +41,8 @@
 
    # update http and https config
     # change restarts apache
-    - include: "ansible-tools/tasks/apache_config.yml file=https prod=spreg"
-    - include: "ansible-tools/tasks/apache_config.yml file=http prod=spreg"
+  - include: "ansible-tools/tasks/apache_config.yml file=https prod=spreg"
+  - include: "ansible-tools/tasks/apache_config.yml file=http prod=spreg"
 
 
   - name: restart tomcat
@@ -98,7 +98,7 @@
   # handlers mostly standard from iam-ansible
 
   handlers:
-    - include: "tasks/iam_handlers.yml"
+    - include: "ansible-tools/tasks/iam_handlers.yml"
 
 
 
