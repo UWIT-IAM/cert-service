@@ -39,10 +39,10 @@
     copy: "src=../cs.properties.{{ cluster_type }}  dest={{ cs_root }}/cs.properties group=iam-dev mode=664"
     notify: restart tomcat
 
-  # update http and https config
-  # change restarts apache
-  - include: "apache/apache_config.yml file=https prod=cs"
-  - include: "apache/apache_config.yml file=http prod=cs"
+   # update http and https config
+    # change restarts apache
+    - include: "ansible-tools/tasks/apache_config.yml file=https prod=spreg"
+    - include: "ansible-tools/tasks/apache_config.yml file=http prod=spreg"
 
 
   - name: restart tomcat
