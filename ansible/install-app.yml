@@ -47,9 +47,9 @@
 
   - name: restart tomcat
     command: /usr/bin/nohup /data/local/bin/ansible_command loadr idle
-      notify:
-        - idle wait
-        - continue restart tomcat
+    notify:
+      - idle wait
+      - continue restart tomcat
 
 
   # update certs and keys (used by cs)
