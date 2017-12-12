@@ -41,8 +41,8 @@
 
   # update http and https config
   # change restarts apache
-  - include: "tasks/apache_config.yml file=https prod=cs"
-  - include: "tasks/apache_config.yml file=http prod=cs"
+  - include: "apache/apache_config.yml file=https prod=cs"
+  - include: "apache/apache_config.yml file=http prod=cs"
 
 
   - name: restart tomcat
