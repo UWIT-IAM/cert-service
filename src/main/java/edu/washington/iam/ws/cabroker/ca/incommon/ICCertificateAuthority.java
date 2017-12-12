@@ -27,7 +27,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -84,11 +85,12 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private Thread activityWatcher = null;
    private int refreshInterval = 0;
 
-   //TODO
-   //private static String authDataFile = "/data/local/etc/comodo.pw";
-   //private static String orgAndSecretFile = "/data/local/etc/comodo.os";
-   private static String authDataFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.pw";
-   private static String orgAndSecretFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.os";
+   //prod strings
+   private static String authDataFile = "/data/local/etc/comodo.pw";
+   private static String orgAndSecretFile = "/data/local/etc/comodo.os";
+   //dev strings
+   //private static String authDataFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.pw";
+   //private static String orgAndSecretFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.os";
    private long authDataModified = 0;
    private long orgAndSecretModified = 0;
 
@@ -209,7 +211,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
             }
          }
          if (status==2 && oldStatus!=2) {
-            // sendNotices(cert);
+            sendNotices(cert);
          }
          cert.updateDB();
          if (status==(-21)) cert.addHistory(CBHistory.CB_HIST_REV, new Date(), "somebody");
@@ -435,8 +437,9 @@ public class ICCertificateAuthority implements CertificateAuthority {
       int status = Integer.parseInt(ret.getTextContent());
       log.debug("status: " + status);
       if (status<0) throw new CertificateAuthorityException(String.valueOf(status));
-      if (status==0) cert.status = CBCertificate.CERT_STATUS_RENEWING;
-      return status;
+      // success returns the enrollment id, ostensibly a signed long, per Comodo.  2017-12-11 mattjm
+      if ( 99999 < status && status < Long.MAX_VALUE) cert.status = CBCertificate.CERT_STATUS_RENEWING;
+      return 0;  //zero used to be the success code--if we got back an enrollment id above then it worked.  
    }
    public int getRenewStatus(CBCertificate cert) {
       return 0;
