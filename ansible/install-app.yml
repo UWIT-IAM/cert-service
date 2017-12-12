@@ -44,6 +44,13 @@
   - include: "tasks/apache_config.yml file=https prod=cs"
   - include: "tasks/apache_config.yml file=http prod=cs"
 
+
+   - name: restart tomcat
+      command: /usr/bin/nohup /data/local/bin/ansible_command loadr idle
+      notify:
+        - idle wait
+        - continue restart tomcat
+
   # copy js files
   - name: copy js files
     copy: "src=../src/main/webapp/cs.js dest=/www/js/cs.js group=iam-dev mode=664"

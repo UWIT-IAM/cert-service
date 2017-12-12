@@ -439,7 +439,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
       if (status<0) throw new CertificateAuthorityException(String.valueOf(status));
       // success returns the enrollment id, ostensibly a signed long, per Comodo.  2017-12-11 mattjm
       if ( 99999 < status && status < Long.MAX_VALUE) cert.status = CBCertificate.CERT_STATUS_RENEWING;
-      return 0;  //zero used to be the success code--if we got back an enrollment id above then it worked.  
+      return 0;  //zero used to be the success code--if we got back an enrollment id above then it worked.
    }
    public int getRenewStatus(CBCertificate cert) {
       return 0;
