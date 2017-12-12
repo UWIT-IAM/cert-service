@@ -103,6 +103,7 @@ public class CBController {
     private static String certRootPath;
     private static String loginCookie;
     private static String logoutUrl;
+    private static String errorUrl;
 
     private static String mailTo = "fox@u.washington.edu";
     private static String requestMailTo = "fox@u.washington.edu";
@@ -954,6 +955,10 @@ public class CBController {
         logoutUrl = v;
     }
 
+    public void setErrorUrl(String v) {
+        errorUrl = v;
+    }
+
     public void setCryptKey(String v) {
         cryptKey = v;
     }
@@ -1027,7 +1032,8 @@ public class CBController {
     /* format an error response */
 
     private String formatError(String msg, Exception e) {
-       return "<span align=\"center\"><h4>" + msg + "</h4><p>" + e.getMessage() + "</span>";
+       return "<span align=\"center\"><h4>" + msg + "</h4><p>" + e.getMessage() + " See <a href=\"" +
+               errorUrl + "\">Errors and Solutions.</a> for help.</span>";
     }
 
 
