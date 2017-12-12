@@ -255,7 +255,7 @@ v_xsrf = '${xsrf}';
 
 <div id="leftsideIndex" dojoType="dijit/layout/ContentPane" style="width:50%;border:0px;" data-dojo-props="splitter:true, region:'leading', style: { overflow: 'hidden', padding: '0' }">
 <h3 class="hidden">Certificate list</h3>
-    <div class="searchresult" id="searchResult" dojoType="dijit/layout/ContentPane" data-dojo-props="style: { overflow: 'hidden', padding: '0' }">
+    <div class="searchresult" id="searchResult" dojoType="dijit/layout/ContentPane" data-dojo-props="style: { overflow: 'hidden', padding: '0', left: '20px' }">
     </div>
 </div>
 
