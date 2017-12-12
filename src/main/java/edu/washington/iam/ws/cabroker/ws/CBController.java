@@ -1006,11 +1006,11 @@ public class CBController {
              wc = true;
              cn = cn.substring(2);
           }
-          if (cn.indexOf("*")>=0) throw new NoPermissionException("invalid wildcard");
-          if (!cn.matches("([\\w]+[\\w\\-]*\\.)+[a-z]+")) throw new DNSVerifyException("CN or altName not valid");
+          if (cn.indexOf("*")>=0) throw new NoPermissionException("invalid wildcard.");
+          if (!cn.matches("([\\w]+[\\w\\-]*\\.)+[a-z]+")) throw new DNSVerifyException("CN or altName not valid.");
           if (!dnsVerifier.isOwner(cn, user, i==0?cert.owners:null)) {
              log.debug("user " + user + " not owner of " + cn);
-             throw new NoPermissionException("You are not an owner of " + cn);
+             throw new NoPermissionException("You are not an owner of " + cn + ".");
           }
        }
        // also check any form altnames
@@ -1020,11 +1020,11 @@ public class CBController {
              wc = true;
              cn = cn.substring(2);
           }
-          if (cn.indexOf("*")>=0) throw new NoPermissionException("invalid wildcard");
-          if (!cn.matches("([\\w]+[\\w\\-]*\\.)+[a-z]+")) throw new DNSVerifyException("CN or altName not valid");
+          if (cn.indexOf("*")>=0) throw new NoPermissionException("invalid wildcard.");
+          if (!cn.matches("([\\w]+[\\w\\-]*\\.)+[a-z]+")) throw new DNSVerifyException("CN or altName not valid.");
           if (!dnsVerifier.isOwner(cn, user, null)) {
              log.debug("user " + user + " not owner of " + cn);
-             throw new NoPermissionException("You are not an owner of " + cn);
+             throw new NoPermissionException("You are not an owner of " + cn + ".");
           }
        }
     }
@@ -1032,8 +1032,8 @@ public class CBController {
     /* format an error response */
 
     private String formatError(String msg, Exception e) {
-       return "<span align=\"center\"><h4>" + msg + "</h4><p>" + e.getMessage() + " See <a href=\"" +
-               errorUrl + "\">Errors and Solutions.</a> for help.</span>";
+       return "<span align=\"center\"><h4>" + msg + "</h4><p>" + e.getMessage() + "<p>See <a href=\"" +
+               errorUrl + "\">Certificate Service Errors</a> for details and solutions.</span>";
     }
 
 
