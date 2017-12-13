@@ -1033,7 +1033,7 @@ public class CBController {
 
     private String formatError(String msg, Exception e) {
        return "<span align=\"center\"><h4>" + msg + "</h4><p>" + e.getMessage() + "<p>See <a href=\"" +
-               errorUrl + "\">Certificate Service Errors</a> for details and solutions.</span>";
+               errorUrl + "\" target=\"_blank\">Certificate Service Errors</a> for details and solutions.</span>";
     }
 
 
