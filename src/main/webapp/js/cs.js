@@ -321,6 +321,7 @@ function _showMyCerts() {
         owner: v_remoteUser
         },
      structure: certTableLayout,
+     sortInfo: -1,
      errorMessage: 'Your session has expired.  Reload the page to reauthenticate.'
    });
    console.log('conecting');
