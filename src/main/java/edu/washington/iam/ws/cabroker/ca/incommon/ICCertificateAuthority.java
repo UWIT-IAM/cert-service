@@ -27,8 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -306,7 +305,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
             }
          } 
          if (status==0 && oldStatus!=CBCertificate.CERT_STATUS_ISSUED) {
-            // sendNotices(cert);
+            sendNotices(cert);
             cert.status = CBCertificate.CERT_STATUS_ISSUED;
          }
          cert.updateDB();
