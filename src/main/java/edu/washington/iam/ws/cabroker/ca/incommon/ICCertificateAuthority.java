@@ -84,8 +84,12 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private Thread activityWatcher = null;
    private int refreshInterval = 0;
 
+   //prod strings
    private static String authDataFile = "/data/local/etc/comodo.pw";
    private static String orgAndSecretFile = "/data/local/etc/comodo.os";
+   //dev strings
+   //private static String authDataFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.pw";
+   //private static String orgAndSecretFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.os";
    private long authDataModified = 0;
    private long orgAndSecretModified = 0;
 
@@ -156,8 +160,8 @@ public class ICCertificateAuthority implements CertificateAuthority {
 
        // "<subjAltNames xsi:type=\"xsd:string\">ALTNAMES</subjAltNames>" +
    
-   private static String renewBody = "<tns:renew xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
-       "<renewId>RENEWID</renewId></tns:renew>";
+   private static String renewBody = "<tns:renewById xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
+       "<id>RENEWID</id></tns:renewById>";
 
  
    public int getCertificate(CBCertificate cert) throws CertificateAuthorityException, CBNotFoundException {
@@ -424,16 +428,18 @@ public class ICCertificateAuthority implements CertificateAuthority {
    public int renewCertificate(CBCertificate cert) throws CertificateAuthorityException {
       log.debug("renew " + cert.caId);
       refreshSecrets();
-      String body = renewBody.replaceFirst("AUTHDATA",authData).replaceFirst("RENEWID",cert.renewId);
+      String body = renewBody.replaceFirst("AUTHDATA",authData).replaceFirst("RENEWID", Integer.toString(cert.caId));
       Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
       if (resp==null) throw new CertificateAuthorityException("IO error to CA");
-      Element cr = XMLHelper.getElementByName(resp, "renewResponse");
+      Element cr = XMLHelper.getElementByName(resp, "renewByIdResponse");
       Element ret = XMLHelper.getElementByName(cr, "return");
       int status = Integer.parseInt(ret.getTextContent());
       log.debug("status: " + status);
       if (status<0) throw new CertificateAuthorityException(String.valueOf(status));
-      if (status==0) cert.status = CBCertificate.CERT_STATUS_RENEWING;
-      return status;
+      // success returns the enrollment id, ostensibly a signed long, per Comodo.
+       // This is already an int which should be big enough for a while.  2017-12-11 mattjm
+      if ( 99999 < status && status < Integer.MAX_VALUE) cert.status = CBCertificate.CERT_STATUS_RENEWING;
+      return 0;  //zero used to be the success code--if we got back an enrollment id above then it worked.
    }
    public int getRenewStatus(CBCertificate cert) {
       return 0;

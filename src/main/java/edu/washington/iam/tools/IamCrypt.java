@@ -41,7 +41,11 @@ import org.slf4j.LoggerFactory;
 
 public final class IamCrypt {
 
-  private static String cryptKey;
+    static {
+        Security.addProvider(new BouncyCastleProvider());
+    }
+
+    private static String cryptKey;
   private static MessageDigest messageDigest;
   private static Key key;
   private static Cipher cipher;

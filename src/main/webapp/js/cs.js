@@ -22,6 +22,7 @@ String.prototype.trim = function () {
    return this.replace(/^\s*|\s*$/g,"");
 }
 
+
 // common vars
 var v_root = '/test_ws/v1';
 var v_remoteUser = '';
@@ -82,37 +83,37 @@ function refreshCertsIfNeeded() {
 function setPaneSizes() {
    console.log('adjust cs panels');
    var cw = contentWidth;
-   var th = dojo.position(dojo.byId('titlebar'),true).h;
+   var th = dojoGeom.position(dojoDom.byId('titlebar'),true).h;
    
    var ch = contentHeight - th - 40;;
    var ct = contentTop + th + 10;
 
-   var pan = dojo.byId('cscontent');
-   if (pan!=null) dojo.style(pan, {
+   var pan = dojoDom.byId('cscontent');
+   if (pan!=null) dojoStyle.set(pan, {
       height: ch + 'px',
       width: cw + 'px'
    });
 
    cw = contentWidth/2 - 20;
    console.log('left: w=' + cw + ', h=' + ch)
-   pan = dojo.byId('leftsideIndex');
-   if (pan!=null) dojo.style(pan, {
+   pan = dojoDom.byId('leftsideIndex');
+   if (pan!=null) dojoStyle.set(pan, {
       height: ch + 'px'
    });
 
    var sw = cw - 20;
    var sh = ch - 20;
    console.log('list: w=' + sw + ', h=' + sh)
-   pan = dojo.byId('searchResult');
-   if (pan!=null) dojo.style(pan, {
+   pan = dojoDom.byId('searchResult');
+   if (pan!=null) dojoStyle.set(pan, {
       height: sh + 'px'
    });
 
    cw = cw - 30;
    ch = ch - 30;
    console.log('right: w=' + cw + ', h=' + ch)
-   pan = dojo.byId('certDisplay');
-   if (pan!=null) dojo.style(pan, {
+   pan = dojoDom.byId('certDisplay');
+   if (pan!=null) dojoStyle.set(pan, {
       height: ch + 'px',
       width: cw + 'px'
    });
@@ -168,7 +169,7 @@ var certTableLayout = [ [
             {
                 field: "status",
                 name: "Status",
-                width: '4em',
+                width: '5em',
                 formatter: function(item) {
                     return item.toString();
                 }
@@ -189,12 +190,12 @@ function doRowAction(e) {
   var status = certsGrid.store.getValue(item, 'status');
   var id = certsGrid.store.getValue(item, 'no');
   var url = v_root + '/cert?innerview=yes&id=' + stripZeros(id.toString());
-  dijit.byId('certDisplay').set('errorMessage', 'Your session had expired.  Reload the page to reauthenticate.');
-  dijit.byId('certDisplay').set('href', url);
-  dijit.byId('certDisplay').set('onLoad', refreshCertsIfNeeded);
+  dijitRegistry.byId('certDisplay').set('errorMessage', 'Your session had expired.  Reload the page to reauthenticate.');
+  dijitRegistry.byId('certDisplay').set('href', url);
+  dijitRegistry.byId('certDisplay').set('onLoad', refreshCertsIfNeeded);
   v_certId = id;
-  // dojo.byId('selectTitlePane').innerHTML = '<tt>' + certsGrid.store.getValue(item, 'cn') + '</tt>';
-  // dojo.byId('selectTitlePane').innerHTML = '<tt>' + e.button + '</tt>';
+  // dojoDom.byId('selectTitlePane').innerHTML = '<tt>' + certsGrid.store.getValue(item, 'cn') + '</tt>';
+  // dojoDom.byId('selectTitlePane').innerHTML = '<tt>' + e.button + '</tt>';
   
   return false;
 }
@@ -209,9 +210,9 @@ function styleRow(row) {
     else if (status=='request') color = '#000090';
     var view = certsGrid.views.views[0];
     var node = view.getCellNode(row.index,0);
-    dojo.style(node, "color", color);
+    dojoStyle.set(node, "color", color);
     node = view.getCellNode(row.index,3);
-    dojo.style(node, "color", color);
+    dojoStyle.set(node, "color", color);
   }
 
 }
@@ -236,7 +237,7 @@ var showCertsName = '';
 
 function showCerts(name) {
    showCertsName = name;
-   dojo.byId('searchTitlePane').innerHTML = "Certificates matching '" + name + "'";
+   dojoDom.byId('searchTitlePane').innerHTML = "Certificates matching '" + name + "'";
    certLister = _showCerts;
    v_cert_ts = 0;
    refreshCertsIfNeeded();
@@ -273,13 +274,17 @@ function _showCerts() {
      selectionMode: 'single',
      loadingMessage: 'searching for certificates',
      rowsPerPage: '20',
-     autoWidth: true
    });
-   dojo.connect(certsGrid, 'onCellFocus', setFocusStyle );
-   dojo.connect(certsGrid, 'onRowClick', doRowAction);
-   dojo.connect(certsGrid, 'onStyleRow', styleRow );
-   dojo.connect(certsGrid, '_onFetchComplete', setPaneSizes);
-   var tgt = dijit.byId('searchResult').containerNode.appendChild(certsGrid.domNode);
+    dojoOn(certsGrid, 'CellFocus', setFocusStyle );
+    dojoOn(certsGrid, 'RowClick', doRowAction);
+    dojoOn(certsGrid, 'StyleRow', styleRow );
+    dojoOn(certsGrid, '_FetchComplete', setPaneSizes);
+   var tgt = dijitRegistry.byId('searchResult').containerNode.appendChild(certsGrid.domNode);
+   // adjust height for footer
+   parent = dojoDom.byId('searchResult');
+   dojoStyle.set(certsGrid.domNode, {
+        height: dojoStyle.get(parent, 'height') - 20 + 'px'
+    });
    certsGrid.startup();
 }
 
@@ -307,7 +312,7 @@ function _showMyCerts() {
    console.log('showMy');
 
    clearOldGrid();
-   dojo.byId('searchTitlePane').innerHTML = "Favorites";
+   dojoDom.byId('searchTitlePane').innerHTML = "Favorites";
 
    getCertsStore();
    certsGrid = new dojox.grid.DataGrid({
@@ -316,28 +321,34 @@ function _showMyCerts() {
         owner: v_remoteUser
         },
      structure: certTableLayout,
+     sortInfo: -1,
      errorMessage: 'Your session has expired.  Reload the page to reauthenticate.'
    });
    console.log('conecting');
-   dojo.connect(certsGrid, 'onCellFocus', setFocusStyle );
-   dojo.connect(certsGrid, 'onRowClick', doRowAction);
-   dojo.connect(certsGrid, 'onStyleRow', styleRow );
-   dojo.connect(certsGrid, '_onFetchComplete', setPaneSizes);
-   var tgt = dijit.byId('searchResult').containerNode.appendChild(certsGrid.domNode);
+   dojoOn(certsGrid, 'CellFocus', setFocusStyle );
+   dojoOn(certsGrid, 'RowClick', doRowAction);
+   dojoOn(certsGrid, 'StyleRow', styleRow );
+   dojoOn(certsGrid, '_FetchComplete', setPaneSizes);
+   var tgt = dijitRegistry.byId('searchResult').containerNode.appendChild(certsGrid.domNode);
    console.log(tgt);
+    // adjust height for footer
+    parent = dojoDom.byId('searchResult');
+    dojoStyle.set(certsGrid.domNode, {
+        height: dojoStyle.get(parent, 'height') - 20 + 'px'
+    });
    certsGrid.startup();
 }
 
 function getCertList(name) {
   var url = v_root + '/search?innerview=yes&name=' + name;
-  dijit.byId('searchResult').set('href',url);
+  dijitRegistry.byId('searchResult').set('href',url);
 }
 
 function checkSimpleSearch(e)
 {
   console.log(e);
   if (!e) e = window.event;
-  if (e.keyCode==13) showCerts(dijit.byId('simplesearch').get('value'));
+  if (e.keyCode==13) showCerts(dijitRegistry.byId('simplesearch').get('value'));
 }
 
 
@@ -348,7 +359,7 @@ function remFav(response, ioArgs) {
    dojo.xhrDelete({
       url: v_root + '/ajax/owner?id=' + v_certId,
       handleAs: 'text',
-      load: function (data){dojo.byId('remLink').innerHTML = "removed";},
+      load: function (data){dojoDom.byId('remLink').innerHTML = "removed";},
       error: function (data){iam_showTheNotice('error: ' + data);}
       });
   }
@@ -358,7 +369,7 @@ function addFav() {
    dojo.xhrPut({
       url: v_root + '/ajax/owner?id=' + v_certId,
       handleAs: 'text',
-         load: function (data){dojo.byId('addLink').innerHTML = "added";},
+         load: function (data){dojoDom.byId('addLink').innerHTML = "added";},
          error: function (data){iam_showTheNotice('error: ' + data);}
       });
   }
@@ -366,16 +377,16 @@ function addFav() {
 
 // right side heplers
 function showNewIC() {
-  // dojo.byId('selectTitlePane').innerHTML = 'InCommon certificate request';
-  dijit.byId('certDisplay').set('href', v_root + '/req?type=ic&innerview=yes');
+  // dojoDom.byId('selectTitlePane').innerHTML = 'InCommon certificate request';
+  dijitRegistry.byId('certDisplay').set('href', v_root + '/req?type=ic&innerview=yes');
 }
 function showNewUW() {
-  // dojo.byId('selectTitlePane').innerHTML = 'UWCA certificate request';
-  dijit.byId('certDisplay').set('href', v_root + '/req?type=uw&innerview=yes');
+  // dojoDom.byId('selectTitlePane').innerHTML = 'UWCA certificate request';
+  dijitRegistry.byId('certDisplay').set('href', v_root + '/req?type=uw&innerview=yes');
 }
 function showVerify() {
-  // dojo.byId('selectTitlePane').innerHTML = 'Verify DNS ownership';
-  dijit.byId('certDisplay').set('href', v_root + '/req?type=ver&innerview=yes');
+  // dojoDom.byId('selectTitlePane').innerHTML = 'Verify DNS ownership';
+  dijitRegistry.byId('certDisplay').set('href', v_root + '/req?type=ver&innerview=yes');
 }
 // new cert functions
 
@@ -384,16 +395,16 @@ function assembleRequestXml(type) {
    if (type=='uw') cert_ca = '1';
    else cert_ca = '2';
 
-   var ct = dijit.byId(type + '_cert_type').get('value');
-   var st = dijit.byId(type + '_server_type').get('value');
-   var lt = dijit.byId(type + '_lifetime').get('value');
-   var ns = dijit.byId(type + '_num_server').get('value');
+   var ct = dijitRegistry.byId(type + '_cert_type').get('value');
+   var st = dijitRegistry.byId(type + '_server_type').get('value');
+   var lt = dijitRegistry.byId(type + '_lifetime').get('value');
+   var ns = dijitRegistry.byId(type + '_num_server').get('value');
 
    var xml = '<sslCertRequest certCa="' + cert_ca + '" certType="' + ct +
       '" serverType="' + st + '" lifetime="' + lt + '" numServer="' + ns + '">';
 
    // add the csr
-   csr = dijit.byId(type + '_csr').get('value').trim();
+   csr = dijitRegistry.byId(type + '_csr').get('value').trim();
    if (csr=='') {
       iam_showTheNotice("You must provide a csr");
       return '';
@@ -409,7 +420,7 @@ function assembleRequestXml(type) {
 
    // add altnames
    if (type=='ic') {
-      altnames = dijit.byId(type + '_altname').get('value').trim().split(/[\s,]+/);
+      altnames = dijitRegistry.byId(type + '_altname').get('value').trim().split(/[\s,]+/);
       xml = xml + '<altNames>';
       dojo.forEach(altnames, function(alt) {
          if (alt.indexOf('&')>=0||alt.indexOf('<')>=0||alt.indexOf('>')>=0) {
@@ -436,18 +447,18 @@ function submitNewRequest(type) {
      load: function(data, args) {
         // iam_showTheNotice(args.xhr.status);
         if (args.xhr.status==200 || args.xhr.status==201) {
-           dijit.byId('certDisplay').set('content', data);
+           dijitRegistry.byId('certDisplay').set('content', data);
         } else if (args.xhr.status==203) {
-           dijit.byId('errorPopup').set('content', data);
-           dijit.byId('errorPopup').show();
+           dijitRegistry.byId('errorPopup').set('content', data);
+           dijitRegistry.byId('errorPopup').show();
         } else iam_showTheNotice('response: ' + args.xhr.status);
         document.body.style.cursor = 'default';
       },
      error: function(data, args) {
         if (args.xhr.status==0) iam_showTheNotice('Please reload the page to reauthenticate.');
         else {
-           dijit.byId('errorPopup').set('content', data);
-           dijit.byId('errorPopup').show();
+           dijitRegistry.byId('errorPopup').set('content', data);
+           dijitRegistry.byId('errorPopup').show();
         }
 
 /*
@@ -472,18 +483,18 @@ function submitRenewRequest(id) {
         // iam_showTheNotice(args.xhr.status);
         if (args.xhr.status==200 || args.xhr.status==201) {
            var url = v_root + '/cert?innerview=yes&id=' + id;
-           dijit.byId('certDisplay').set('href', url);
+           dijitRegistry.byId('certDisplay').set('href', url);
         } else if (args.xhr.status==203) {
-           dijit.byId('errorPopup').set('content', data);
-           dijit.byId('errorPopup').show();
+           dijitRegistry.byId('errorPopup').set('content', data);
+           dijitRegistry.byId('errorPopup').show();
         } else iam_showTheNotice('response: ' + args.xhr.status);
         document.body.style.cursor = 'default';
       },
      error: function(data, args) {
         if (args.xhr.status==0) iam_showTheNotice('Please reload the page to reauthenticate.');
         else {
-           dijit.byId('errorPopup').set('content', data);
-           dijit.byId('errorPopup').show();
+           dijitRegistry.byId('errorPopup').set('content', data);
+           dijitRegistry.byId('errorPopup').show();
         }
         document.body.style.cursor = 'default';
       }
@@ -499,9 +510,9 @@ function checkDnsLookup(e)
 }
 
 function doDnsTest() {
-   name = dijit.byId('dnsname').get('value').trim();
+   name = dijitRegistry.byId('dnsname').get('value').trim();
    if (name=='') return true;
-   dojo.byId('dnsResult').innerHTML = "verifying";
+   dojoDom.byId('dnsResult').innerHTML = "verifying";
    url = v_root + '/ajax/verify?dns=' + name;
    sub = 'You are';
    if ((s=name.indexOf(' '))>0) {
@@ -513,16 +524,16 @@ function doDnsTest() {
      url: url,
      handleAs: 'text',
      load: function(data, args) {
-        dojo.byId('dnsResult').innerHTML = sub + " an owner of that domain.";
+        dojoDom.byId('dnsResult').innerHTML = sub + " an owner of that domain.";
       },
      error: function(data, args) {
-        if (args.xhr.status==404) dojo.byId('dnsResult').innerHTML = sub + " not an owner of that domain.";
-        else dojo.byId('dnsResult').innerHTML = "DNS verification failed with status: " + args.xhr.status==404;
+        if (args.xhr.status==404) dojoDom.byId('dnsResult').innerHTML = sub + " not an owner of that domain.";
+        else dojoDom.byId('dnsResult').innerHTML = "DNS verification failed with status: " + args.xhr.status==404;
       }
    });
 }
 
 // show the incommon intermediate cert
 function showInc() {
-   dijit.byId('incDialog').show();
+   dijitRegistry.byId('incDialog').show();
 }
