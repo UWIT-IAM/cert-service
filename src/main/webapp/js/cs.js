@@ -169,7 +169,7 @@ var certTableLayout = [ [
             {
                 field: "status",
                 name: "Status",
-                width: '4em',
+                width: '5em',
                 formatter: function(item) {
                     return item.toString();
                 }
