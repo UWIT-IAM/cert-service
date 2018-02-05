@@ -41,8 +41,8 @@
 
    # update http and https config
     # change restarts apache
-  - include: "ansible-tools/tasks/apache_config.yml file=https prod=spreg"
-  - include: "ansible-tools/tasks/apache_config.yml file=http prod=spreg"
+  - include: "ansible-tools/tasks/apache_config.yml file=https prod=cs"
+  - include: "ansible-tools/tasks/apache_config.yml file=http prod=cs"
 
 
   # update certs and keys (used by cs)
