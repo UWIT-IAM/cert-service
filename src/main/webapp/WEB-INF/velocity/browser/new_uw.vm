@@ -85,8 +85,7 @@
          <td><select id="uw_lifetime" dojoType="dijit.form.FilteringSelect">
           <option value="3" >3 months</option>
           <option value="12" >1 year</option>
-          <option value="24" >2 years</option>
-          <option value="36" selected="selected">3 years</option>
+          <option value="24" selected="selected">2 years</option>
           </select>
          </td>
      <td></td>
