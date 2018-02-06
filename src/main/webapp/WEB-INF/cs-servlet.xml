@@ -40,8 +40,8 @@
         <property name="icCertificateAuthority" ref="icCertificateAuthority"/>
         <property name="cbRegistry" ref="cbRegistry"/>
         <property name="dnsVerifier" ref="comboDnsVerifier" />
-
-       <property name="browserRootPath" value="${cs.browserRoot}"/>
+        <property name="errorUrl" value="${cs.errorUrl}"/>
+        <property name="browserRootPath" value="${cs.browserRoot}"/>
         <property name="certRootPath" value="${cs.certRoot}"/>
         <property name="loginCookie" value="cscookie"/>
         <property name="logoutUrl" value="${cs.uwLogout}"/>

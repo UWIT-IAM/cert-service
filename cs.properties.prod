@@ -3,8 +3,8 @@
 # cs will look for this file first in the cs directory
 # if that is undefined or not found this installed copy will be used
 #
-cs.version=2.2.2
-cs.versionDate=04/20/2016
+cs.version=2.3.0
+cs.versionDate=2017-12-10
 
 # location of the properties file
 cs.root=/data/local/cs
@@ -36,6 +36,7 @@ cs.googleEntityId=https://idp.u.washington.edu/google
 
 cs.myEntityId=https://iamtools-test.u.washington.edu/shibboleth
 cs.csUrl=https://iam-tools-test.u.washington.edu/cs/
+cs.errorUrl=https://wiki.cac.washington.edu/x/6wz-B
 cs.browserRoot=/cs
 cs.certRoot=/cs/ws
 

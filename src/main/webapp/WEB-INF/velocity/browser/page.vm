@@ -31,19 +31,19 @@ dojoConfig = {
    "isDebug": true,
    packages: [{
       name: "iam",
-      location: "/js"
+      location: "/cs/js"
    }]
 };
 </script>
 
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" data-dojo-config="async: true"></script>
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css"/>
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css"/>
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/Grid.css"/>
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claro.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js" data-dojo-config="async: true"></script>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/resources/dojo.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/claro/claro.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojox/grid/resources/Grid.css"/>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojox/grid/resources/claroGrid.css"/>
 
-<link rel="stylesheet" type="text/css" href="/css/iam-dojo-2.css"/>
-<link rel="stylesheet" type="text/css" href="/css/cs.css"/>
+<link rel="stylesheet" type="text/css" href="/cs/css/iam-dojo-2.css"/>
+<link rel="stylesheet" type="text/css" href="/cs/css/cs.css"/>
 
 ## add ie7 css if needed
 <script>
@@ -64,8 +64,8 @@ dojoConfig = {
 </script>
 
 
-<script type="text/javascript" src="/js/iam-dojo.js"></script>
-<script type="text/javascript" src="/js/cs.js"></script>
+<script type="text/javascript" src="/cs/js/iam-dojo.js"></script>
+<script type="text/javascript" src="/cs/js/cs.js"></script>
 
 
 <script>
@@ -113,7 +113,7 @@ v_xsrf = '${xsrf}';
    <p aligh="center">Your session with the <br/>Certificate Service<br/> has expired. <br/>Refresh the page to continue working.</p>
  </div>
  <div class="dijitDialogPaneActionBar">
-    <button dojoType="dijit.form.Button" type="button" onClick="location.reload()">Refresh</button>
+    <button dojoType="dijit/form/Button" type="button" onClick="location.reload()">Refresh</button>
  </div>
 </div>
 
@@ -122,30 +122,30 @@ v_xsrf = '${xsrf}';
   <div class="dijitDialogPaneContentArea">
     Identity and Access Management
     <br/>
-    Certificate Services 2.2.2
+    Certificate Services 2.3.0
     <br/>
-    Revision 04/20/2016
+    Revision 2017-12-10
     <p/>
     <a href="https://wiki.cac.washington.edu/x/KDaoAQ">Learn more about certificate services</a>
   </div>
  <div class="dijitDialogPaneActionBar">
-    <button dojoType="dijit.form.Button" type="button" onClick="iam_hideTheDialog('helpAbout')">Close</button>
+    <button dojoType="dijit/form/Button" type="button" onClick="iam_hideTheDialog('helpAbout')">Close</button>
  </div>
 </div>
 
 
 
 ## error display
-<div id="errorPopup" dojoType="dijit.Dialog" title="Error" $hide">
+<div id="errorPopup" dojoType="dijit/Dialog" title="Error" $hide">
 </div>
 
 ## page
 
 ## loader flash
-<div role="presentation" id="theflash" data-dojo-type="dijit.layout.ContentPane" style="width: 100%; height:100%; z-index: 1001; display:block;">
+<div role="presentation" id="theflash" data-dojo-type="dijit/layout/ContentPane" style="width: 100%; height:100%; z-index: 1001; display:block;">
 <div style="width: 100%; height:50%">
 </div>
-<div align="center"><img src="/img/circle_loader.gif">
+<div align="center"><img src="/cs/img/circle_loader.gif">
 </div>
 </div>
 
@@ -156,7 +156,7 @@ v_xsrf = '${xsrf}';
 
 <h1 class="hidden">CERTIFICATE SERVICE</h1>
 
-<div id="topbanner" data-dojo-type="dijit.layout.ContentPane">
+<div id="topbanner" data-dojo-type="dijit/layout/ContentPane">
 <span class="topleft"><a href="https://wiki.cac.washington.edu/x/lR4">IDENTITY AND ACCESS MANAGEMENT</a></span>
 <ul class="topright">
  <li>Logged in: $remote_user</li>
@@ -168,7 +168,7 @@ v_xsrf = '${xsrf}';
 </div>##topbanner
 
 
-<div id="banner" data-dojo-type="dijit.layout.ContentPane" >
+<div id="banner" data-dojo-type="dijit/layout/ContentPane" >
     <span id="title"><a tabindex=-1 href="javascript:showHomePage()">CERTIFICATE SERVICE</a></span>
 ##     <span id="banner_notice"></span>
     <ul id="ident">
@@ -180,7 +180,7 @@ v_xsrf = '${xsrf}';
     <ul id="rightsubbanner">
       <li class="sublist">
          Search
-          <input id="simplesearch" aria-label="search" data-dojo-type="dijit.form.TextBox" />
+          <input id="simplesearch" aria-label="search" data-dojo-type="dijit/form/TextBox" />
       </li>
       <li class="sublist">
         <a aria-role="button" href="javascript:showMyCerts()">Favorites</a>
@@ -203,9 +203,9 @@ v_xsrf = '${xsrf}';
 ## end banner
 
 ## notice popup
-<div id="bannerNotice" data-dojo-type="dijit.layout.ContentPane" role="alert" $hide></div>
+<div id="bannerNotice" data-dojo-type="dijit/layout/ContentPane" role="alert" $hide></div>
 
-<div id="titlebar" class="pageHeader" dojoType="dijit.layout.ContentPane" style="width:100%;margin-top:10px;" >
+<div id="titlebar" class="pageHeader" dojoType="dijit/layout/ContentPane" style="width:100%;margin-top:10px;" >
 <table width="100%"><tr>
  <td id="searchTitlePane" align="left"></td>
  <td id="selectTitlePane" align="right" style="padding-right:60px"></td>
@@ -251,18 +251,18 @@ v_xsrf = '${xsrf}';
 ## page content
 
 
-<div id="cscontent"  dojoType="dijit.layout.BorderContainer" style="width:100%;height:100%" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true">
+<div id="cscontent"  dojoType="dijit/layout/BorderContainer" style="width:100%;height:100%" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true">
 
-<div id="leftsideIndex" dojoType="dijit.layout.ContentPane" style="width:50%;border:0px;" data-dojo-props="splitter:true, region:'leading'">
+<div id="leftsideIndex" dojoType="dijit/layout/ContentPane" style="width:50%;border:0px;" data-dojo-props="splitter:true, region:'leading', style: { overflow: 'hidden', padding: '0' }">
 <h3 class="hidden">Certificate list</h3>
-    <div class="searchresult" id="searchResult" dojoType="dijit.layout.ContentPane" style="overflow:auto">
+    <div class="searchresult" id="searchResult" dojoType="dijit/layout/ContentPane" data-dojo-props="style: { overflow: 'hidden', padding: '0'}">
     </div>
 </div>
 
-<div id="certDisplay" dojoType="dijit.layout.ContentPane"   style="border:0px;" data-dojo-props="splitter:true, region:'center'">
+<div id="certDisplay" dojoType="dijit/layout/ContentPane"   style="border:0px;" data-dojo-props="splitter:true, region:'center'">
 <h3 class="hidden">Detail</h3>
 
-<div id="certDisplayIntro" data-dojo-type="dijit.layout.ContentPane">
+<div id="certDisplayIntro" data-dojo-type="dijit/layout/ContentPane">
 <p>
 <h4>Need a certificate?</h4>
 <p>
@@ -285,7 +285,7 @@ web servers and applications.
 </div>
 
 
-<div id="certDisplayDetail" data-dojo-type="dijit.layout.ContentPane" $hide>
+<div id="certDisplayDetail" data-dojo-type="dijit/layout/ContentPane" $hide>
 </div>
 
 #parse ( 'browser/new_ic.vm' )
@@ -297,7 +297,7 @@ web servers and applications.
 ## footer
  
 
-<div id="footer" data-dojo-type="dijit.layout.ContentPane"  style="position:absolute;bottom:0px">
+<div id="footer" data-dojo-type="dijit/layout/ContentPane"  style="position:absolute;bottom:0px">
     <span id="footlogo"><a href="http:/www.uw.edu/" title="University of Washington">
        UNIVERSITY OF WASHINGTON
        </a></span>
@@ -312,7 +312,7 @@ web servers and applications.
     </span>
     <span id="footright">
     <ul id="navigation">
-        <li><a href="javascript:iam_showTheDialog('helpAbout');">Cert service 2.2</a></li>
+        <li><a href="javascript:iam_showTheDialog('helpAbout');">Cert service 2.3</a></li>
     </ul>
     </span>
 </div>

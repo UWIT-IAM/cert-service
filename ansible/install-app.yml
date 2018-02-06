@@ -17,7 +17,7 @@
     when: local_vars_stat.stat.exists
 
   - name: create properties yml file
-    local_action: property_to_yml name=cs type={{ cluster_type }}
+    local_action: "property_to_yml name=cs type={{ cluster_type }}"
 
   - include_vars: "properties.yml"
 
@@ -39,20 +39,11 @@
     copy: "src=../cs.properties.{{ cluster_type }}  dest={{ cs_root }}/cs.properties group=iam-dev mode=664"
     notify: restart tomcat
 
-  # update http and https config
-  # change restarts apache
-  - include: "tasks/apache_config.yml file=https prod=cs"
-  - include: "tasks/apache_config.yml file=http prod=cs"
+   # update http and https config
+    # change restarts apache
+  - include: "ansible-tools/tasks/apache_config.yml file=https prod=cs"
+  - include: "ansible-tools/tasks/apache_config.yml file=http prod=cs"
 
-  # copy js files
-  - name: copy js files
-    copy: "src=../src/main/webapp/cs.js dest=/www/js/cs.js group=iam-dev mode=664"
-    when: non_standard_apache is not defined
-
-  # copy css files
-  - name: copy css files
-    copy: "src=../src/main/webapp/cs.css dest=/www/css/cs.css group=iam-dev mode=664"
-    when: non_standard_apache is not defined
 
   # update certs and keys (used by cs)
   # change restarts tomcat
@@ -100,7 +91,7 @@
   # handlers mostly standard from iam-ansible
 
   handlers:
-    - include: "tasks/iam_handlers.yml"
+    - include: "ansible-tools/tasks/iam_handlers.yml"
 
 
 
