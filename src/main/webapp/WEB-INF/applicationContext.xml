@@ -26,7 +26,6 @@
         <property name="cbRegistry" ref="cbRegistry"/>
          <property name="iamMailSender" ref="iamMailSender"/>
          <property name="certIssuedMessage" ref="certIssuedMessage"/>
-         <property name="certWatcherMessage" ref="certWatcherMessage"/>
         <property name="dnsVerifier" ref="comboDnsVerifier" />
         <property name="watchForActivity" value="${cs.uwca.watch}" />
         <property name="refreshInterval" value="600" />
@@ -38,7 +37,6 @@
         <property name="cbRegistry" ref="cbRegistry"/>
          <property name="iamMailSender" ref="iamMailSender"/>
          <property name="certIssuedMessage" ref="certIssuedMessage"/>
-         <property name="certWatcherMessage" ref="certWatcherMessage"/>
         <property name="dnsVerifier" ref="comboDnsVerifier" />
         <property name="watchForActivity" value="${cs.ic.watch}" />
         <property name="refreshInterval" value="1800" />
@@ -105,16 +103,7 @@ managed by UW-IT. You are receiving this message because you requested this cert
 certificate's common name or one of its alternative names. Requests for changes to the contact list for your DNS name(s) should be emailed to
 netops@uw.edu. "/>
 </bean>
-
-<bean id="certWatcherMessage" class="edu.washington.iam.tools.IamMailMessage">
-  <property name="from" value="UW Certificate Services &lt;somebody@iam-tools.u.washington.edu&gt;"/>
-  <property name="to" value="${cs.smtp.issuedTo}"/>
-  <property name="subject" value="Certificate #CERTID issued for CERTCN"/>
-  <property name="replyTo" value="help@uw.edu"/>
-  <property name="text" value="A certificate for CERTCN (#CERTID) has been issued by ISSUER.
-NLNLThis message is advisory.  No action is required."/>
-</bean>
-
+    
 
 
 
