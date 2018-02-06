@@ -89,7 +89,7 @@ public final class PEMHelper {
          cert.dn = dn.toString();
          try {
             List cns = dn.getValues(X509Name.CN);
-            if (cns.size()!=1) throw new CBParseException("invalid CSR"); 
+            if (cns.size()!=1) throw new CBParseException("invalid CSR (number of CNs does not equal one)");
             cert.cn = (String)(cns.get(0));
             log.debug("cn=" + cert.cn);
             cert.names.add(cert.cn.toLowerCase());   // first entry for names is always cn
@@ -148,6 +148,9 @@ public final class PEMHelper {
       } catch (IOException e) {
         log.debug("ioerror: " + e);
         throw new CBParseException("invalid CSR " + e.getMessage());
+      } catch (CBParseException e) {
+        log.debug("cbparseexception: " + e);
+        throw e;
       } catch (Exception e) {
         log.debug("excp: " + e);
         throw new CBParseException("invalid CSR");
