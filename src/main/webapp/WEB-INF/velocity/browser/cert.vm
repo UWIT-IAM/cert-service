@@ -105,6 +105,7 @@ $!{cert.pemCert}
  #if ($cert.ca==1)
   <li>Apache: cut and paste the PEM representation of your certificate to your <tt>SSLCertificateFile</tt>.</li>
   <li>IIS: download the PKCS7 format.</li>
+  <li>Get the <a href="https://certs.cac.washington.edu/?req=svpem">UWCA root certificate</a>.</li>
  #end
  #if ($cert.ca==2)
   <li>Apache install:

@@ -680,6 +680,7 @@ public class CBController {
            if (!cert.dnC.equals("US")) throw new CBParseException("Country must be 'US'");
            if (!(cert.dnST.equals("WA")||cert.dnST.equals("Washington"))) throw new CBParseException("State must be 'WA' or 'Washington'");
            if (!cert.dnO.equals("University of Washington")) throw new CBParseException("Organization must be 'University of Washington'");
+           if (cert.lifetime > 24 && cert.ca==CBCertificate.IC_CA) throw new CBParseException("Lifetime must be 24 months or fewer.");
            if (cert.keySize>0 && cert.keySize<2048 &&
                cert.ca==CBCertificate.IC_CA) throw new CBParseException("Key length must be 2048");
            verifyOwnership(cert, session.remoteUser);
