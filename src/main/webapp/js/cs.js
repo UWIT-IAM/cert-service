@@ -273,7 +273,7 @@ function _showCerts() {
      columnReordering: true,
      selectionMode: 'single',
      loadingMessage: 'searching for certificates',
-     rowsPerPage: '20',
+     rowsPerPage: '20'
    });
     dojoOn(certsGrid, 'CellFocus', setFocusStyle );
     dojoOn(certsGrid, 'RowClick', doRowAction);
