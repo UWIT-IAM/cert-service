@@ -77,7 +77,7 @@ $!{cert.pemCert}
  #else
     (expired)
  #end
-</td></tr>
+ </td></tr>
 ## is InCommon cert with more than two year term
 #elseif ($cert.lifetime>24 && $cert.ca==2 && $expdays && $expdays>(-30))
  <tr><td>action</td><td>
@@ -87,6 +87,8 @@ $!{cert.pemCert}
     Expired.
  #end
     This certificate cannot be renewed.  <a href="https://wiki.cac.washington.edu/x/UbUMBQ">Why?</a>  Please request a new certificate.  </td></tr>
+#else
+ ${cert.lifetime} , ${expdays}, ${cert.ca}, ${cert.sha1}
 #end
 
 </table>
