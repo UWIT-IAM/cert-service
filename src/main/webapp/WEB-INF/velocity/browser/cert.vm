@@ -88,7 +88,7 @@ $!{cert.pemCert}
  #end
     This certificate cannot be renewed.  <a href="https://wiki.cac.washington.edu/x/UbUMBQ">Why?</a>  Please request a new certificate.  </td></tr>
 #else
- ${cert.lifetime} , ${expdays}, ${cert.ca}, ${cert.sha1}
+    <tr><td>${cert.lifetime} , ${expdays}, ${cert.ca}, ${cert.sha1}</td></tr>
 #end
 
 </table>
