@@ -70,7 +70,7 @@ $!{cert.pemCert}
 #end
 
 ## #if ($expdays && $expdays>0 && $expdays<100)
-#if (!$cert.sha1 && $expdays && $expdays>(-30) && (!$cert.lifetime>24 || $cert.ca==1))
+#if (($cert.ca==1 || !$cert.sha1) && $expdays && $expdays>(-30) && (!$cert.lifetime>24 || $cert.ca==1))
  <tr><td>action</td><td><a href="javascript:submitRenewRequest('$cert.id')">renew this certificate</a>
  #if ($expdays>0)
     (expires in ${expdays} days)
