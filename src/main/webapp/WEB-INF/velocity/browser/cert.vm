@@ -69,8 +69,10 @@ $!{cert.pemCert}
  <tr><td>favorites</td><td id="remLink"><a href="javascript:remFav()">remove from Favorites</a></td></tr>
 #end
 
+    <tr><td>${cert.lifetime} , ${expdays}, ${cert.ca}, ${cert.sha1}</td></tr>
+    
 ## #if ($expdays && $expdays>0 && $expdays<100)
-#if (($cert.ca==1 || !$cert.sha1) && $expdays && $expdays>(-30) && (!$cert.lifetime>24 || $cert.ca==1))
+#if ( ($cert.ca==1 || !$cert.sha1) && $expdays && $expdays>(-30) && (!$cert.lifetime>24 || $cert.ca==1) )
  <tr><td>action</td><td><a href="javascript:submitRenewRequest('$cert.id')">renew this certificate</a>
  #if ($expdays>0)
     (expires in ${expdays} days)
@@ -79,7 +81,7 @@ $!{cert.pemCert}
  #end
  </td></tr>
 ## is InCommon cert with more than two year term
-#elseif ($cert.lifetime>24 && $cert.ca==2 && $expdays && $expdays>(-30))
+#elseif ( $cert.lifetime>24 && $cert.ca==2 && $expdays && $expdays>(-30) )
  <tr><td>action</td><td>
  #if ($expdays>0)
     Expires in ${expdays} days.
