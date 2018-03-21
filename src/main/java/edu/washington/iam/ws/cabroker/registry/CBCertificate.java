@@ -99,6 +99,7 @@ public class CBCertificate {
    public int getCa() {
       return ca;
    }
+   public int getLifetime() {return lifetime; }
 
    public List<String> getNames() {
       if (names.size()==0) registry.getNames(this);
