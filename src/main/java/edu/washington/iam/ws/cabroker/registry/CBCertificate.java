@@ -20,6 +20,7 @@ package edu.washington.iam.ws.cabroker.registry;
 import java.util.List;
 import java.util.Date;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 /* Certificate broker certificate */
 
@@ -145,6 +146,15 @@ public class CBCertificate {
    }
    public Date getExpires() {
       return expires;
+   }
+   public int getTerm() {
+      //returns the cert validity period in days
+      if (expires != null && issued != null) {
+         long period = expires.getTime() - issued.getTime();
+         long days = TimeUnit.DAYS.convert(period, TimeUnit.MILLISECONDS);
+         return (int) days;
+      }
+      else return 0;  //if expires or issued is missing this is probably a renewal
    }
    public int getKeySize() {
       return keySize;
