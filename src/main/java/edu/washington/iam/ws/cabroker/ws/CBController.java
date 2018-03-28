@@ -328,7 +328,7 @@ public class CBController {
 
        // we need some shib attrs
        String remoteUser = (String)request.getAttribute(eppnName);
-       //remoteUser = "mattjm@washington.edu";
+       //remoteUser = "" This is where you hardcode a user for testing on non-shib installs (netid@washington.edu)
        String provider = (String)request.getAttribute("Shib-Identity-Provider");
        log.debug("eppn("+eppnName+")=" + remoteUser + " rus=" + request.getRemoteUser() + " prov=" + provider + " m=" + method + " k=" + methodKey);
        if (remoteUser!=null) {
