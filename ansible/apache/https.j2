@@ -6,6 +6,10 @@
 # ----------------------------------------------------------------------
 #
 
+RewriteCond %{HTTP_USER_AGENT}  Trident
+RewriteCond %{REQUEST_URI} ^/cs*
+RewriteRule ^(.*)$ https://iam-tools.u.washington.edu/ie.html
+
 ProxyPass /cs ajp://localhost:8009/cs
 
 # browser authn
