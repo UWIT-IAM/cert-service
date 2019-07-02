@@ -34,6 +34,6 @@ then
   send_dash "9" "iam-tools.u.washington.edu" "certnotify" "Cert expiration warning failed"
 fi
 
-send_mail mattjm@uw.edu "expire certs notices" "$certs"
+send_mail cert-dev@uw.edu "expire certs notices" "$certs"
 
 
