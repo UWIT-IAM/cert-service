@@ -40,12 +40,29 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Key;
 
-import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.config.Lookup;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
+import org.apache.http.impl.client.CloseableHttpClient;
+
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+
+
+// import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+// import org.apache.http.conn.ClientConnectionManager;
+// import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.params.BasicHttpParams;
+
 
 
 /**
@@ -58,13 +75,14 @@ public class IamConnectionManager {
    private String certFilename;
    private String keyFilename;
 
-   private SSLSocketFactory socketFactory;
+   private SSLConnectionSocketFactory socketFactory;
    private TrustManager[] trustManagers;
    private KeyManager[] keyManagers;
    private KeyStore keyStore;
    private KeyStore trustStore;
    private SchemeRegistry schemeRegistry;
-   private ThreadSafeClientConnManager connectionManager;
+   private PoolingHttpClientConnectionManager connectionManager;
+   private Registry<ConnectionSocketFactory> registry;
 
    private static Logger log = LoggerFactory.getLogger(IamConnectionManager.class);
    
@@ -81,13 +99,18 @@ public class IamConnectionManager {
       try {
          SSLContext ctx = SSLContext.getInstance("TLSv1.2");
          ctx.init(keyManagers, trustManagers, null);
-         socketFactory = new SSLSocketFactory(ctx);
-         Scheme scheme = new Scheme(protocol, socketFactory, port);
-         schemeRegistry = new SchemeRegistry();
-         schemeRegistry.register(scheme);
+         socketFactory = new SSLConnectionSocketFactory(ctx, new DefaultHostnameVerifier());
 
-         log.debug("create conn mgr");
-         connectionManager = new ThreadSafeClientConnManager(new BasicHttpParams(),schemeRegistry);
+         registry = RegistryBuilder.<ConnectionSocketFactory> create()
+                .register("https", socketFactory)
+                .register("http", new PlainConnectionSocketFactory())
+                .build();
+         // Scheme scheme = new Scheme(protocol, socketFactory, port);
+         // schemeRegistry = new SchemeRegistry();
+         // schemeRegistry.register(scheme);
+
+         log.debug("** creating conn mgr");
+         connectionManager = new PoolingHttpClientConnectionManager(registry);
 
       } catch (Exception e) {
          log.error("sf error: " + e);
@@ -95,16 +118,17 @@ public class IamConnectionManager {
    }
 
    
-   public SSLSocketFactory getSocketFactory() {
+   public SSLConnectionSocketFactory getSocketFactory() {
        log.debug("sr get sock factory");
        return socketFactory;
    }
-   public SchemeRegistry getSchemeRegistry() {
-       log.debug("sr get scheme reg");
-       return schemeRegistry;
-   }
-   public ClientConnectionManager getConnectionManager() {
-       return (ClientConnectionManager) connectionManager;
+
+   public CloseableHttpClient getClient() {
+       log.info("IamCM getClient, pool stats: " + connectionManager.getTotalStats().toString());
+       HttpClientBuilder builder = HttpClientBuilder.create();
+       builder.setSSLSocketFactory(socketFactory);
+       builder.setConnectionManager(connectionManager );
+       return builder.build();
    }
       
    protected void initSocketFactory() {

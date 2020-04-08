@@ -177,6 +177,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
       if (oldStatus==CBCertificate.CERT_STATUS_REVOKED) return oldStatus;
       refreshSecrets();
     
+      try {
          String body = collectBody.replaceFirst("AUTHDATA",authData).replaceFirst("ID", String.valueOf(cert.caId));
          Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
          if (resp==null) throw new CertificateAuthorityException("IO error to CA");
@@ -215,6 +216,9 @@ public class ICCertificateAuthority implements CertificateAuthority {
          cert.updateDB();
          if (status==(-21)) cert.addHistory(CBHistory.CB_HIST_REV, new Date(), "somebody");
 
+      } catch (WebClientException e) {
+         throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
+      }
       return status;
    }
 
@@ -227,6 +231,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
       int status = (-999);
       String pkcs7 = null;
       refreshSecrets();
+      try {
          String body = collectPKCS7.replaceFirst("AUTHDATA",authData).replaceFirst("ID", String.valueOf(cert.caId));
          Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
          if (resp==null) throw new CertificateAuthorityException("IO error to CA");
@@ -247,6 +252,9 @@ public class ICCertificateAuthority implements CertificateAuthority {
             pkcs7 = certE.getTextContent();
             // log.debug("pkcs7: " + pkcs7);
          }
+      } catch (WebClientException e) {
+         throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
+      }
 
       return pkcs7;
    }
@@ -262,6 +270,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
       if (oldStatus==CBCertificate.CERT_STATUS_REVOKED) return oldStatus;
       refreshSecrets();
     
+      try {
          String body = collectRenewedBody.replaceFirst("AUTHDATA",authData).replaceFirst("ID", String.valueOf(cert.renewId));
          // log.debug("request: " + body);
          Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
@@ -310,6 +319,9 @@ public class ICCertificateAuthority implements CertificateAuthority {
          }
          cert.updateDB();
 
+      } catch (WebClientException e) {
+         throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
+      }
 
       return status;
    }
@@ -324,6 +336,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
       int oldStatus = cert.status;
       refreshSecrets();
     
+      try {
          String body = collectRenewedPKCS7.replaceFirst("AUTHDATA",authData).replaceFirst("ID", String.valueOf(cert.renewId));
          Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
          if (resp==null) throw new CertificateAuthorityException("IO error to CA");
@@ -343,6 +356,9 @@ public class ICCertificateAuthority implements CertificateAuthority {
             String b64 = data.getTextContent();
             pkcs7 = new String(Base64.decode(b64));
          }
+      } catch (WebClientException e) {
+         throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
+      }
 
       return pkcs7;
    }
@@ -390,12 +406,16 @@ public class ICCertificateAuthority implements CertificateAuthority {
 
       // log.debug("request: [" + body + "]");
 
+      try {
          Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
          if (resp==null) throw new CertificateAuthorityException("IO error to CA");
          // log.debug("ret: " + resp.toString());
          Element rsp = XMLHelper.getElementByName(resp, "enrollResponse");
          Element ret = XMLHelper.getElementByName(rsp, "return");
          status = Integer.parseInt(ret.getTextContent());
+      } catch (WebClientException e) {
+         throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
+      }
 
       log.debug("status: " + status);
       if (status<0) {
@@ -412,11 +432,16 @@ public class ICCertificateAuthority implements CertificateAuthority {
       log.debug("get cert status for " + cert.caId);
       refreshSecrets();
       String body = getCollectStatusBody.replaceFirst("AUTHDATA",authData).replaceFirst("ID", String.valueOf(cert.caId));
-      Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
-      if (resp==null) throw new CertificateAuthorityException("IO error to CA");
-      Element cr = XMLHelper.getElementByName(resp, "getCollectStatusResponse");
-      Element ret = XMLHelper.getElementByName(cr, "return");
-      int status = Integer.parseInt(ret.getTextContent());
+      int status = 0;
+      try {
+         Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
+         if (resp==null) throw new CertificateAuthorityException("IO error to CA");
+         Element cr = XMLHelper.getElementByName(resp, "getCollectStatusResponse");
+         Element ret = XMLHelper.getElementByName(cr, "return");
+         status = Integer.parseInt(ret.getTextContent());
+      } catch (WebClientException e) {
+         throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
+      }
       log.debug("status: " + status);
       if (status<0) throw new CertificateAuthorityException(String.valueOf(status));
       if (status==0 && cert.status!=CBCertificate.CERT_STATUS_RENEWING &&
@@ -429,15 +454,20 @@ public class ICCertificateAuthority implements CertificateAuthority {
       log.debug("renew " + cert.caId);
       refreshSecrets();
       String body = renewBody.replaceFirst("AUTHDATA",authData).replaceFirst("RENEWID", Integer.toString(cert.caId));
-      Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
-      if (resp==null) throw new CertificateAuthorityException("IO error to CA");
-      Element cr = XMLHelper.getElementByName(resp, "renewByIdResponse");
-      Element ret = XMLHelper.getElementByName(cr, "return");
-      int status = Integer.parseInt(ret.getTextContent());
+      int status = 0;
+      try {
+         Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
+         if (resp==null) throw new CertificateAuthorityException("IO error to CA");
+         Element cr = XMLHelper.getElementByName(resp, "renewByIdResponse");
+         Element ret = XMLHelper.getElementByName(cr, "return");
+         status = Integer.parseInt(ret.getTextContent());
+      } catch (WebClientException e) {
+         throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
+      }
       log.debug("status: " + status);
       if (status<0) throw new CertificateAuthorityException(String.valueOf(status));
       // success returns the enrollment id, ostensibly a signed long, per Comodo.
-       // This is already an int which should be big enough for a while.  2017-12-11 mattjm
+      // This is already an int which should be big enough for a while.  2017-12-11 mattjm
       if ( 99999 < status && status < Integer.MAX_VALUE) cert.status = CBCertificate.CERT_STATUS_RENEWING;
       return 0;  //zero used to be the success code--if we got back an enrollment id above then it worked.
    }

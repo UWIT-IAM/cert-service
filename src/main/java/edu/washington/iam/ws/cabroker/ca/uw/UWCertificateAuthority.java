@@ -104,9 +104,11 @@ public class UWCertificateAuthority implements CertificateAuthority {
          if (cert.pemCert!=null) PEMHelper.parseCert(cert);
          if (cert.status==CBCertificate.CERT_STATUS_EXPIRED) status = 7;  // got cert but it is expired
 
+      } catch (WebClientException e) {
+         log.info("get uwca excp: " + e);
+         throw new CertificateAuthorityException("uwca retrieve:" + e.getMessage());
       } catch (NullPointerException e) {
-         // due to invalid uwca response
-         log.debug("get uwca excp: " + e);
+         log.info("get uwca excp: " + e);
          throw new CertificateAuthorityException("uwca retrieve failed");
       }
 
@@ -135,8 +137,10 @@ public class UWCertificateAuthority implements CertificateAuthority {
          Element pk = XMLHelper.getElementByName(resp, "pkcs7");
          pkcs7 = pk.getTextContent();
 
+      } catch (WebClientException e) {
+         log.info("get uwca excp: " + e);
+         throw new CertificateAuthorityException("uwca retrieve:" + e.getMessage());
       } catch (NullPointerException e) {
-         // due to invalid uwca response
          log.debug("get uwca excp: " + e);
          throw new CertificateAuthorityException("uwca pkcs7 retrieve failed");
       }
@@ -176,8 +180,10 @@ public class UWCertificateAuthority implements CertificateAuthority {
          Element reqno = XMLHelper.getElementByName(resp, "reqno");
          cert.caId = Integer.parseInt(reqno.getTextContent());
          log.debug("uwca reqno=" + cert.caId);
+      } catch (WebClientException e) {
+         log.info("get uwca excp: " + e);
+         throw new CertificateAuthorityException("uwca retrieve:" + e.getMessage());
       } catch  (NullPointerException e) {
-         // due to invalid uwca response
          log.debug("get uwca excp: " + e);
          throw new CertificateAuthorityException("uwca request failed");
       }
@@ -203,8 +209,10 @@ public class UWCertificateAuthority implements CertificateAuthority {
          log.debug("status: " + status);
          if (cert.status!=4 && status==6) cert.status = CBCertificate.CERT_STATUS_RENEWING;
          log.debug("uwca renew ok");
+      } catch (WebClientException e) {
+         log.info("get uwca excp: " + e);
+         throw new CertificateAuthorityException("uwca retrieve:" + e.getMessage());
       } catch  (NullPointerException e) {
-         // due to invalid uwca response
          log.debug("renew uwca excp: " + e);
          throw new CertificateAuthorityException("uwca renew failed");
       }
