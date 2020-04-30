@@ -87,29 +87,18 @@ public class NetactDNSVerifier implements DNSVerifier {
              JsonElement ele = parser.parse(respString);
              if (ele.isJsonObject()) {
                 JsonObject resp = ele.getAsJsonObject();
-                if (resp.get("table").isJsonObject()) {
-                   JsonObject tbl = resp.getAsJsonObject("table");
-                   if (tbl.get("row").isJsonArray()) {
-                      JsonArray ids = tbl.getAsJsonArray("row");
-                      for (int i = 0; i < ids.size(); i++) {
-                         JsonObject idi = ids.get(i).getAsJsonObject();
-                         JsonPrimitive oidu = idi.getAsJsonPrimitive("uwnetid");
-                         if (oidu==null) continue;
-                         String oid = oidu.getAsString();
-                         if (oid.equals(id)) {
+                if (resp.get("netids").isJsonArray()) {
+                    JsonArray netids = resp.getAsJsonArray("netids");
+                    for (JsonElement netid : netids) {
+                        JsonPrimitive oidu = netid.getAsJsonPrimitive();
+                        if (oidu==null) continue;
+                        String oid = oidu.getAsString();
+                        if (oid.equals(id)) {
                             if (owners==null) return true;  // done
                             isOwner = true;
-                         }
-                         if (owners!=null && !owners.contains(oid)) owners.add(oid);
-                      }
-                   } else {
-                      String oid = tbl.getAsJsonObject("row").getAsJsonPrimitive("uwnetid").getAsString();
-                      if (oid.equals(id)) {
-                         if (owners==null) return true;  // done
-                         isOwner = true;
-                      }
-                      if (owners!=null && !owners.contains(oid)) owners.add(oid);
-                   }
+                        }
+                        if (owners!=null && !owners.contains(oid)) owners.add(oid);
+                    }
                 }
              }
           }
