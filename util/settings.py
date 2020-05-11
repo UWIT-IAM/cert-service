@@ -1,18 +1,31 @@
 # Settings for the cert service
 
 # load some info from certservice properties
-import ConfigParser
-import StringIO
+import configparser
+import io
+
 db_access = None
+http_cert_file = None
+http_key_file = None
+gws_url_template = None
+
 def init(props, secrets):
     global db_access
-    pfp = StringIO.StringIO('[base]\n' + open(props, 'r').read() + '\n[secrets]\n' + open(secrets, 'r').read())
-    cp = ConfigParser.RawConfigParser()
-    cp.readfp(pfp)
-    db_access = 'host=%s dbname=%s user=%s password=%s' % \
-             (cp.get('base', 'cs.db.host'),  cp.get('base', 'cs.db.name'),  cp.get('base', 'cs.db.user'),  cp.get('secrets', 'cs.db.password'))
+    global http_cert_file
+    global http_key_file
+    global gws_url_template
 
-warn_days = 30
+    pfp = io.StringIO('[base]\n' + open(props, 'r').read() + '\n[secrets]\n' + open(secrets, 'r').read())
+    cp = configparser.RawConfigParser()
+    cp.read_file(pfp)
+    db_access = 'host=%s dbname=%s user=%s password=%s' % \
+                (cp.get('base', 'cs.db.host'), cp.get('base', 'cs.db.name'), cp.get('base', 'cs.db.user'),
+                 cp.get('secrets', 'cs.db.password'))
+    http_cert_file = cp.get('base', 'cs.webclient.certFile')
+    http_key_file = cp.get('base', 'cs.webclient.keyFile')
+    gws_url_template = cp.get('base', 'cs.gws.urltemplate')
+
+warn_days = (7, 30)
 
 mail_server = "appsubmit.cac.washington.edu"
 mail_from_addr = "UW Certificate Services <somebody@iam-tools.u.washington.edu>"
@@ -25,4 +38,3 @@ mail_warn_text_ic = "Your certificate for '%s', id=%d, will expire in %d days.\n
 
 # addrs that don't get mail notices
 nomail = set(['netops@uw.edu'])
-
