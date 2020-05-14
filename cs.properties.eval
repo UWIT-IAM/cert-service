@@ -44,4 +44,5 @@ cs.errorUrl=https://wiki.cac.washington.edu/x/6wz-B
 cs.browserRoot=/cs
 cs.certRoot=/cs/ws
 
+cs.gws.urltemplate=https://eval.groups.uw.edu/group_sws/v3/group/u_weblogin_dns-owners_%s/effective_member
 

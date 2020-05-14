@@ -1,108 +1,118 @@
 # library for the utilities
 
-import sys
-import dateutil.parser
-import string
-import time
-import re
-import os.path
-from sys import exit
-import signal
-
-import psycopg2
-import smtplib
-
 import json
+import smtplib
+import psycopg2
 import urllib3
+import settings
+
 urllib3.disable_warnings()
+
 
 def _add_owners(owners, url):
     try:
-        http = urllib3.PoolManager()
+        http = urllib3.PoolManager(cert_file=settings.http_cert_file, cert_reqs='CERT_REQUIRED',
+                                   key_file=settings.http_key_file)
         resp = http.request('GET', url)
         jdata = json.loads(resp.data)
-        table = jdata['table']
-        if not 'row' in table:
-            return
-        row = table['row']
-        if type(row) is dict:
-            if row['uwnetid'] not in owners:
-                owners.add(row['uwnetid'])
-        else:
-            for o in row:
-                if o['uwnetid'] not in owners:
-                    owners.add(o['uwnetid'])
+        netids = jdata['netids']
+        for o in netids:
+            if o not in owners:
+                owners.add(o)
     except Exception as e:
-        print e
-
-def _add_host_owners(owners, dns):
-    return _add_owners(owners, 'https://umbra.cac.washington.edu/daw/json/DNS_TOOLS/v1/UWNetidsFromFQDN/fqdn/%s' % dns)
-
-def _add_domain_owners(owners, dns):
-    return _add_owners(owners, 'https://umbra.cac.washington.edu/daw/json/DNS_TOOLS/v1/UWNetidsFromDomain/domain/%s' % dns)
+        print(e)
 
 
+def _add_netact_host_owners(owners, dns):
+    return _add_owners(owners, 'https://api.tools.s.uw.edu/daw/json/DNS_TOOLS/v2/UWNetidsFromFQDN?fqdn=%s' % dns)
+
+
+def _add_netact_domain_owners(owners, dns):
+    return _add_owners(owners, 'https://api.tools.s.uw.edu/daw/json/DNS_TOOLS/v2/UWNetidsFromDomain?domain=%s' % dns)
+
+
+def _add_gws_domain_owners(owners, dns):
+    try:
+        http = urllib3.PoolManager(cert_file=settings.http_cert_file, cert_reqs='CERT_REQUIRED',
+                                   key_file=settings.http_key_file)
+        resp = http.request('GET',
+                            settings.gws_url_template % dns)
+        jdata = json.loads(resp.data)
+        if 'data' in jdata and type(jdata['data']) is list:
+            ownerlist = jdata['data']
+            for ownerdict in ownerlist:
+                if type(ownerdict) is dict and 'type' in ownerdict \
+                        and ownerdict['type'] == 'uwnetid' and ownerdict['id'] not in owners:
+                    owners.add(ownerdict['id'])
+
+    except Exception as e:
+        print(e)
 
 
 class CertificateHelper:
 
-   def __init__(self, settings):
+    def __init__(self, settings):
 
-      self.db_conn = psycopg2.connect(settings.db_access)
-      self.netid_cursor = self.db_conn.cursor()
-      self.warn_days = settings.warn_days
+        self.db_conn = psycopg2.connect(settings.db_access)
+        self.netid_cursor = self.db_conn.cursor()
+        self.warn_days = settings.warn_days
 
-      self.mail_server = settings.mail_server
-      self.mail_from_addr = settings.mail_from_addr
-      self.mail_reply_to = settings.mail_reply_to
-      self.mail_tip_text = settings.mail_tip_text
+        self.mail_server = settings.mail_server
+        self.mail_from_addr = settings.mail_from_addr
+        self.mail_reply_to = settings.mail_reply_to
+        self.mail_tip_text = settings.mail_tip_text
 
-   # find soon to expire certs (30 days)
-  
-   def find_expiring(self):
+    # find soon to expire certs (30 days)
 
-      self.netid_cursor.execute("select id,cn,expires from certificate where status=2 and date_trunc('day',expires) = date_trunc('day',now() + interval '%d days');" % (self.warn_days))
-      certlist = self.netid_cursor.fetchall()
-      return certlist
+    def find_expiring(self, warn_day):
 
-   # find owners of a cert by favorites
-   def find_fav_owners(self, id):
-      self.netid_cursor.execute("select netid from owner where id='%s';" % (id))
-      owners = self.netid_cursor.fetchall()
-      return owners
+        self.netid_cursor.execute(
+            "select id,cn,expires from certificate where status=2 and date_trunc('day',expires) = date_trunc('day',now() + interval '%d days');" % (
+                warn_day))
+        certlist = self.netid_cursor.fetchall()
+        return certlist
 
-   # find owners of a dns
-   def find_dns_owners(self, dns):
-       owners = set()
-       #owners.add('mattjm') # use to cc yourself on all notifications
-       dots = string.split(dns, '.')
-       if len(dots) < 2:
-          return owners
-       for i in range(len(dots)-1):
-           if i == 0:
-               _add_host_owners(owners, dns)
-               _add_domain_owners(owners, dns)
-           else:
-               _add_domain_owners(owners, string.join(dots[i:], '.'))
-       return owners
-    
-   # send mail 
-   def send_mail(self, to_addrs, subject, message):
+    # find owners of a cert by favorites
+    def find_fav_owners(self, id):
+        self.netid_cursor.execute("select netid from owner where id='%s';" % (id))
+        owners = self.netid_cursor.fetchall()
+        return owners
 
-      mail_text = '\n'.join(['To: %s' % ','.join(to_addrs),
-                       'From: %s' % self.mail_from_addr, 
-                       'Reply-To: %s' % self.mail_reply_to,
-                       'Errors-To: %s' % self.mail_reply_to,
-                       'X-Auto-Response-Suppress: NDR, OOF, AutoReply',
-                       'Precedence: Special-Delivery, never-bounce',
-                       'Subject: %s' % subject,
-                       '',
-                       message,
-                       '',
-                       self.mail_tip_text])
+    # find owners of a dns
+    def find_dns_owners(self, dns):
+        owners = set()
+        # owners.add('mattjm') # use to cc yourself on all notifications
+        dots = dns.split(".")
+        if len(dots) < 2:
+            return owners
+        for i in range(len(dots) - 1):
+            if i == 0:
+                _add_netact_host_owners(owners, dns)
+                _add_netact_domain_owners(owners, dns)
+                _add_gws_domain_owners(owners, dns)
+            else:
+                _add_netact_domain_owners(owners, '.'.join(dots[i:]))
+                _add_gws_domain_owners(owners, '.'.join(dots[i:]))
+        return owners
 
-      mail_server = smtplib.SMTP(self.mail_server)
-      mail_server.sendmail(self.mail_from_addr, to_addrs, mail_text)
-      # mail_server.sendmail(self.mail_from_addr,['fox@uw.edu'],'Subject: %s\n\n'%subject+'[sent to: '+','.join(to_addrs)+']\n\n'+ mail_text)
-      mail_server.quit()
+    # send mail
+    def send_mail(self, to_addrs, subject, message):
 
+        mail_text = '\n'.join(['To: %s' % ','.join(to_addrs),
+                               'From: %s' % self.mail_from_addr,
+                               'Reply-To: %s' % self.mail_reply_to,
+                               'Errors-To: %s' % self.mail_reply_to,
+                               'X-Auto-Response-Suppress: NDR, OOF, AutoReply',
+                               'Precedence: Special-Delivery, never-bounce',
+                               'Subject: %s' % subject,
+                               '',
+                               message,
+                               '',
+                               self.mail_tip_text])
+
+        # mail_server = smtplib.SMTP_SSL(self.mail_server)
+        # mail_server.login("jim7@uw.edu", "...")
+        mail_server = smtplib.SMTP(self.mail_server)
+        mail_server.sendmail(self.mail_from_addr, to_addrs, mail_text)
+        # mail_server.sendmail(self.mail_from_addr, ['jim7@uw.edu'], 'Subject: %s\n\n'%subject+'[sent to: '+','.join(to_addrs)+']\n\n'+ mail_text)
+        mail_server.quit()
