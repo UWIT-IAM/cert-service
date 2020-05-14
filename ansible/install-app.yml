@@ -10,28 +10,6 @@
 
 
   tasks:
-  - local_action: stat path=./local_vars.yml
-    register: local_vars_stat
-
-  - include_vars: "local_vars.yml"
-    when: local_vars_stat.stat.exists
-
-  - name: create properties yml file
-    local_action: "property_to_yml name=cs type={{ cluster_type }}"
-
-  - include_vars: "properties.yml"
-
-  - name: check for secrets file
-    stat: path={{ cs_root }}/cs-secrets.properties
-    register: cssecrets
-  - fail: msg="secrets file not preloaded on target"
-    when: not cssecrets.stat.exists
-
-  # configure tomcat startup properties
-  # change restarts tomcat
-  - name: tomcat startup params
-    daemon_config: "service=tomcat key=cs.properties.path value=file:{{ cs_root }}"
-    notify: restart tomcat
 
   # copy cs properties file
   # change restarts tomcat
@@ -45,17 +23,6 @@
   - include: "ansible-tools/tasks/apache_config.yml file=http prod=cs"
 
 
-  # update certs and keys (used by cs)
-  # change restarts tomcat
-  - name: copy certs and keys
-    copy: "src={{ item.src }} dest={{ item.dest }} group=iam-dev mode=664 "
-    with_items:
-       - { src: '{{local_webclient_certFile}}', dest: '{{cs_webclient_certFile}}' }
-       - { src: '{{local_webclient_keyFile}}', dest: '{{cs_webclient_keyFile}}' }
-       - { src: '{{local_webclient_caFile}}', dest: '{{cs_webclient_caFile}}' }
-    when: have_local_certs is defined and item.src != ""
-    notify: restart tomcat
-
   # update the cs.war file
   - name: copy war
     copy: "src=../target/cs.war dest=/data/webapps/cs.war group=iam-dev mode=664"
@@ -63,30 +30,6 @@
 
   # run any handlers 
   - meta: flush_handlers
-
-  # always run the test
-  - name: run service tests
-    local_action:  "command wget  -q -O /dev/null
-           --certificate={{local_webclient_certFile}} 
-           --private-key={{local_webclient_keyFile}} 
-           --ca-certificate={{local_webclient_caFile}} 
-           --no-check-certificate
-           https://{{inventory_hostname}}/cs/ws/status"
-    when: local_webclient_certFile is defined
-    register: wget_result
-    changed_when: "wget_result.rc != 0"
-
-
-  # idle loadr if test fails
-  - name: idle loadr on test fail
-    command: /usr/bin/nohup /data/local/bin/ansible_command loadr idle
-    when: "local_webclient_certFile is defined and wget_result.rc != 0"
-      
-  # fail if test fails
-  - name: fail on test fail
-    fail: msg="API service test fails after install"
-    when: "local_webclient_certFile is defined and wget_result.rc != 0"
-      
 
   # handlers mostly standard from iam-ansible
 

@@ -1,36 +1,41 @@
 This is the ansible certservice installer
 
+Installs as user = iamcert
+
 prerequisites
 -------------
 
-On your build host:
+In this drectory:
 
-1) Ansible
-
-   see: http://docs.ansible.com/
-   via git:  git clone https://github.com/ansible/ansible.git
+1) A python3 environment named 'env' (can be a link elsewhere)
+   with: pip install ansible
 
 
 
 On the target:
 
-1) Ansible 'as-root' controller
+1) If you want ansible to restart tomcat
 
    /data/local/bin/ansible_command
 
-   see: (ansibletools)/host-tools
+   (source?)
 
+2) Directories to exist and be chown to 'iamcert.iam-dev'
 
-2) Directories to be chown to 'iamcert.iam-dev'
-
-   /etc/daemons/tomcat
    /data/webapps
    /data/conf/apache.conf.d/
    /logs/cs/
    /www/ (?)
    /data/local/cs
   
-3) configure tomcat to run as user=iamcert
+3) tomcat config
+   a) configure tomcat to run as user=iamcert
+   b) assure that /etc/daemons/tomcat includes: -Dcs.properties.path=file:/data/local/cs
+
+4) certs and etc needed
+   /data/local/etc/gws-cac-uw.crt
+   /data/local/etc/gws-cac-uw.key
+   /data/local/etc/uw-incommon-ca.crt
 
 ---------------------
 
@@ -43,7 +48,7 @@ Install
    $ mvn clean package
 
 2) To install the service: 
-   ( host_type = tools_dev | tools_eval | tools_prod )
+   ( host_type = eval | prod )
   
    $ ./install.sh app <host_type>
 

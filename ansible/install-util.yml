@@ -10,14 +10,6 @@
 
   tasks:
 
-  - name: show cluster
-    debug: msg="cluster type = {{ cluster_type }}"
-
-  - name: create properties yml file
-    local_action: "property_to_yml name=cs type={{ cluster_type }}"
-
-  - include_vars: "properties.yml"
-
   - name: create util dir
     file: "path={{ cs_root }}/{{item}} group=iam-dev mode=2755 state=directory"
     with_items:
@@ -49,18 +41,6 @@
     with_items:
       - certlib.sh
 
-  - name: setup python virtual env
-    pip: 
-       requirements: "{{cs_root}}/util/requirements.txt"
-       virtualenv_command: /usr/local/bin/virtualenv-2.7
-       virtualenv: "{{ cs_root }}/util/env"
-    environment:
-       PATH: /usr/local/pgversion/bin:{{ansible_env.PATH}}
-
-  - name: set live crontab if prod
-    set_fact: "cron_status=''"
-    when: "'{{cluster_type}}' == 'prod'"
-
   - name: certs warn crontab
     cron: name="certswarn" disabled={{cluster_type != 'prod'}} hour="01" minute="01" job="{{ cs_root }}/util/certs_warn.sh >> /dev/null 2>&1"
 
@@ -70,7 +50,5 @@
   - name: pw notify corntab
     cron: name="pwnotify" disabled={{cluster_type != 'prod'}} hour="01" minute="01" day="01" month="1,3,5,7,9,11" job="{{ cs_root }}/util/pw-notify.sh >> /dev/null 2>&1"
 
-  handlers:
-    - include: "tasks/iam_handlers.yml"
 
 
