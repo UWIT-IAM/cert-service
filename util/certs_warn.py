@@ -5,7 +5,7 @@ import settings
 
 from optparse import OptionParser
 
-from certs_util_lib import CertificateHelper
+from certs_util_lib import CertificateHelper, AddrHelper
 
 certificateHelper = None
 
@@ -15,10 +15,6 @@ certificateHelper = None
 
 logging.basicConfig(filename='certs_warn.log', level=logging.INFO, format='%(asctime)s %(message)s')
 logging.getLogger("urllib3").setLevel(logging.WARNING)
-
-
-def _uwmail(id):
-    return id + '@uw.edu'
 
 
 def warn_expiring():
@@ -34,10 +30,9 @@ def warn_expiring():
 
                 owners = certificateHelper.find_dns_owners(cert[1])
                 msg = warn_text % (cert[1], cert[0], warn_day)
-                certificateHelper.send_mail(map(_uwmail, owners.difference(settings.nomail)),
-                                            'Certificate expiration warning',
-                                            msg)
-                logging.info('sent mail to %s for %s', map(_uwmail, owners.difference(settings.nomail)), cert[1])
+                to_addrs = set(map(AddrHelper.uwmail, owners.difference(settings.nomail)))
+                certificateHelper.send_mail(to_addrs, 'Certificate expiration warning', msg)
+                logging.info('sent mail to %s for %s', to_addrs, cert[1])
                 print(cert[1] + '\n')
 
 

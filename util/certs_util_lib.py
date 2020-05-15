@@ -1,6 +1,7 @@
 # library for the utilities
 
 import json
+import re
 import smtplib
 import psycopg2
 import urllib3
@@ -41,10 +42,11 @@ def _add_gws_domain_owners(owners, dns):
         if 'data' in jdata and type(jdata['data']) is list:
             ownerlist = jdata['data']
             for ownerdict in ownerlist:
-                if type(ownerdict) is dict and 'type' in ownerdict \
-                        and ownerdict['type'] == 'uwnetid' and ownerdict['id'] not in owners:
-                    owners.add(ownerdict['id'])
-
+                if type(ownerdict) is dict and 'type' in ownerdict and ownerdict['id'] not in owners:
+                    if ownerdict['type'] == 'uwnetid':
+                        owners.add(ownerdict['id'])
+                    elif ownerdict['type'] == 'eppn':
+                        owners.add(ownerdict['id'])
     except Exception as e:
         print(e)
 
@@ -67,7 +69,7 @@ class CertificateHelper:
     def find_expiring(self, warn_day):
 
         self.netid_cursor.execute(
-            "select id,cn,expires from certificate where status=2 and date_trunc('day',expires) = date_trunc('day',now() + interval '%d days');" % (
+            "select id, cn, expires from certificate where status=2 and date_trunc('day',expires) = date_trunc('day',now() + interval '%d days');" % (
                 warn_day))
         certlist = self.netid_cursor.fetchall()
         return certlist
@@ -110,9 +112,17 @@ class CertificateHelper:
                                '',
                                self.mail_tip_text])
 
-        # mail_server = smtplib.SMTP_SSL(self.mail_server)
-        # mail_server.login("jim7@uw.edu", "...")
+        # for testing
+        # mail_server = smtplib.SMTP_SSL('smtp.washington.edu')
+        # mail_server.login('<netid>@uw.edu>', '<password for netid>')
+        # mail_server.sendmail(self.mail_from_addr, ['<netid>@uw.edu'], mail_text)
         mail_server = smtplib.SMTP(self.mail_server)
         mail_server.sendmail(self.mail_from_addr, to_addrs, mail_text)
-        # mail_server.sendmail(self.mail_from_addr, ['jim7@uw.edu'], 'Subject: %s\n\n'%subject+'[sent to: '+','.join(to_addrs)+']\n\n'+ mail_text)
         mail_server.quit()
+
+
+class AddrHelper:
+    regex = re.compile("[^@]+@[^@]+\.[^@]+")
+
+    def uwmail(addr_id):
+        return addr_id if AddrHelper.regex.match(addr_id) else addr_id + '@uw.edu'
