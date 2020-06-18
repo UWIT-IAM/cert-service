@@ -8,6 +8,8 @@
   gather_facts: false
   remote_user: iamcert
 
+  vars:
+    cs_root: /data/local/cs
 
   tasks:
 
@@ -17,12 +19,20 @@
     copy: "src=../cs.properties.{{ cluster_type }}  dest={{ cs_root }}/cs.properties group=iam-dev mode=664"
     notify: restart tomcat
 
-   # update http and https config
+  # update http and https config
     # change restarts apache
-  - include: "ansible-tools/tasks/apache_config.yml file=https prod=cs"
-  - include: "ansible-tools/tasks/apache_config.yml file=http prod=cs"
+  - name: copy http apache config
+    template:
+      src: apache/http.j2
+      dest: /data/conf/apache.conf.d/http.cs group=iam-dev mode=644
+    notify: restart apache
 
-
+  - name: copy https apache config
+    template:
+      src: apache/https.j2
+      dest: /data/conf/apache.conf.d/https.cs group=iam-dev mode=644
+    notify: restart apache
+    
   # update the cs.war file
   - name: copy war
     copy: "src=../target/cs.war dest=/data/webapps/cs.war group=iam-dev mode=664"
@@ -31,10 +41,22 @@
   # run any handlers 
   - meta: flush_handlers
 
-  # handlers mostly standard from iam-ansible
-
   handlers:
-    - include: "ansible-tools/tasks/iam_handlers.yml"
+
+  - name: restart apache
+    command: /usr/bin/nohup /data/local/bin/ansible_command apache restart
+#   notify:
+#     - wait_for_apache
+
+  - name: restart tomcat
+    command: /usr/bin/nohup /data/local/bin/ansible_command tomcat restart
+    notify: wait for tomcat
+
+  # wait for tomcat to restart
+  - name: wait for tomcat
+    shell: "c=0;while [ $c -lt 20 ]; do [[ \"`curl -k -f https://localhost/tomcatmanager/text/list 2>/dev/null  | grep 'cs'`\" =~ 'cs' ]] && exit 0; let c=c+1;sleep 5; done; exit 1"
+    register: wait_result
+    failed_when: "wait_result.rc != 0"
 
 
 
