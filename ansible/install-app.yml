@@ -13,6 +13,13 @@
 
   tasks:
 
+  - name: check for secrets file
+    stat: path={{ cs_root }}/cs-secrets.properties
+    register: cssecrets
+  - name: fail if secrets file not found 
+    fail: msg="secrets file not preloaded on target"
+    when: not cssecrets.stat.exists
+      
   # copy cs properties file
   # change restarts tomcat
   - name: copy properties file
