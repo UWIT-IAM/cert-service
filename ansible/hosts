@@ -1,0 +1,25 @@
+# IAM tools hosts
+
+[prod]
+iamtools21.s.uw.edu idle_wait_sec=10
+iamtools22.s.uw.edu idle_wait_sec=10
+
+[prod:vars]
+cluster_type=prod
+cluster_name=iam-tools.u.washington.edu
+cluster_hosts=["iamtools21.s.uw.edu", "iamtools22.s.uw.edu"]
+clustering_method=loadr
+apps="cs"
+ansible_ssh_group=iam-dev
+
+
+[eval] 
+iamtools-test11.s.uw.edu idle_wait_sec=10 wd_cron_offset=01
+
+[eval:vars]
+cluster_type=eval
+cluster_name=iam-tools-test.u.washington.edu
+cluster_hosts=["iamtools-test11.s.uw.edu"]
+clustering_method=loadr
+apps="cs"
+ansible_ssh_group=iam-dev

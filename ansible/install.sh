@@ -3,10 +3,25 @@
 # certservice ansible installation script
 
 function usage {
-  echo "usage: $0 [-v] [-l limit_host] product target "
-  echo "       $0 -H  target (shows hostnames)"
-  echo "       product: app | util"
-  echo "       target: tools_eval | tools_prod"
+  echo "
+    usage:  $0 [options] product target
+            options:     [-v]            ( verbose )
+                         [-d]            ( very verbose )
+                         [-l hostname]   ( limit install to 'hostname' )
+                         [-H]            ( list hosts in the cluster )
+            product: app | util
+            target: eval | prod
+
+            target help: $0 targets
+    "
+    exit 1
+}
+
+function targets {
+  echo "
+     eval                       Installs to eval hosts (iamtools-test11)
+     prod                       Installs to prod hosts (iamtools21, 22)
+  "
   exit 1
 }
 
@@ -16,7 +31,7 @@ base=${dir%/ansible}
 
 cd $dir
 playbook=
-list_hosts=0
+listhosts=0
 verb=0
 debug=0
 target=
@@ -46,28 +61,16 @@ done
 
 eval product="\${$OPTIND}"
 [[ -z $product ]] && usage
+[[ $product == 'targets' ]] && targets
+[[ $product == "app" || $product == "util" ]] || usage
 (( OPTIND += 1 ))
 eval target="\${$OPTIND}"
 [[ -z $target ]] && usage
 echo "Installing $product to $target"
 playbook="install-${product}.yml"
 
-# get ansible-tools
-[[ -d ansible-tools ]] || {
-   echo "installing ansible-tools tools"
-   git clone ssh://git@git.s.uw.edu/iam/ansible-tools.git
-   gettools=0
-}
-(( getools>0 )) && {
-      cd ansible-tools
-      git pull origin master
-      cd ..
-}
-
-export ANSIBLE_LIBRARY=ansible-tools/modules:/usr/share/ansible
-
 ((listhosts>0)) && {
-   ansible-playbook ${playbook} --list-hosts -i ansible-tools/hosts  --extra-vars "target=${target}"
+   ansible-playbook ${playbook} --list-hosts -i ./hosts  --extra-vars "target=${target}"
    exit 0
 }
 
@@ -95,5 +98,5 @@ vars=
 (( verb>0 )) && vars="$vars -v "
 (( debug>0 )) && vars="$vars -vvvv "
 [[ -n $limit ]] && vars="$vars -l $limit "
-ansible-playbook ${playbook} $vars -i ansible-tools/hosts  --extra-vars "target=${target}"
+ansible-playbook ${playbook} $vars -i ./hosts  --extra-vars "target=${target}"
 
