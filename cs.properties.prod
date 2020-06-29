@@ -10,7 +10,7 @@ cs.versionDate=2020-07-01
 cs.root=/data/local/cs
 
 # database parameters
-cs.db.host=iamdb11.cac.washington.edu
+cs.db.host=iamdb21.u.uw.edu
 cs.db.name=certservice
 cs.db.user=ca
 
@@ -21,9 +21,9 @@ cs.uwca.watch=true
 cs.ic.url=https://cert-manager.com:443/ws/EPKIManagerSSL
 cs.ic.watch=true
 
-cs.webclient.certFile=/data/local/cs/urizen3.crt
-cs.webclient.keyFile=/data/local/cs/urizen3.key
-cs.webclient.caFile=/data/local/cs/uwca.crt
+cs.webclient.certFile=/data/local/etc/gws.cac-uw.crt
+cs.webclient.keyFile=/data/local/etc/gws.cac-uw.key
+cs.webclient.caFile=/data/local/cs/uw-incommon-ca.crt
 cs.webclient.queryTimeLimit=240000
 
 # mail settings
@@ -34,8 +34,8 @@ cs.smtp.issuedTo=cert-dev@uw.edu
 cs.uwLogout=https://idp.u.washington.edu/idp/logout
 cs.googleEntityId=https://idp.u.washington.edu/google
 
-cs.myEntityId=https://iamtools-test.u.washington.edu/shibboleth
-cs.csUrl=https://iam-tools-test.u.washington.edu/cs/
+cs.myEntityId=https://iamtools.u.washington.edu/shibboleth
+cs.csUrl=https://iam-tools.u.washington.edu/cs/
 cs.errorUrl=https://wiki.cac.washington.edu/x/6wz-B
 cs.browserRoot=/cs
 cs.certRoot=/cs/ws
