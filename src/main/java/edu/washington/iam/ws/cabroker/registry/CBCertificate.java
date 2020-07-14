@@ -17,6 +17,7 @@
 
 package edu.washington.iam.ws.cabroker.registry;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Date;
 import java.util.Vector;
@@ -44,6 +45,7 @@ public class CBCertificate {
    public List<String> owners;   // netids
    public String pemRequest;
    public String pemCert;
+   public String serialNumber;
    public String remHash;
    public CBRegistry registry;
    public String dnC;   // country code
@@ -141,6 +143,19 @@ public class CBCertificate {
    public String getPemCert() {
       return pemCert;
    }
+   
+   public String getSerialNumber() {
+      return serialNumber;
+   }
+
+   public void setSerialNumber(BigInteger serialNum) {
+      StringBuilder result = new StringBuilder();
+      for (byte bb : serialNum.toByteArray()) {
+         result.append(String.format("%02x:", bb));
+      }
+      this.serialNumber = result.toString().substring(0, result.length() - 1);
+   }
+
    public String getRenewId() {
       return renewId;
    }
@@ -176,7 +191,7 @@ public class CBCertificate {
       if (history==null) registry.getHistory(this);
       return history;
    }
-  
+
    public int addHistory(int status, Date date, String user) {
       return registry.addHistory(this, status, date, user);
    } 

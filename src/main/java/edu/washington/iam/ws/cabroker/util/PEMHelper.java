@@ -171,6 +171,8 @@ public final class PEMHelper {
          cert.expires = x509.getNotAfter();
          log.debug("pem expires = " + cert.expires);
 
+         cert.setSerialNumber(x509.getSerialNumber());
+         
          X500Principal prin = x509.getSubjectX500Principal();
          cert.dn = prin.toString();
          log.debug("principal = " + cert.dn);

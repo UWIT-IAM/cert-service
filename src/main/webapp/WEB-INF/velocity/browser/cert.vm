@@ -43,6 +43,7 @@ $!{cert.pemCert}
  <tr><td>status</td><td>$cert.statusText</td></tr>
  <tr><td>no.</td><td>$!{cert.id}</td></tr>
  <tr><td>DN</td><td>$!{cert.cleanDn}</td></tr>
+ <tr><td nowrap="nowrap">serial #</td><td>$!{cert.serialNumber}</td></tr>
  <tr><td>Issuer</td><td>$!{cert.caName}</td></tr>
  <tr><td nowrap="nowrap">Issuer's id</td><td>$!{cert.caId}</td></tr>
 
