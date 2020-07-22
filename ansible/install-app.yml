@@ -10,6 +10,7 @@
 
   vars:
     cs_root: /data/local/cs
+    proj_root: ..
 
   tasks:
 
@@ -24,7 +25,7 @@
   # change restarts tomcat
   - name: copy properties file
     copy:
-      src: ../cs.properties.{{ cluster_type }}
+      src: "{{ proj_root }}/cs.properties.{{ cluster_type }}"
       dest: "{{ cs_root }}/cs.properties"
       group: iam-dev
       mode: 0664
@@ -49,15 +50,22 @@
     notify: restart apache
     
   # update the cs.war file
-  - name: copy war
+  - name: copy cs.war
     copy: 
-      src: ../target/cs.war
-      dest: /data/webapps/cs.war
+      src: "{{ proj_root }}/target/cs.war"
+      dest: /tmp/cs.war
       group: iam-dev
       mode: 0664
-    notify: restart tomcat
+    register: warfile
 
-  # run any handlers 
+    # unpack the cs.war file
+  - name: unpack cs.war
+    shell: "rm -rf /data/webapps/cs; mkdir /data/webapps/cs; cd /data/webapps/cs; jar xf /tmp/cs.war"
+    when: warfile.changed
+    notify:
+      - restart tomcat
+
+    # run any handlers 
   - meta: flush_handlers
 
   handlers:
