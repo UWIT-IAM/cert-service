@@ -96,9 +96,9 @@
 
  <tr>
       <td>Lifetime</td>
-         <td><select id="ic_lifetime" dojoType="dijit.form.FilteringSelect">
-          <option value="12" >1 year</option>
-          <option value="24" selected="selected">2 years</option>
+         <td><select id="ic_lifetime" disabled="disabled" dojoType="dijit.form.FilteringSelect">
+          <option value="12" selected="selected">1 year</option>
+          <option value="24">2 years</option>
           </select>
          </td>
      <td></td>
