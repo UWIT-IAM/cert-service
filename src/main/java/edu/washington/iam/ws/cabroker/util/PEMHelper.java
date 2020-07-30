@@ -21,11 +21,8 @@ import java.lang.Exception;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Collection;
 import java.io.StringReader;
 import java.io.IOException;
@@ -45,22 +42,20 @@ import java.security.cert.CertificateNotYetValidException;
 import javax.security.auth.x500.X500Principal;
 
 
-import org.bouncycastle.openssl.PEMReader;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.x500.RDN;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.pkcs.Attribute;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Set;
-import org.bouncycastle.asn1.DEREncodable;
-import org.bouncycastle.asn1.DERSequence;
-import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.x509.GeneralName;
-import org.bouncycastle.asn1.x509.Attribute;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.asn1.x509.X509Extension;
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
-import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.Extensions;
+import org.bouncycastle.asn1.x509.GeneralNames;
 
 import edu.washington.iam.ws.cabroker.registry.CBCertificate;
 import edu.washington.iam.ws.cabroker.exception.CBParseException;
@@ -71,34 +66,45 @@ public final class PEMHelper {
 
    /* extract some info from the submitted CSR */
 
+   private final static String COUNTRY = "2.5.4.6";
+   private final static String STATE = "2.5.4.8";
+   private final static String ORGANIZATION = "2.5.4.10";
+   private final static String COMMON_NAME = "2.5.4.3";
+
+   private static String getX500Field(String asn1ObjectIdentifier, X500Name x500Name) {
+      RDN[] rdnArray = x500Name.getRDNs(new ASN1ObjectIdentifier(asn1ObjectIdentifier));
+      String retVal = null;
+      for (RDN item : rdnArray) {
+         retVal = item.getFirst().getValue().toString();
+      }
+      return retVal;
+   }
+
    public static int parseCsr(CBCertificate cert) throws CBParseException {
 
       try {
-         PEMReader  pRd = new PEMReader(new StringReader(cert.pemRequest));
-         log.debug("pRd ok");
+         PEMParser  pRd = new PEMParser(new StringReader(cert.pemRequest));
          PKCS10CertificationRequest request = (PKCS10CertificationRequest)pRd.readObject();
-         log.debug("req ok");
          if (request==null) throw new CBParseException("invalid CSR (request)");
-         CertificationRequestInfo info = request.getCertificationRequestInfo();
-         log.debug("info ok");
-         if (info==null) throw new CBParseException("invalid CSR (info)");
    
-         X509Name dn = info.getSubject();
+         X500Name dn = request.getSubject();
          if (dn==null) throw new CBParseException("invalid CSR (dn)");
-         log.debug("dn=" + dn.toString());
+         log.debug("parseCsr: dn=" + dn.toString());
          cert.dn = dn.toString();
          try {
-            List cns = dn.getValues(X509Name.CN);
-            if (cns.size()!=1) throw new CBParseException("invalid CSR (number of CNs does not equal one)");
-            cert.cn = (String)(cns.get(0));
-            log.debug("cn=" + cert.cn);
+            String x = getX500Field(COMMON_NAME, dn);
+            log.debug("cn: " + x);
+            cert.cn = x;
             cert.names.add(cert.cn.toLowerCase());   // first entry for names is always cn
-            cns = dn.getValues(X509Name.C);
-            cert.dnC = (String)(cns.get(0));
-            cns = dn.getValues(X509Name.ST);
-            cert.dnST = (String)(cns.get(0));
-            cns = dn.getValues(X509Name.O);
-            cert.dnO = (String)(cns.get(0));
+            x = getX500Field(COUNTRY, dn);
+            log.debug("country: " + x);
+            cert.dnC = x;
+            x = getX500Field(STATE, dn);
+            log.debug("state: " + x);
+            cert.dnST = x;
+            x = getX500Field(ORGANIZATION, dn);
+            log.debug("org: " + x);
+            cert.dnO = x;
          } catch (Exception e) {
             log.debug("get cn error: " + e);
             throw new CBParseException("invalid CSR--check for missing State, Country or Organization.");
@@ -106,54 +112,37 @@ public final class PEMHelper {
 
          // see if we've got alt names (in extensions)
 
-         ASN1Set attrs = info.getAttributes();
-         if (attrs!=null) {
-          for (int a=0; a<attrs.size(); a++) {
-            Attribute attr = Attribute.getInstance(attrs.getObjectAt(a)); 
-            if (attr.getAttrType().equals(PKCSObjectIdentifiers.pkcs_9_at_extensionRequest)) {
-      
-               // is the extension
-               X509Extensions extensions = X509Extensions.getInstance(attr.getAttrValues().getObjectAt(0)); 
-    
-               // get the subAltName extension
-               DERObjectIdentifier sanoid = new DERObjectIdentifier(X509Extensions.SubjectAlternativeName.getId());
-               X509Extension  xext = extensions.getExtension(sanoid);
-               if (xext!=null) {
-                  log.debug("processing altname extensions");
-                  ASN1Object asn1 = X509Extension.convertValueToObject(xext);
-                  Enumeration dit = DERSequence.getInstance(asn1).getObjects();
-                  while (dit.hasMoreElements()) {
-                     GeneralName gn = GeneralName.getInstance(dit.nextElement());
-                     log.debug("altname tag=" + gn.getTagNo());
-                     log.debug("altname name=" + gn.getName().toString());
-                     if (gn.getTagNo()==GeneralName.dNSName) cert.names.add( gn.getName().toString().toLowerCase());
-                  }
-               }
-         
-            }
-          }
+         Attribute[] attrs = request.getAttributes();
+         for ( Attribute attr: attrs ) {
+            Extensions extensions = Extensions.getInstance(attr.getAttrValues().getObjectAt(0));
+            GeneralNames gns = GeneralNames.fromExtensions(extensions,Extension.subjectAlternativeName);
+            GeneralName[] names = gns.getNames();
+            for (int k=0; k < names.length; k++) {
+                if(names[k].getTagNo() == GeneralName.dNSName) {
+                    log.debug("adding altname: " + names[k].getName());
+                    cert.names.add(names[k].getName().toString().toLowerCase());
+                }
+                else if(names[k].getTagNo() == GeneralName.iPAddress) {
+                    names[k].toASN1Object();
+                    log.debug("ignoring altip: " + names[k].getName());
+                }
+            } 
          }
         
-         // check key size
-         PublicKey pk = request.getPublicKey();
-         log.debug("key alg = " + pk.getAlgorithm());
-         log.debug("key fmt = " + pk.getFormat());
+         // note key size
+
+         JcaPKCS10CertificationRequest jcaRequest = new JcaPKCS10CertificationRequest(request);
+         PublicKey pk = jcaRequest.getPublicKey();
+         log.debug("key alg/fmt = " + pk.getAlgorithm() + " / " + pk.getFormat());
          if (pk.getAlgorithm().equals("RSA")) {
             RSAPublicKey rpk = (RSAPublicKey) pk;
             cert.keySize = rpk.getModulus().bitLength();
             log.debug("key size = " + cert.keySize);
          }
          
-
-      } catch (IOException e) {
-        log.debug("ioerror: " + e);
-        throw new CBParseException("invalid CSR " + e.getMessage());
-      } catch (CBParseException e) {
-        log.debug("cbparseexception: " + e);
-        throw e;
       } catch (Exception e) {
-        log.debug("excp: " + e);
-        throw new CBParseException("invalid CSR");
+        log.debug("request parse exception: " + e);
+        throw new CBParseException("e.getMessage()");
       }
       return 1;
    }
@@ -164,7 +153,7 @@ public final class PEMHelper {
    public static int parseCert(CBCertificate cert) {
 
       try {
-         PEMReader  pRd = new PEMReader(new StringReader(cert.pemCert));
+         PEMParser  pRd = new PEMParser(new StringReader(cert.pemCert));
          X509Certificate x509 = (X509Certificate)pRd.readObject();
 
          cert.issued = x509.getNotBefore();

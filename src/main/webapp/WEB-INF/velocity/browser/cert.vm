@@ -72,8 +72,8 @@ $!{cert.pemCert}
     (expired)
  #end
  </td></tr>
-## is InCommon cert with more than two year term (825 days became max term in 2018)
-#elseif ( $cert.term>825 && $cert.ca==2 && $expdays && $expdays>(-30) )
+## is InCommon cert with more than one year term (3989 days) became max term in 2020)
+#elseif ( $cert.term>398 && $cert.ca==2 && $expdays && $expdays>(-30) )
     <tr><td>action</td><td>
         #if ($expdays>0)
             Expires in ${expdays} days.

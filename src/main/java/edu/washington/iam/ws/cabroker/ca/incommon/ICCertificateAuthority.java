@@ -396,10 +396,10 @@ public class ICCertificateAuthority implements CertificateAuthority {
       String ans = cert.names.get(0);
       for (int i=1; i<cert.names.size(); i++) ans = ans + "," + cert.names.get(i);
 
-      if (cert.cn.startsWith("*.")) {
-           body = body.replaceFirst("ALTNAME", "").replaceFirst("CERTTYPE", wildcardSSLType);;
-      } else if (cert.names.size()>1) {
+      if (cert.names.size()>1) {
            body = body.replaceFirst("ALTNAME", "<subjAltNames>"+ans+"</subjAltNames>").replaceFirst("CERTTYPE", multiSSLType);
+      } else if (cert.cn.startsWith("*.")) {
+           body = body.replaceFirst("ALTNAME", "").replaceFirst("CERTTYPE", wildcardSSLType);;
       } else {
            body = body.replaceFirst("ALTNAME", "").replaceFirst("CERTTYPE", singleSSLType);;
       }

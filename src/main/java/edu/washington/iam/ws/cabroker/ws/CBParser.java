@@ -40,13 +40,12 @@ import javax.xml.parsers.DocumentBuilder;
 
 import java.security.cert.X509Certificate;
 
-import org.bouncycastle.openssl.PEMReader;
+// import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Set;
-import org.bouncycastle.asn1.DEREncodable;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.x509.GeneralName;
@@ -89,7 +88,7 @@ public final class CBParser {
       // csr
       Element csrE = XMLHelper.getElementByName(req, "csr");
       cert.pemRequest = csrE.getTextContent();
-      log.debug("csr = " + cert.pemRequest);
+      log.info("CSR: " + cert.pemRequest);
 
       // altnames
       Element altnsE = XMLHelper.getElementByName(req, "altNames");

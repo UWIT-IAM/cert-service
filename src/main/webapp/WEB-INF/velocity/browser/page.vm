@@ -122,9 +122,9 @@ v_xsrf = '${xsrf}';
   <div class="dijitDialogPaneContentArea">
     Identity and Access Management
     <br/>
-    Certificate Services 2.4.0
+    Certificate Services 2.4.1
     <br/>
-    Revision 2017-12-10
+    Revision 2020-07-28
     <p/>
     <a href="https://wiki.cac.washington.edu/x/KDaoAQ">Learn more about certificate services</a>
   </div>

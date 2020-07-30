@@ -3,14 +3,14 @@
 # cs will look for this file first in the cs directory
 # if that is undefined or not found this installed copy will be used
 #
-cs.version=2.4.0
-cs.versionDate=2020-07-01
+cs.version=2.4.1
+cs.versionDate=2020-07-28
 
 # location of the properties file
 cs.root=/data/local/cs
 
 # database parameters
-cs.db.host=iamdb21.u.uw.edu
+cs.db.host=iamdb21.s.uw.edu
 cs.db.name=certservice
 cs.db.user=ca
 
