@@ -4,7 +4,7 @@
 # if that is undefined or not found this installed copy will be used
 #
 cs.version=2.4.1
-cs.versionDate=2020-07-28
+cs.versionDate=2020-08-03
 
 # location of the properties file
 cs.root=/data/local/cs
@@ -21,9 +21,9 @@ cs.uwca.watch=true
 cs.ic.url=https://cert-manager.com:443/ws/EPKIManagerSSL
 cs.ic.watch=true
 
-cs.webclient.certFile=/data/local/etc/gws.cac-uw.crt
-cs.webclient.keyFile=/data/local/etc/gws.cac-uw.key
-cs.webclient.caFile=/data/local/cs/uw-incommon-ca.crt
+cs.webclient.certFile=/data/local/cs/gws.cac-uw.crt
+cs.webclient.keyFile=/data/local/cs/gws.cac-uw.key
+cs.webclient.caFile=/data/local/cs/ca.crt
 cs.webclient.queryTimeLimit=240000
 
 # mail settings
