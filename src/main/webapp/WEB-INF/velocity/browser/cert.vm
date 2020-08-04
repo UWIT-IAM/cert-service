@@ -80,7 +80,7 @@ $!{cert.pemCert}
         #else
             Expired.
         #end
-        This certificate cannot be renewed.  <a href="https://wiki.cac.washington.edu/x/UbUMBQ">Why?</a></td></tr>
+        This certificate cannot be renewed.  <a href="https://wiki.cac.washington.edu/x/jBN3Bw">Why?</a></td></tr>
 #else
 #end
 
