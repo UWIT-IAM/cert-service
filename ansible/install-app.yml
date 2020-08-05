@@ -53,14 +53,14 @@
   - name: copy cs.war
     copy: 
       src: "{{ proj_root }}/target/cs.war"
-      dest: /tmp/cs.war
+      dest: /data/local/wars/cs.war
       group: iam-dev
       mode: 0664
     register: warfile
 
     # unpack the cs.war file
   - name: unpack cs.war
-    shell: "rm -rf /data/webapps/cs; mkdir /data/webapps/cs; cd /data/webapps/cs; jar xf /tmp/cs.war"
+    shell: "rm -rf /data/webapps/cs; mkdir /data/webapps/cs; cd /data/webapps/cs; jar xf /data/local/wars/cs.war"
     when: warfile.changed
     notify:
       - restart tomcat

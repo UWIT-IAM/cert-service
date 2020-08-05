@@ -63,8 +63,22 @@ $!{cert.pemCert}
 #if ($cert.cn && $cert.isOwner($remote_user))
  <tr><td>favorites</td><td id="remLink"><a href="javascript:remFav()">remove from Favorites</a></td></tr>
 #end
+
+## try to establish a term for the cert - many in the DB don't have an issue date recorded
+#set ( $term = $cert.term )
+#if ( $term == 0 )
+ #set ( $issued = 0 )
+ #foreach ( $ev in $cert.getHistory() )
+  #if ( ($ev.event==1 || $ev.event==2) && $ev.eventTime.time>$issued )
+   #set ( $issued = $ev.eventTime.time )
+  #end
+ #end
+ #set ($term = ($cert.expires.time - $issued)/86400000 )
+#end
+
+
 ## #if ($expdays && $expdays>0 && $expdays<100)
-#if ( ($cert.ca==1 || !$cert.sha1) && $expdays && $expdays>(-30) && (!($cert.term>825) || $cert.ca==1) )
+#if ( ($cert.ca==1 || !$cert.sha1) && $expdays && $expdays>(-30) && (!($term>390) || $cert.ca==1) )
  <tr><td>action</td><td><a href="javascript:submitRenewRequest('$cert.id')">renew this certificate</a>
  #if ($expdays>0)
     (expires in ${expdays} days)
@@ -72,8 +86,8 @@ $!{cert.pemCert}
     (expired)
  #end
  </td></tr>
-## is InCommon cert with more than one year term (3989 days) became max term in 2020)
-#elseif ( $cert.term>398 && $cert.ca==2 && $expdays && $expdays>(-30) )
+## is InCommon cert with more than one year term (398 days actually) became max term in 2020)
+#elseif ( $term>390 && $cert.ca==2 && $expdays && $expdays>(-30) )
     <tr><td>action</td><td>
         #if ($expdays>0)
             Expires in ${expdays} days.
