@@ -43,7 +43,7 @@
         <property name="errorUrl" value="${cs.errorUrl}"/>
         <property name="browserRootPath" value="${cs.browserRoot}"/>
         <property name="certRootPath" value="${cs.certRoot}"/>
-        <property name="loginCookie" value="cscookie"/>
+        <property name="loginCookie" value="cscookie2"/>
         <property name="logoutUrl" value="${cs.uwLogout}"/>
         <property name="cryptKey" value="${cs.cookieCryptKey}"/>
         <property name="standardDSLoginPath" value="/login"/>  <!-- dont have ds -->

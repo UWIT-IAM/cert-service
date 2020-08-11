@@ -96,7 +96,7 @@
 NLNLCertificate Details:
 NLDETAIL
 NLNLYou may retrieve the certificate from the UW Certificate Service website:
-NL  https://iam-tools.u.washington.edu/cs/cert?id=CERTID
+NL  https://iam-tools.u.washington.edu/cs/
 NLNL** Tip **
 : UW Certificate Services determines ownership of certificate requests and sends email notifications based on contact information in DNS
 managed by UW-IT. You are receiving this message because you requested this certificate or because you're a registered DNS contact for the
