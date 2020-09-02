@@ -97,6 +97,9 @@ playbook="install-${product}.yml"
 vars=
 (( verb>0 )) && vars="$vars -v "
 (( debug>0 )) && vars="$vars -vvvv "
-[[ -n $limit ]] && vars="$vars -l $limit "
+[[ -n $limit ]] && {
+   [[ $limit == *"."* ]] || limit=${limit}.s.uw.edu
+   vars="$vars -l $limit "
+}
 ansible-playbook ${playbook} $vars -i ./hosts  --extra-vars "target=${target}"
 

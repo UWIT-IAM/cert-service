@@ -578,6 +578,7 @@ public class CBController {
               }
            } else {
               cert = cbRegistry.getCertificate(id);
+              cbRegistry.getNames(cert);
            }
            if (cert.status!=CBCertificate.CERT_STATUS_REVOKED && cert.status!=CBCertificate.CERT_STATUS_DECLINED) {
               log.debug("getting the cert from the ca");
@@ -612,6 +613,14 @@ public class CBController {
            log.debug("exp in " + expdays + " days");
            mv.addObject("expdays", expdays);
         }
+        try {
+           verifyOwnership(cert, session.remoteUser);
+           mv.addObject("isowner", true);
+           
+        } catch (Exception e) {
+           log.debug("user not an owner");
+        }
+        
 
         return (mv); 
     }
@@ -739,6 +748,7 @@ public class CBController {
         String errmsg = null;
         try {
            cert = cbRegistry.getCertificate(id);
+           cbRegistry.getNames(cert);
            verifyOwnership(cert, session.remoteUser);
            if (cert.status!=CBCertificate.CERT_STATUS_REVOKED) {
               log.debug("asking for renew from the ca");
