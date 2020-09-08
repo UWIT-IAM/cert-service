@@ -29,9 +29,9 @@ def ComodoReportClient():
 
 def _usage(req, argtext):
    if req:
-      print 'usage: python %s [%s]' % (sys.argv[0], argtext)
+      print('usage: python %s [%s]' % (sys.argv[0], argtext))
    else:
-      print 'usage: python %s %s' % (sys.argv[0], argtext)
+      print('usage: python %s %s' % (sys.argv[0], argtext))
    exit (1)
 
 # get, verify, and return one arg

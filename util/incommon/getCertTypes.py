@@ -9,4 +9,4 @@ client,auth = ComodoSSLClient()
 
 result = client.service.getCustomerCertTypes(auth)
 
-print result
+print(result)

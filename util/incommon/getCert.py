@@ -14,4 +14,4 @@ arg = getOneArg(True, 'cert_id')
   
 result = client.service.collect(auth, int(arg), 1)
 
-print result
+print(result)

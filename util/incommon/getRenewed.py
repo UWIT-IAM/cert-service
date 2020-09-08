@@ -14,8 +14,8 @@ client,auth = ComodoSSLClient()
 
 arg = getOneArg(True, 'renew_id')
   
-print '[%s]' % arg
+print('[%s]' % arg)
 
 result = client.service.collectRenewed(arg, 1)
 
-print result
+print(result)

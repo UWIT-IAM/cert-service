@@ -14,4 +14,4 @@ arg = getOneArg(True, 'cert_id')
   
 result = client.service.getCollectStatus(auth, int(arg))
 
-print result
+print(result)

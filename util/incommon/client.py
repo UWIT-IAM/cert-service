@@ -14,8 +14,8 @@ arg = getOneArg(False, 'method_name')
   
 if arg!=None:
   method = client.factory.create(arg)
-  print method
+  print(method)
 
 else:
 
-  print client
+  print(client)

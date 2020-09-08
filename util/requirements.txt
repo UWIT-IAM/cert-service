@@ -1,5 +1,6 @@
 python-dateutil
 psycopg2
+psycopg2-binary
 urllib3
 six
-suds
+suds-py3
