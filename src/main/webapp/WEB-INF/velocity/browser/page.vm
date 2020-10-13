@@ -312,7 +312,7 @@ web servers and applications.
     </span>
     <span id="footright">
     <ul id="navigation">
-        <li><a href="javascript:iam_showTheDialog('helpAbout');">Cert service 2.4.1</a></li>
+        <li><a href="javascript:iam_showTheDialog('helpAbout');">Cert service 2.4.2</a></li>
     </ul>
     </span>
 </div>

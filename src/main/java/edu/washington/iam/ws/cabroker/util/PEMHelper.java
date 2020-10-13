@@ -82,9 +82,10 @@ public final class PEMHelper {
 
    public static int parseCsr(CBCertificate cert) throws CBParseException {
 
+      PKCS10CertificationRequest request = null;
       try {
          PEMParser  pRd = new PEMParser(new StringReader(cert.pemRequest));
-         PKCS10CertificationRequest request = (PKCS10CertificationRequest)pRd.readObject();
+         request = (PKCS10CertificationRequest)pRd.readObject();
          if (request==null) throw new CBParseException("invalid CSR (request)");
    
          X500Name dn = request.getSubject();
@@ -110,10 +111,15 @@ public final class PEMHelper {
             throw new CBParseException("invalid CSR--check for missing State, Country or Organization.");
          }
 
+      } catch (Exception e) {
+        log.debug("request DN parse exception: " + e);
+        throw new CBParseException("e.getMessage()");
+      }
          // see if we've got alt names (in extensions)
 
          Attribute[] attrs = request.getAttributes();
          for ( Attribute attr: attrs ) {
+           try {
             Extensions extensions = Extensions.getInstance(attr.getAttrValues().getObjectAt(0));
             GeneralNames gns = GeneralNames.fromExtensions(extensions,Extension.subjectAlternativeName);
             GeneralName[] names = gns.getNames();
@@ -127,10 +133,15 @@ public final class PEMHelper {
                     log.debug("ignoring altip: " + names[k].getName());
                 }
             } 
+           } catch (Exception e) {
+             log.debug("ignoring request ATTR parse exception: " + e);
+             // throw new CBParseException("e.getMessage()");
+           }
          }
         
          // note key size
 
+      try {
          JcaPKCS10CertificationRequest jcaRequest = new JcaPKCS10CertificationRequest(request);
          PublicKey pk = jcaRequest.getPublicKey();
          log.debug("key alg/fmt = " + pk.getAlgorithm() + " / " + pk.getFormat());
@@ -141,7 +152,7 @@ public final class PEMHelper {
          }
          
       } catch (Exception e) {
-        log.debug("request parse exception: " + e);
+        log.debug("request KEY parse exception: " + e);
         throw new CBParseException("e.getMessage()");
       }
       return 1;
