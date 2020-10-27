@@ -76,7 +76,7 @@
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
       <property name="host" value="${cs.smtp.host}"/>
     </bean>
-    <bean id="iamMailSender" class="edu.washington.iam.tools.IamMailSender">
+    <bean id="iamMailSender" init-method="init" class="edu.washington.iam.tools.IamMailSender">
       <property name="active" value="true"/>
       <property name="mailSender" ref="mailSender"/>
       <property name="doNotMail">

@@ -48,6 +48,7 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.pkcs.Attribute;
 import org.bouncycastle.asn1.ASN1Object;
@@ -72,12 +73,22 @@ public final class PEMHelper {
    private final static String COMMON_NAME = "2.5.4.3";
 
    private static String getX500Field(String asn1ObjectIdentifier, X500Name x500Name) {
+      log.debug("looking for [" + asn1ObjectIdentifier + "]");
       RDN[] rdnArray = x500Name.getRDNs(new ASN1ObjectIdentifier(asn1ObjectIdentifier));
-      String retVal = null;
       for (RDN item : rdnArray) {
-         retVal = item.getFirst().getValue().toString();
+         // log.debug("RDN: size=" +  item.size());
+         AttributeTypeAndValue[] atvArray = item.getTypesAndValues();
+         for (AttributeTypeAndValue atv: atvArray) {
+             // log.debug("type id=[" + atv.getType().getId() + "]");
+             // log.debug("type string=" + atv.getType().toString());
+             // log.debug("value string=" + atv.getValue().toString());
+             if (atv.getType().getId().equals(asn1ObjectIdentifier)) {
+                log.debug(".. have value = " + atv.getValue().toString());
+                return atv.getValue().toString();
+             }
+         }
       }
-      return retVal;
+      return null;
    }
 
    public static int parseCsr(CBCertificate cert) throws CBParseException {

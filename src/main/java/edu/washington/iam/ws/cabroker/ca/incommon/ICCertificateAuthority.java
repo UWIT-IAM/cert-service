@@ -125,6 +125,16 @@ public class ICCertificateAuthority implements CertificateAuthority {
        "<id>ID</id></tns:getCollectStatus>";
 
    // SHA-2 types
+   private String singleSSLType = "<certType><id>14042</id><name>InCommon SSL (SHA-2)</name>" +
+        "<terms>1</terms><terms>1</terms></certType>";
+   
+   private String multiSSLType = "<certType><id>14044</id><name>InCommon Multi Domain SSL (SHA-2)</name>" +
+        "<terms>1</terms><terms>1</terms></certType>";
+
+   private String wildcardSSLType = "<certType><id>14837</id><name>InCommon Wildcard SSL Certificate (SHA-2)</name>" +
+        "<terms>1</terms><terms>1</terms></certType>";
+
+/**
    private String singleSSLType = "<certType><id>224</id><name>InCommon SSL (SHA-2)</name>" +
         "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
    
@@ -133,6 +143,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
 
    private String wildcardSSLType = "<certType><id>227</id><name>InCommon Wildcard SSL Certificate (SHA-2)</name>" +
         "<terms>1</terms><terms>2</terms><terms>3</terms></certType>";
+ **/
 
 /** SHA-1 types 
    private String singleSSLType = "<certType><id>62</id><name>InCommon SSL</name>" +
@@ -198,7 +209,10 @@ public class ICCertificateAuthority implements CertificateAuthority {
             Element ssl = XMLHelper.getElementByName(ret, "SSL");
             Element certE = XMLHelper.getElementByName(ssl, "certificate");
             cert.pemCert = certE.getTextContent();
-            PEMHelper.parseCert(cert);
+            if (PEMHelper.parseCert(cert) == 0) {
+               cert.status = CBCertificate.CERT_STATUS_REQUESTED;  // kind of an assumption, incommon does this when no cert yet
+               return 0;
+            } 
             Date now = new Date();
             if (cert.expires.before(now)) {
                log.debug("cert available, but is expired");
@@ -300,7 +314,10 @@ public class ICCertificateAuthority implements CertificateAuthority {
             Element data = XMLHelper.getElementByName(ret, "data");
             String b64 = data.getTextContent();
             cert.pemCert = new String(Base64.decode(b64));
-            PEMHelper.parseCert(cert);
+            if (PEMHelper.parseCert(cert) == 0) {
+               cert.status = CBCertificate.CERT_STATUS_RENEWING;  // kind of an assumption, incommon does this when no cert yet
+               return 0;
+            } 
          }
          if (status==(-1) || status==(-5)) {
             cert.status = CBCertificate.CERT_STATUS_RENEWING;
@@ -404,7 +421,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
            body = body.replaceFirst("ALTNAME", "").replaceFirst("CERTTYPE", singleSSLType);;
       }
 
-      // log.debug("request: [" + body + "]");
+      log.debug("request: [" + body + "]");
 
       try {
          Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
