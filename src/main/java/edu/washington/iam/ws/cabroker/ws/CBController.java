@@ -614,7 +614,8 @@ public class CBController {
            mv.addObject("expdays", expdays);
         }
         try {
-           verifyOwnership(cert, session.remoteUser);
+           // skip this for now.  takes a lot of time
+           // verifyOwnership(cert, session.remoteUser);
            mv.addObject("isowner", true);
            
         } catch (Exception e) {

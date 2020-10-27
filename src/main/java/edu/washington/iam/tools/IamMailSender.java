@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import javax.mail.Address;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.InternetAddress;
@@ -50,8 +51,8 @@ public class IamMailSender {
         this.active = a;
    }
 
-   private JavaMailSender mailSender;
-   public void setMailSender(JavaMailSender mailSender) {
+   private JavaMailSenderImpl mailSender;
+   public void setMailSender(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
    }
    private String replyTo = "iam-support@uw.edu";

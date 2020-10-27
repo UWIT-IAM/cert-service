@@ -42,6 +42,8 @@ import java.security.cert.CertificateNotYetValidException;
 import javax.security.auth.x500.X500Principal;
 
 
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
@@ -176,8 +178,9 @@ public final class PEMHelper {
 
       try {
          PEMParser  pRd = new PEMParser(new StringReader(cert.pemCert));
-         X509Certificate x509 = (X509Certificate)pRd.readObject();
-
+         // X509Certificate x509 = (X509Certificate)pRd.readObject();
+         X509CertificateHolder x509h = (X509CertificateHolder)pRd.readObject();
+         X509Certificate x509 = new JcaX509CertificateConverter().setProvider("BC").getCertificate(x509h); 
          cert.issued = x509.getNotBefore();
          cert.expires = x509.getNotAfter();
          log.debug("pem expires = " + cert.expires);
