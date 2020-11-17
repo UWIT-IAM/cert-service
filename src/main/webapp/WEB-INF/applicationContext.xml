@@ -87,7 +87,6 @@
            <value>fox2</value>
         </list>
       </property>
-      <property name="testMessage" ref="certIssuedMessage"/>
     </bean>
 
 <bean id="certIssuedMessage" class="edu.washington.iam.tools.IamMailMessage">
