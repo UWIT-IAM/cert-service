@@ -128,6 +128,7 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
 
 .tundra .dijitContentPane {
     padding: 2px;
+    overflow: auto;
 }
 .tundra .dijitTabPaneWrapper {
     border: 0px solid #ffffff;
