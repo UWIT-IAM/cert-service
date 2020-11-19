@@ -5,6 +5,10 @@
     word-wrap: normal;
 }
 
+/*override .claro .dijitContentPane overflow property*/
+.claro .dijitContentPane {
+    overflow: auto;
+}
 
 /* sub banner is a right-justified, shaded bar under the banner */
 
