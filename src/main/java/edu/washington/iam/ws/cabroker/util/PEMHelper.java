@@ -17,51 +17,36 @@
 
 package edu.washington.iam.ws.cabroker.util;
 
-import java.lang.Exception;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Date;
-import java.util.Collection;
-import java.io.StringReader;
-import java.io.IOException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.cert.X509Certificate;
-import java.security.cert.CertificateExpiredException;
-import java.security.cert.CertificateNotYetValidException;
-import javax.security.auth.x500.X500Principal;
-
-
+import edu.washington.iam.ws.cabroker.exception.CBParseException;
+import edu.washington.iam.ws.cabroker.registry.CBCertificate;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.pkcs.Attribute;
+import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
+import org.bouncycastle.asn1.x500.RDN;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.Extensions;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.x500.RDN;
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
-import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.bouncycastle.asn1.pkcs.Attribute;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1Set;
-import org.bouncycastle.asn1.x509.GeneralName;
-import org.bouncycastle.asn1.x509.Extension;
-import org.bouncycastle.asn1.x509.Extensions;
-import org.bouncycastle.asn1.x509.GeneralNames;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import edu.washington.iam.ws.cabroker.registry.CBCertificate;
-import edu.washington.iam.ws.cabroker.exception.CBParseException;
+import javax.security.auth.x500.X500Principal;
+import java.io.IOException;
+import java.io.StringReader;
+import java.security.PublicKey;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
+import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 public final class PEMHelper {
 
@@ -142,7 +127,10 @@ public final class PEMHelper {
                     cert.names.add(names[k].getName().toString().toLowerCase());
                 }
                 else if(names[k].getTagNo() == GeneralName.iPAddress) {
-                    names[k].toASN1Object();
+                    // org.bouncycastle.asn1.x509.GeneralName *is* an ASN1Object (subclass), and this method
+                    // - doesn't have any effect (result is never assigned), and
+                    // - org.bouncycastle.asn1.x509.GeneralName no longer has this method
+                    // names[k].toASN1Object(); 
                     log.debug("ignoring altip: " + names[k].getName());
                 }
             } 

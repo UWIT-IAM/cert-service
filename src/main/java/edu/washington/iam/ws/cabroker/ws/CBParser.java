@@ -17,50 +17,16 @@
 
 package edu.washington.iam.ws.cabroker.ws;
 
-import java.lang.Exception;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Date;
-import java.util.Enumeration;
-import java.io.StringReader;
-import java.io.IOException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
+import edu.washington.iam.tools.XMLHelper;
+import edu.washington.iam.ws.cabroker.exception.CBParseException;
+import edu.washington.iam.ws.cabroker.registry.CBCertificate;
+import edu.washington.iam.ws.cabroker.util.PEMHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-
-import java.security.cert.X509Certificate;
-
-// import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1Set;
-import org.bouncycastle.asn1.DERSequence;
-import org.bouncycastle.asn1.DERObjectIdentifier;
-import org.bouncycastle.asn1.x509.GeneralName;
-import org.bouncycastle.asn1.x509.Attribute;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.asn1.x509.X509Extension;
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
-
-
-import edu.washington.iam.ws.cabroker.registry.CBCertificate;
-
-import  edu.washington.iam.ws.cabroker.exception.CBParseException;
-
-import  edu.washington.iam.tools.XMLHelper;
-import  edu.washington.iam.ws.cabroker.util.PEMHelper;
+import java.util.List;
 
 
 public final class CBParser {

@@ -166,7 +166,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
        "<numberServers>NUMSERVERS</numberServers>" +
        "<serverType>SERVERTYPE</serverType>" +
        "<term>TERM</term>" +
-       "<comments>requested by REQUESTOR</comments>" +
+       "<comments></comments>" +
        "</tns:enroll>";
 
        // "<subjAltNames xsi:type=\"xsd:string\">ALTNAMES</subjAltNames>" +

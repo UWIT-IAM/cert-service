@@ -142,7 +142,7 @@ public class CBRegistry {
              " (status=" + String.valueOf(CBCertificate.CERT_STATUS_REQUESTED) +
              " or status=" + String.valueOf(CBCertificate.CERT_STATUS_RENEWING) + ")";
  
-          log.debug("wating search query: " + query);
+          log.debug("waiting on search query: " + query);
            
           ResultSet rs = stmt.executeQuery(query);
           while (rs.next()) {
