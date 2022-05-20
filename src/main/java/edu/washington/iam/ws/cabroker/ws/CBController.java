@@ -614,7 +614,8 @@ public class CBController {
            mv.addObject("expdays", expdays);
         }
         try {
-           verifyOwnership(cert, session.remoteUser);
+           // skip this for now.  takes a lot of time
+           // verifyOwnership(cert, session.remoteUser);
            mv.addObject("isowner", true);
            
         } catch (Exception e) {
@@ -687,9 +688,9 @@ public class CBController {
            log.debug("have req for " + cert.ca);
  
            // do some quick validation
-           if (!cert.dnC.equals("US")) throw new CBParseException("Country must be 'US'");
-           if (!(cert.dnST.equals("WA")||cert.dnST.equals("Washington"))) throw new CBParseException("State must be 'WA' or 'Washington'");
-           if (!cert.dnO.equals("University of Washington")) throw new CBParseException("Organization must be 'University of Washington'");
+           if (cert.dnC==null || !cert.dnC.equals("US")) throw new CBParseException("Country must be 'US'");
+           if (cert.dnST==null || !(cert.dnST.equals("WA")||cert.dnST.equals("Washington"))) throw new CBParseException("State must be 'WA' or 'Washington'");
+           if (cert.dnO==null || !cert.dnO.equals("University of Washington")) throw new CBParseException("Organization must be 'University of Washington'");
            if (cert.lifetime > 12 && cert.ca==CBCertificate.IC_CA) throw new CBParseException("Lifetime must be 12 months.");
            if (cert.keySize>0 && cert.keySize<2048 &&
                cert.ca==CBCertificate.IC_CA) throw new CBParseException("Key length must be 2048");

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import javax.mail.Address;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.InternetAddress;
@@ -35,6 +36,8 @@ import javax.mail.MessagingException;
 import edu.washington.iam.tools.DNSVerifier;
 import edu.washington.iam.tools.DNSVerifyException;
 import com.sun.mail.smtp.SMTPSenderFailedException;
+import com.sun.mail.smtp.SMTPAddressFailedException;
+
 
 
 // local interface to java mail sender
@@ -48,8 +51,8 @@ public class IamMailSender {
         this.active = a;
    }
 
-   private JavaMailSender mailSender;
-   public void setMailSender(JavaMailSender mailSender) {
+   private JavaMailSenderImpl mailSender;
+   public void setMailSender(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
    }
    private String replyTo = "iam-support@uw.edu";
@@ -59,6 +62,17 @@ public class IamMailSender {
    private String from = "UW Certificate Services <iam-support@uw.edu>";
    public void setFrom(String from) {
         this.from = from;
+   }
+
+   // test that mail works
+   public void init() {
+      try {
+        this.mailSender.testConnection();
+        log.info("Mail sender connection verified.");
+      } catch (MessagingException e) {
+        log.error("Unable to use the mail sender: " + e);
+        this.active = false;
+      }
    }
 
    private String[] doNotMail = null;
@@ -118,6 +132,8 @@ public class IamMailSender {
       } catch(DNSVerifyException ex) {
          log.error("checking dns: " + ex.getMessage());
       } catch (SMTPSenderFailedException e) {
+         log.error("cannot send email: " + e);
+      } catch (SMTPAddressFailedException e) {
          log.error("cannot send email: " + e);
       } catch (MessagingException e) {
          log.error("iam mail failure: " + e);

@@ -42,12 +42,15 @@ import java.security.cert.CertificateNotYetValidException;
 import javax.security.auth.x500.X500Principal;
 
 
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.pkcs.Attribute;
 import org.bouncycastle.asn1.ASN1Object;
@@ -72,12 +75,22 @@ public final class PEMHelper {
    private final static String COMMON_NAME = "2.5.4.3";
 
    private static String getX500Field(String asn1ObjectIdentifier, X500Name x500Name) {
+      log.debug("looking for [" + asn1ObjectIdentifier + "]");
       RDN[] rdnArray = x500Name.getRDNs(new ASN1ObjectIdentifier(asn1ObjectIdentifier));
-      String retVal = null;
       for (RDN item : rdnArray) {
-         retVal = item.getFirst().getValue().toString();
+         // log.debug("RDN: size=" +  item.size());
+         AttributeTypeAndValue[] atvArray = item.getTypesAndValues();
+         for (AttributeTypeAndValue atv: atvArray) {
+             // log.debug("type id=[" + atv.getType().getId() + "]");
+             // log.debug("type string=" + atv.getType().toString());
+             // log.debug("value string=" + atv.getValue().toString());
+             if (atv.getType().getId().equals(asn1ObjectIdentifier)) {
+                log.debug(".. have value = " + atv.getValue().toString());
+                return atv.getValue().toString();
+             }
+         }
       }
-      return retVal;
+      return null;
    }
 
    public static int parseCsr(CBCertificate cert) throws CBParseException {
@@ -165,8 +178,9 @@ public final class PEMHelper {
 
       try {
          PEMParser  pRd = new PEMParser(new StringReader(cert.pemCert));
-         X509Certificate x509 = (X509Certificate)pRd.readObject();
-
+         // X509Certificate x509 = (X509Certificate)pRd.readObject();
+         X509CertificateHolder x509h = (X509CertificateHolder)pRd.readObject();
+         X509Certificate x509 = new JcaX509CertificateConverter().setProvider("BC").getCertificate(x509h); 
          cert.issued = x509.getNotBefore();
          cert.expires = x509.getNotAfter();
          log.debug("pem expires = " + cert.expires);
