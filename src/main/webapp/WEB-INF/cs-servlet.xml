@@ -25,8 +25,12 @@
 
   <!-- the application context definition for the springapp DispatcherServlet -->
 
-    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+    <bean id="velocityFactory" class="org.apache.velocity.spring.VelocityEngineFactoryBean">
         <property name="resourceLoaderPath" value="/WEB-INF/velocity"/>
+        <property name="configLocation" value="/WEB-INF/velocity.properties"/>
+    </bean>
+    <bean id="velocityConfig" class="edu.washington.iam.tools.IamVelocityConfig">
+        <property name="velocityEngine" ref="velocityFactory"/>
     </bean>
     <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
         <property name="cache" value="false"></property>
@@ -57,7 +61,7 @@
         <property name="basename" value="messages"/>
     </bean>
 
-<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
     <property name="messageConverters">
       <util:list id="beanList">
          <ref bean="stringHttpMessageConverter"/>
