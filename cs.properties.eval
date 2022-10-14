@@ -3,8 +3,8 @@
 # cs will look for this file first in the cs directory
 # if that is undefined or not found this installed copy will be used
 #
-cs.version=2.4.1
-cs.versionDate=2020-08-03
+cs.version=2.4.4
+cs.versionDate=2022-10-13
 
 # location of the properties file
 cs.root=/data/local/cs
@@ -13,7 +13,7 @@ cs.root=/data/local/cs
 # cs.db.host=iamdb11.cac.washington.edu
 # cs.db.name=certservice
 # cs.db.user=ca
-cs.db.host=iamdbdev01.s.uw.edu
+cs.db.host=iamdbeval20.s.uw.edu
 cs.db.name=certdev
 cs.db.user=cadev
 
@@ -28,12 +28,12 @@ cs.ic.watch=false
 cs.webclient.certFile=/data/local/cs/gws.cac-uw.crt
 cs.webclient.keyFile=/data/local/cs/gws.cac-uw.key
 cs.webclient.caFile=/data/local/cs/ca.crt
-cs.webclient.queryTimeLimit=120000
+cs.webclient.queryTimeLimit=240000
 
 # mail settings
 cs.smtp.host=appsubmit.cac.washington.edu
-cs.smtp.from=UW Certificate Services <somebody@iam-tools.u.washington.edu>
-cs.smtp.issuedTo=mattjm@uw.edu
+cs.smtp.from=UW Certificate Services <somebody@iam-tools-test.u.washington.edu>
+cs.smtp.issuedTo=cert-dev@uw.edu
 
 cs.uwLogout=https://idp.u.washington.edu/idp/logout
 cs.googleEntityId=https://idp.u.washington.edu/google
