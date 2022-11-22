@@ -166,7 +166,6 @@ public final class PEMHelper {
 
       try {
          PEMParser  pRd = new PEMParser(new StringReader(cert.pemCert));
-         // X509Certificate x509 = (X509Certificate)pRd.readObject();
          X509CertificateHolder x509h = (X509CertificateHolder)pRd.readObject();
          X509Certificate x509 = new JcaX509CertificateConverter().setProvider("BC").getCertificate(x509h); 
          cert.issued = x509.getNotBefore();
@@ -180,7 +179,6 @@ public final class PEMHelper {
          log.debug("principal = " + cert.dn);
 
          // see if we've got alt names (in extensions)
-
          Collection<List<?>> ans = x509.getSubjectAlternativeNames();
 
          log.debug("ans size = " + ans.size());
