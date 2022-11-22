@@ -84,8 +84,8 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private static String authDataFile = "/data/local/etc/comodo.pw";
    private static String orgAndSecretFile = "/data/local/etc/comodo.os";
    // running locally strings
-   // private static String authDataFile = "/Users/jimt/src/UW/IAM/certs/comodo.pw";
-   // private static String orgAndSecretFile = "/Users/jimt/src/UW/IAM/certs/comodo.os";
+   // private static String authDataFile = "<path to local comodo.pw file>";
+   // private static String orgAndSecretFile = "<path to local comodo.os file>";
    private long authDataModified = 0;
    private long orgAndSecretModified = 0;
 
