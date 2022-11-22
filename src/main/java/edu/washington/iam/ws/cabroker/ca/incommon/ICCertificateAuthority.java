@@ -17,57 +17,54 @@
 
 package edu.washington.iam.ws.cabroker.ca.incommon;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
-import java.util.Iterator;
-import java.io.StringWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.commons.io.IOUtils;
-
-import org.bouncycastle.util.encoders.Base64;
-
+import com.google.gson.stream.JsonReader;
+import edu.washington.iam.tools.DNSVerifier;
+import edu.washington.iam.tools.IamMailMessage;
+import edu.washington.iam.tools.IamMailSender;
 import edu.washington.iam.tools.WebClient;
 import edu.washington.iam.tools.WebClientException;
 import edu.washington.iam.tools.XMLHelper;
-import edu.washington.iam.ws.cabroker.util.PEMHelper;
-
+import edu.washington.iam.ws.cabroker.ca.CertificateAuthority;
+import edu.washington.iam.ws.cabroker.exception.CBNotFoundException;
+import edu.washington.iam.ws.cabroker.exception.CertificateAuthorityException;
+import edu.washington.iam.ws.cabroker.exception.NoPermissionException;
 import edu.washington.iam.ws.cabroker.registry.CBCertificate;
 import edu.washington.iam.ws.cabroker.registry.CBHistory;
 import edu.washington.iam.ws.cabroker.registry.CBRegistry;
+import edu.washington.iam.ws.cabroker.util.PEMHelper;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
-import edu.washington.iam.tools.DNSVerifier;
-import edu.washington.iam.tools.DNSVerifyException;
-import edu.washington.iam.tools.IamMailMessage;
-import edu.washington.iam.tools.IamMailSender;
-
-import edu.washington.iam.ws.cabroker.ca.CertificateAuthority;
-import edu.washington.iam.ws.cabroker.exception.CertificateAuthorityException;
-import edu.washington.iam.ws.cabroker.exception.CBNotFoundException;
-import edu.washington.iam.ws.cabroker.exception.NoPermissionException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.stream.Collectors;
 
 public class ICCertificateAuthority implements CertificateAuthority {
 
    private final Logger log =   LoggerFactory.getLogger(getClass());
 
-   private String customerLoginUri = "InCommon";
-   private String login;
-   private String password;
-   
    private WebClient webClient;
    private CBRegistry cbRegistry;
    private DNSVerifier dnsVerifier;
@@ -77,19 +74,17 @@ public class ICCertificateAuthority implements CertificateAuthority {
 
    private static String soapUrl = "https://cert-manager.com:443/ws/EPKIManagerSSL";
    private static String soapAction = "";
-   private static boolean initialized = false;
-   private static String timeoutMessage = "No response from InCommon.  The service may be down temporarily. Please try again later.";
 
    private static boolean watchForActivity = false;
    private Thread activityWatcher = null;
    private int refreshInterval = 0;
 
    //prod strings
-   private static String authDataFile = "/data/local/etc/comodo.pw";
-   private static String orgAndSecretFile = "/data/local/etc/comodo.os";
+   // private static String authDataFile = "/data/local/etc/comodo.pw";
+   // private static String orgAndSecretFile = "/data/local/etc/comodo.os";
    //dev strings
-   //private static String authDataFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.pw";
-   //private static String orgAndSecretFile = "C:\\Users\\mattjm\\Documents\\spregworking\\incommoncert\\comodo.os";
+   private static String authDataFile = "/Users/jimt/src/UW/IAM/certs/comodo.pw";
+   private static String orgAndSecretFile = "/Users/jimt/src/UW/IAM/certs/comodo.os";
    private long authDataModified = 0;
    private long orgAndSecretModified = 0;
 
@@ -106,20 +101,11 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private String orgAndSecretTmpl = "<orgId>ORGID</orgId><secretKey>ORGSECRET</secretKey>";
    private String orgAndSecret;
 
-   private static String getCustomerCertTypesBody = "<tns:getCustomerCertTypes xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
-        "</tns:getCustomerCertTypes>";
-
    private static String collectBody = "<tns:collect xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
        "<id>ID</id><formatType>1</formatType></tns:collect>";
 
    private static String collectPKCS7 = "<tns:collect xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
        "<id>ID</id><formatType>3</formatType></tns:collect>";
-
-   private static String collectRenewedBody = "<tns:collectRenewed xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
-       "<renewId>ID</renewId><formatType>1</formatType></tns:collectRenewed>";
-
-   private static String collectRenewedPKCS7 = "<tns:collectRenewed xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
-       "<renewId>ID</renewId><formatType>3</formatType></tns:collectRenewed>";
 
    private static String getCollectStatusBody = "<tns:getCollectStatus xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
        "<id>ID</id></tns:getCollectStatus>";
@@ -157,6 +143,18 @@ public class ICCertificateAuthority implements CertificateAuthority {
 
 **/
 
+   private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+   private DocumentBuilder builder;
+
+   private static Map pemParams = new HashMap<String, String>() {{
+      put("format", "x509CO");
+   }};
+   
+   private static Map pkcs7Params = new HashMap<String, String>() {{
+      put("format", "base64");
+   }};
+   
+   private Map<String, String> authContentHdrMap;
    private static String enrollBody = "<tns:enroll xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
        "ORGANDSECRET" +
        "<csr>CSR</csr>" +
@@ -174,16 +172,20 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private static String renewBody = "<tns:renewById xmlns:tns=\"http://ssl.ws.epki.comodo.com/\">AUTHDATA" +
        "<id>RENEWID</id></tns:renewById>";
 
- 
+   public ICCertificateAuthority() throws ParserConfigurationException {
+      builder = factory.newDocumentBuilder();
+   }
+
+
    public int getCertificate(CBCertificate cert) throws CertificateAuthorityException, CBNotFoundException {
       log.debug("get cert for " + cert.caId);
-      
+
       if (cert.renewId!=null && cert.renewId.length()>0 &&
           cert.status!=CBCertificate.CERT_STATUS_DECLINED) return getRenewedCertificate(cert); 
 
       cert.pemCert = null;
       int status = (-999);
-
+      
       int oldStatus = cert.status;
       if (oldStatus==CBCertificate.CERT_STATUS_REVOKED) return oldStatus;
       refreshSecrets();
@@ -204,7 +206,7 @@ public class ICCertificateAuthority implements CertificateAuthority {
          else if (status==(-21)) cert.status = CBCertificate.CERT_STATUS_REVOKED;
          else if (status==(-40)) throw new CBNotFoundException("not found");
          else if (status<0 && status!=(-23)) throw new CertificateAuthorityException(String.valueOf(status));
-
+    
          if (status==2) {
             Element ssl = XMLHelper.getElementByName(ret, "SSL");
             Element certE = XMLHelper.getElementByName(ssl, "certificate");
@@ -278,68 +280,61 @@ public class ICCertificateAuthority implements CertificateAuthority {
       log.debug("get renewed cert for " + cert.caId + " renewId=" + cert.renewId + " status=" + cert.status);
       cert.pemCert = null;
       int status = (-999);
-      if (cert.renewId!=null && cert.renewId.length()==0) return status; // shouldn't happen
+      if (cert.renewId != null && cert.renewId.length() == 0) return status; // shouldn't happen
 
       int oldStatus = cert.status;
-      if (oldStatus==CBCertificate.CERT_STATUS_REVOKED) return oldStatus;
+      if (oldStatus == CBCertificate.CERT_STATUS_REVOKED) return oldStatus;
       refreshSecrets();
-    
+
       try {
-         String body = collectRenewedBody.replaceFirst("AUTHDATA",authData).replaceFirst("ID", String.valueOf(cert.renewId));
-         // log.debug("request: " + body);
-         Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
-         if (resp==null) throw new CertificateAuthorityException("IO error to CA");
-         Element cr = XMLHelper.getElementByName(resp, "collectRenewedResponse");
-         if (cr==null) {
-            log.error("ic no collectRenewedResponse!");
-            throw new CertificateAuthorityException("missing collectRenewedResponse");
-         }
-         Element ret = XMLHelper.getElementByName(cr, "return");
-         if (ret==null) {
-            log.error("ic no ret!");
-            throw new CertificateAuthorityException("missing return");
-         }
-         Element sc = XMLHelper.getElementByName(ret, "errorCode");
-         if (sc==null) {
-            log.error("ic no sc!");
-            throw new CertificateAuthorityException("missing errorcode");
-         }
+         CloseableHttpResponse response = webClient.doRestGet("https://cert-manager.com/api/ssl/v1/collect/" + cert.getCaId(), pemParams, authContentHdrMap);
 
-         status = Integer.parseInt(sc.getTextContent());
+         if (null == response) throw new CertificateAuthorityException("IO error to CA");
+
+         status = response.getStatusLine().getStatusCode();
+
          log.debug("status: " + status);
-         if (status==0) cert.status = CBCertificate.CERT_STATUS_ISSUED;
-         else if (status==(-6)) cert.status = CBCertificate.CERT_STATUS_DECLINED;
 
-         if (status==0) {
-            Element data = XMLHelper.getElementByName(ret, "data");
-            String b64 = data.getTextContent();
-            cert.pemCert = new String(Base64.decode(b64));
+         HttpEntity entity = response.getEntity();
+
+         // Sectigo's REST API generates different statuses/error-codes than the SOAP API;
+         // Log and throw an exception based on the error
+         if (status > 400) {
+            Map<String, String> sectigoReturnMap = parseSectigoError(entity);
+            String errorCode = sectigoReturnMap.get("code");
+            switch (errorCode) {
+               case "-618":  // Discovery is currently running. Please try again later.
+               case "-1400": // The request is being processed by Sectigo.
+                  cert.status = CBCertificate.CERT_STATUS_RENEWING;
+                  break;
+               case "-1112": // Certificate can''t be approved cause it has state = ...
+                  cert.status = CBCertificate.CERT_STATUS_DECLINED;
+                  break;
+               case "-5101": // Certificate not found. 
+                  cert.status = CBCertificate.CERT_STATUS_GONE;
+                  break;
+               default:
+                  cert.status = CBCertificate.CERT_STATUS_UNKNOWN;
+                  log.error("Unhandled Sectigo error: " + errorCode);
+                  break;
+            }
+         }
+         else {
+            cert.pemCert = new BufferedReader(new InputStreamReader(entity.getContent())).lines().collect(Collectors.joining("\n"));
+            response.close();
             if (PEMHelper.parseCert(cert) == 0) {
                cert.status = CBCertificate.CERT_STATUS_RENEWING;  // kind of an assumption, incommon does this when no cert yet
-               return 0;
-            } 
-         }
-         if (status==(-1) || status==(-5)) {
-            cert.status = CBCertificate.CERT_STATUS_RENEWING;
-         } else if (status==(-6)) {
-            cert.status = CBCertificate.CERT_STATUS_DECLINED;
-         } else if (status==(-2)) {
-            // have seen this come back when an expired cert was renewed
-            if (cert.status != CBCertificate.CERT_STATUS_RENEWING) {
-               cert.renewId = null;
-               return getCertificate(cert);  // revocation or expired
+            } else if (status == HttpStatus.SC_OK) {
+               cert.status = CBCertificate.CERT_STATUS_ISSUED;
+               if (oldStatus != CBCertificate.CERT_STATUS_ISSUED) {
+                  sendNotices(cert);
+               }
             }
-         } 
-         if (status==0 && oldStatus!=CBCertificate.CERT_STATUS_ISSUED) {
-            sendNotices(cert);
-            cert.status = CBCertificate.CERT_STATUS_ISSUED;
+            cert.updateDB();
          }
-         cert.updateDB();
-
-      } catch (WebClientException e) {
+      } catch (WebClientException | IOException e) {
          throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
       }
-
       return status;
    }
 
@@ -352,32 +347,56 @@ public class ICCertificateAuthority implements CertificateAuthority {
 
       int oldStatus = cert.status;
       refreshSecrets();
-    
-      try {
-         String body = collectRenewedPKCS7.replaceFirst("AUTHDATA",authData).replaceFirst("ID", String.valueOf(cert.renewId));
-         Element resp = webClient.doSoapRequest(soapUrl, soapAction, body);
-         if (resp==null) throw new CertificateAuthorityException("IO error to CA");
-         Element cr = XMLHelper.getElementByName(resp, "collectRenewedResponse");
-         Element ret = XMLHelper.getElementByName(cr, "return");
-         Element sc = XMLHelper.getElementByName(ret, "errorCode");
 
-         status = Integer.parseInt(sc.getTextContent());
+      try {
+         CloseableHttpResponse response = webClient.doRestGet("https://cert-manager.com/api/ssl/v1/collect/" + cert.getCaId(), pkcs7Params, authContentHdrMap);
+
+         if (null == response) throw new CertificateAuthorityException("IO error to CA");
+
+         status = response.getStatusLine().getStatusCode();
+
          log.debug("status: " + status);
 
-         if (status==(-4)) throw new CBNotFoundException("not found");
-         if (status==(-1) || status==(-5)) throw new CertificateAuthorityException("renewing");
-         if (status<0) throw new CertificateAuthorityException(String.valueOf(status));
+         HttpEntity entity = response.getEntity();
 
-         if (status==0) {
-            Element data = XMLHelper.getElementByName(ret, "data");
-            String b64 = data.getTextContent();
-            pkcs7 = new String(Base64.decode(b64));
+         // Sectigo's REST API generates different statuses/error-codes than the SOAP API;
+         // Log and throw an exception based on the error
+         if (status > 400) {
+            Map<String, String> sectigoReturnMap = parseSectigoError(entity);
+            String errorCode = sectigoReturnMap.get("code");
+            switch (errorCode) {
+               case "-618":  // Discovery is currently running. Please try again later.
+               case "-1400": // The request is being processed by Sectigo.
+                  throw new CertificateAuthorityException("renewing: errorCode = " + errorCode);
+               case "-5101": // Certificate not found. 
+                  throw new CBNotFoundException("not found");
+               default:
+                  log.error("Unhandled Sectigo error: " + errorCode);
+                  throw new CertificateAuthorityException(String.valueOf(status));
+            }
          }
-      } catch (WebClientException e) {
+         pkcs7 = IOUtils.toString(new InputStreamReader(entity.getContent()));
+         response.close();
+      } catch (WebClientException | IOException e) {
          throw new CertificateAuthorityException("incommon retrieve:" + e.getMessage());
       }
-
       return pkcs7;
+   }
+
+   private Map<String, String> parseSectigoError(HttpEntity errEntity) throws IOException {
+      // parse out Sectigo REST error; see the 'Errors' section of the
+      // Certificate Manager 22.10 REST API
+      HashMap<String, String> errorMap = new HashMap<>();
+
+      JsonReader reader = new JsonReader(new InputStreamReader(errEntity.getContent()));
+      reader.beginObject();
+      while (reader.hasNext()) {
+         errorMap.put(reader.nextName(), reader.nextString());
+      }
+      reader.endObject();
+
+      log.error("Error calling Sectigo REST API: " + errorMap.get("description") + "; error code: " + errorMap.get("code"));
+      return errorMap;
    }
 
    public int requestCertificate(CBCertificate cert) throws CertificateAuthorityException,NoPermissionException {
@@ -588,6 +607,21 @@ public class ICCertificateAuthority implements CertificateAuthority {
             StringWriter sw = new StringWriter();
             IOUtils.copy(new FileInputStream(f), sw);
             authData = sw.toString().replaceAll("\n","");
+            Document authDoc;
+            try {
+               InputSource is = new InputSource(new StringReader(authData));
+               authDoc = builder.parse(is);
+               String loginUri = authDoc.getElementsByTagName("customerLoginUri").item(0).getTextContent();
+               String loginId = authDoc.getElementsByTagName("login").item(0).getTextContent();
+               String loginPw = authDoc.getElementsByTagName("password").item(0).getTextContent();
+               authContentHdrMap = new HashMap<String, String>() {{
+                  put("login", loginId);
+                  put("password", loginPw);
+                  put("customerUri", loginUri);
+               }};
+            } catch (SAXException e) {
+               throw new RuntimeException(e);
+            }
             authDataModified = f.lastModified();
          }
          f = new File(orgAndSecretFile);
@@ -617,15 +651,6 @@ public class ICCertificateAuthority implements CertificateAuthority {
       if (activityWatcher!=null) activityWatcher.interrupt();
    }
 
-   public void setCustomerLoginUri(String v) {
-      customerLoginUri = v;
-   }
-   public void setLogin(String v) {
-      login = v;
-   }
-   public void setPassword(String v) {
-      password = v;
-   }
    public void setWebClient(WebClient v) {
       webClient = v;
    }
@@ -659,8 +684,4 @@ public class ICCertificateAuthority implements CertificateAuthority {
    public void setSoapUrl(String v) {
       soapUrl = v;
    }
-   public void setTimeoutMessage(String v) {
-      timeoutMessage = v;
-   }
-
 }
