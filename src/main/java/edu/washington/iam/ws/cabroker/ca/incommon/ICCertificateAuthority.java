@@ -79,12 +79,13 @@ public class ICCertificateAuthority implements CertificateAuthority {
    private Thread activityWatcher = null;
    private int refreshInterval = 0;
 
-   //prod strings
-   // private static String authDataFile = "/data/local/etc/comodo.pw";
-   // private static String orgAndSecretFile = "/data/local/etc/comodo.os";
-   //dev strings
-   private static String authDataFile = "/Users/jimt/src/UW/IAM/certs/comodo.pw";
-   private static String orgAndSecretFile = "/Users/jimt/src/UW/IAM/certs/comodo.os";
+   // prod strings
+   // TODO - put auth-root property in cs.properties file and locate these files off that setting
+   private static String authDataFile = "/data/local/etc/comodo.pw";
+   private static String orgAndSecretFile = "/data/local/etc/comodo.os";
+   // running locally strings
+   // private static String authDataFile = "/Users/jimt/src/UW/IAM/certs/comodo.pw";
+   // private static String orgAndSecretFile = "/Users/jimt/src/UW/IAM/certs/comodo.os";
    private long authDataModified = 0;
    private long orgAndSecretModified = 0;
 
