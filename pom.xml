@@ -1,12 +1,12 @@
-<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.washington.iam</groupId>
   <artifactId>certservice</artifactId>
   <packaging>war</packaging>
   <version>2.4.5</version>
   <name>Certificate Service Webapp</name>
-  
+
   <repositories>
     <repository>
       <id>apache</id>
@@ -55,7 +55,7 @@
       <artifactId>spring-web</artifactId>
       <version>5.3.22</version>
     </dependency>
-      <dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <version>5.3.22</version>
@@ -122,11 +122,18 @@
       <version>2.3</version>
     </dependency>
     <dependency>
+      <groupId>velocity-tools</groupId>
+      <artifactId>velocity-tools-view</artifactId>
+      <version>1.4</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.apache.velocity</groupId>
       <artifactId>spring-velocity-support</artifactId>
       <version>2.3</version>
     </dependency>
- 
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
@@ -150,7 +157,7 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-    </plugins>   
+    </plugins>
     <finalName>cs</finalName>
   </build>
 
