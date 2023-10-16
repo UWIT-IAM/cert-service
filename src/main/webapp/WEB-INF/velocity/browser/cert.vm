@@ -134,7 +134,7 @@ $!{cert.pemCert}
    </ul>
   </li>
   <li>IIS install: download the PKCS7 format.</li>
-  <li>Downloads: Go to <a href="https://cert-manager.com/customer/InCommon/ssl?action=download&sslId=$!{cert.caId}">InCommon</a> for more download options.</li>
+  <li>Downloads: For other download options please email help@uw.edu with your certificate number and a specialist will assist you.</li>
  #end
   <li>Revocation: If you believe the certificate's private key has been compromised send mail to <a href="mailto:iam-support@uw.edu">IAM Support</a> requesting the certificate be revoked.  Be sure to
     specify the certificate number and CN and the reason for revocation.

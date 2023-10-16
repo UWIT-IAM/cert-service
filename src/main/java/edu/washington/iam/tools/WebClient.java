@@ -18,39 +18,62 @@
 
 package edu.washington.iam.tools;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
+import java.io.Serializable;
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+
+import java.util.List;
+import java.util.Vector;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.apache.http.entity.StringEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.message.BasicNameValuePair;
+
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.conn.HttpClientConnectionManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
+
+import edu.washington.iam.tools.XMLHelper;
 
 public class WebClient {
 
@@ -81,7 +104,7 @@ public class WebClient {
         "<soap:Body>";
     private String soapTrailer = "</soap:Body></soap:Envelope>";
 
-    // "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + 
+          // "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + 
           // "xmlns:tns=\"http://ssl.ws.epki.comodo.com/\" " +
 
     public void closeIdleConnections() { 
@@ -175,66 +198,6 @@ public class WebClient {
        return ele;
     }
 
-    /**
-     * Do a Rest GET accepting JSON
-     * @param url
-     * @param headerMap - map of header fields & values
-     * @return
-     * @throws WebClientException
-     */
-    public CloseableHttpResponse doRestGet(String url, Map<String, String> params, Map<String, String> headerMap) throws WebClientException {
-
-        closeIdleConnections();
-
-        // log.debug("do rest get");
-        Element ele = null;
-        // restclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, new BasicHttpParams());
-        // if (restclient==null) restclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, httpParams);
-
-        CloseableHttpClient client = iamConnectionManager.getClient();
-        CloseableHttpResponse response = null;
-
-        log.debug(" rest get, url: " + url);
-
-        URIBuilder builder;
-        HttpGet httpget;
-        try {
-            builder = new URIBuilder(url);
-            if (null != params && params.size() > 0) {
-                for (String paramKey : params.keySet()) {
-                    builder.addParameter(paramKey, params.get(paramKey));
-                }
-            }
-            httpget = new HttpGet(builder.build());
-        } catch (URISyntaxException e) {
-            throw new WebClientException(e);
-        }
-        if (null != headerMap && headerMap.size() > 0) {
-            for (String hdrKey : headerMap.keySet()) {
-                httpget.addHeader(hdrKey, headerMap.get(hdrKey));
-            }
-        }
-
-        try {
-            response = client.execute(httpget);
-            
-            return response;
-//            HttpEntity entity = response.getEntity();
-//
-//            // null is error - should get something
-//            if (entity == null) {
-//                closeResponse(response);
-//                throw new WebClientException("client REST GET exception");
-//            }
-//            String resp = EntityUtils.toString(entity);
-//            closeClient(client);
-//            return (resp);
-        } catch (IOException e) {
-            closeClient(client);
-            throw new WebClientException(e.getMessage());
-        }
-    }
-
     public Element doRestGet(String url, String auth) throws WebClientException {
 
        closeIdleConnections();
@@ -300,7 +263,7 @@ public class WebClient {
     }
 
     public Element doRestGet(String url) throws WebClientException {
-       return doRestGet(url, (String) null);
+       return doRestGet(url, null);
     }
 
     public Element doRestPut(String url, List<NameValuePair> data, String auth) throws WebClientException {
