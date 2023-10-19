@@ -122,9 +122,9 @@ v_xsrf = '${xsrf}';
   <div class="dijitDialogPaneContentArea">
     Identity and Access Management
     <br/>
-    Certificate Services 2.4.5
+    Certificate Services 2.4.4
     <br/>
-    Revision 2022-11-22
+    Revision 2020-08-04
     <p/>
     <a href="https://wiki.cac.washington.edu/x/KDaoAQ">Learn more about certificate services</a>
   </div>
@@ -170,7 +170,7 @@ v_xsrf = '${xsrf}';
 
 <div id="banner" data-dojo-type="dijit/layout/ContentPane" >
     <span id="title"><a tabindex=-1 href="javascript:showHomePage()">CERTIFICATE SERVICE</a></span>
-##     <span id="banner_notice"></span>
+       <span id="banner_notice"></span>
     <ul id="ident">
         <li></li>
     </ul>
@@ -312,7 +312,7 @@ web servers and applications.
     </span>
     <span id="footright">
     <ul id="navigation">
-        <li><a href="javascript:iam_showTheDialog('helpAbout');">Cert service 2.4.5</a></li>
+        <li><a href="javascript:iam_showTheDialog('helpAbout');">Cert service 2.4.4</a></li>
     </ul>
     </span>
 </div>

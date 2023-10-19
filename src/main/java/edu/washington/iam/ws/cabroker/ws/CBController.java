@@ -105,8 +105,8 @@ public class CBController {
     private static String logoutUrl;
     private static String errorUrl;
 
-    private static String mailTo = "cert-dev@uw.edu";
-    private static String requestMailTo = "cert-dev@uw.edu";
+    private static String mailTo = "fox@u.washington.edu";
+    private static String requestMailTo = "fox@u.washington.edu";
 
     // sessions
     private String standardLoginPath = "/login";
