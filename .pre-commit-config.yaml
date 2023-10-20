@@ -1,0 +1,26 @@
+# See https://pre-commit.com/ for file specification
+#
+# These checks are not performed by default. If you'd like to use these checks,
+# install pre-commit and then run `pre-commit install` in the root of your
+# repository.
+
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.1.0
+    hooks:
+    # Avoid trailing whitespace, see Java style guide
+    -   id: trailing-whitespace
+
+    # Avoid files without newline ending, see Java style guide
+    -   id: end-of-file-fixer
+
+    # Verify modified data files
+    -   id: check-yaml
+    -   id: check-xml
+
+-   repo: https://github.com/ejba/pre-commit-maven
+    rev: v0.3.3
+    hooks:
+    # Project compiles and passes unit tests
+    -   id: maven-compile
+    -   id: maven-test
