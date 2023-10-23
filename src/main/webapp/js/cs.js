@@ -344,11 +344,21 @@ function getCertList(name) {
   dijitRegistry.byId('searchResult').set('href',url);
 }
 
+/**
+ * Called on keyup in the simple search textbox.
+ *
+ * See src/main/webapp/WEB-INF/velocity/browser/page.vm
+ */
 function checkSimpleSearch(e)
 {
   console.log(e);
   if (!e) e = window.event;
   if (e.keyCode==13) showCerts(dijitRegistry.byId('simplesearch').get('value'));
+}
+
+/** Called when the simple search "Search" button is clicked. */
+function onSimpleSearchButton() {
+   showCerts(dijitRegistry.byId('simplesearch').get('value'));
 }
 
 
