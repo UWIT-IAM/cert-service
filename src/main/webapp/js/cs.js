@@ -84,7 +84,7 @@ function setPaneSizes() {
    console.log('adjust cs panels');
    var cw = contentWidth;
    var th = dojoGeom.position(dojoDom.byId('titlebar'),true).h;
-   
+
    var ch = contentHeight - th - 40;;
    var ct = contentTop + th + 10;
 
@@ -196,7 +196,7 @@ function doRowAction(e) {
   v_certId = id;
   // dojoDom.byId('selectTitlePane').innerHTML = '<tt>' + certsGrid.store.getValue(item, 'cn') + '</tt>';
   // dojoDom.byId('selectTitlePane').innerHTML = '<tt>' + e.button + '</tt>';
-  
+
   return false;
 }
 
@@ -244,7 +244,7 @@ function showCerts(name) {
    iam_bannerNotice('showing certs');
 }
 
-// 
+//
 function setSort(t) {
   require(["dojo/dom-class"], function(domClass){
     if (t=='name') {

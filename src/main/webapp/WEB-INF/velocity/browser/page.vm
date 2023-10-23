@@ -268,12 +268,12 @@ v_xsrf = '${xsrf}';
 <p>
 <ul>
 <p>
-   Certificate Service allows University of Washington DNS domain contacts to request and manage certificates for their 
+   Certificate Service allows University of Washington DNS domain contacts to request and manage certificates for their
 web servers and applications.
 <p>
  <ul>
  <li>
-  InCommon certificates are most efficacious for web servers. 
+  InCommon certificates are most efficacious for web servers.
  </li>
  <li>
    UWCA certificates are necessary for some server-to-server applications.
@@ -295,7 +295,7 @@ web servers and applications.
 </div>
 
 ## footer
- 
+
 
 <div id="footer" data-dojo-type="dijit/layout/ContentPane"  style="position:absolute;bottom:0px">
     <span id="footlogo"><a href="http:/www.uw.edu/" title="University of Washington">
@@ -323,4 +323,3 @@ web servers and applications.
 
 </body>
 </html>
-
