@@ -6,12 +6,12 @@
   <packaging>war</packaging>
   <version>2.4.4</version>
   <name>Certificate Service Webapp</name>
-  
+
   <repositories>
     <repository>
       <id>apache</id>
       <name>apache</name>
-      <url>http://maven.apache.org</url>
+      <url>https://maven.apache.org</url>
     </repository>
   </repositories>
   <dependencies>
@@ -55,7 +55,7 @@
       <artifactId>spring-web</artifactId>
       <version>5.3.22</version>
     </dependency>
-      <dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <version>5.3.22</version>
@@ -122,16 +122,18 @@
       <version>2.3</version>
     </dependency>
     <dependency>
+      <groupId>velocity-tools</groupId>
+      <artifactId>velocity-tools-view</artifactId>
+      <version>1.4</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.apache.velocity</groupId>
       <artifactId>spring-velocity-support</artifactId>
       <version>2.3</version>
     </dependency>
-    <dependency>
-      <groupId>edu.washington.iam</groupId>
-      <artifactId>uw-spring-velocity-web</artifactId>
-      <version>4.3.20.RELEASE</version>
-    </dependency>
- 
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
@@ -155,7 +157,35 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-    </plugins>   
+
+      <!-- Explicity specify war version to avoid unexpected build errors. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.1</version>
+      </plugin>
+
+      <!-- Compile spring-velocity from source -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>./deps/velocity-spring/src/main/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
     <finalName>cs</finalName>
   </build>
 

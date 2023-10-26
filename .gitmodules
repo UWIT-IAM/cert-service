@@ -1,0 +1,3 @@
+[submodule "deps/velocity-spring"]
+	path = deps/velocity-spring
+	url = https://github.com/UWIT-IAM/velocity-spring.git
