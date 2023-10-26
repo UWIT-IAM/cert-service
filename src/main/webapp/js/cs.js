@@ -84,7 +84,7 @@ function setPaneSizes() {
    console.log('adjust cs panels');
    var cw = contentWidth;
    var th = dojoGeom.position(dojoDom.byId('titlebar'),true).h;
-   
+
    var ch = contentHeight - th - 40;;
    var ct = contentTop + th + 10;
 
@@ -196,7 +196,7 @@ function doRowAction(e) {
   v_certId = id;
   // dojoDom.byId('selectTitlePane').innerHTML = '<tt>' + certsGrid.store.getValue(item, 'cn') + '</tt>';
   // dojoDom.byId('selectTitlePane').innerHTML = '<tt>' + e.button + '</tt>';
-  
+
   return false;
 }
 
@@ -244,7 +244,7 @@ function showCerts(name) {
    iam_bannerNotice('showing certs');
 }
 
-// 
+//
 function setSort(t) {
   require(["dojo/dom-class"], function(domClass){
     if (t=='name') {
@@ -344,11 +344,21 @@ function getCertList(name) {
   dijitRegistry.byId('searchResult').set('href',url);
 }
 
+/**
+ * Called on keyup in the simple search textbox.
+ *
+ * See src/main/webapp/WEB-INF/velocity/browser/page.vm
+ */
 function checkSimpleSearch(e)
 {
   console.log(e);
   if (!e) e = window.event;
   if (e.keyCode==13) showCerts(dijitRegistry.byId('simplesearch').get('value'));
+}
+
+/** Called when the simple search "Search" button is clicked. */
+function onSimpleSearchButton() {
+   showCerts(dijitRegistry.byId('simplesearch').get('value'));
 }
 
 
