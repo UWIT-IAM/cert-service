@@ -21,12 +21,15 @@ public class CBException extends Exception {
   public CBException() {
     super();
   }
+
   public CBException(String msg) {
     super(msg);
   }
+
   public CBException(String msg, Throwable cause) {
     super(msg, cause);
   }
+
   public CBException(Throwable cause) {
     super(cause);
   }

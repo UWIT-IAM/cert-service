@@ -21,12 +21,15 @@ public class WebClientException extends Exception {
   public WebClientException() {
     super();
   }
+
   public WebClientException(String msg) {
     super(msg);
   }
+
   public WebClientException(String msg, Throwable cause) {
     super(msg, cause);
   }
+
   public WebClientException(Throwable cause) {
     super(cause);
   }

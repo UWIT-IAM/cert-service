@@ -15,26 +15,20 @@
  * ========================================================================
  */
 
-
 package edu.washington.iam.tools;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.w3c.dom.Element;
-
 public interface DNSVerifier {
 
-    /**
-     * Test if a user has ownership of a domain
-     *
-     * @param id user's uwnetid
-     * @param domain to test
-     * @param return list of owners (can be null)
-     */
+  /**
+   * Test if a user has ownership of a domain
+   *
+   * @param id user's uwnetid
+   * @param domain to test
+   * @param return list of owners (can be null)
+   */
+  public boolean isOwner(String dns, String id, List<String> owners) throws DNSVerifyException;
 
-    public boolean isOwner(String dns, String id, List<String> owners) throws DNSVerifyException;
-    public boolean isOwner(String dns, String id) throws DNSVerifyException;
+  public boolean isOwner(String dns, String id) throws DNSVerifyException;
 }
