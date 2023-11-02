@@ -1,5 +1,12 @@
 # Certificate Service
 
+The certificate service allows users to find and create certs using one of our two cert provides, Incommon and UWCA.
+
+Links:
+
+*   Prod endpoint: https://iam-tools.u.washington.edu/cs/
+*   Test endpoint: https://iam-tools-test.u.washington.edu/cs/
+
 ## Configure
 
 Create cs.properties.[dev|eval] and cs.properties.prod from cs.properties.tmpl
