@@ -21,12 +21,15 @@ public class CBRegistryException extends Exception {
   public CBRegistryException() {
     super();
   }
+
   public CBRegistryException(String msg) {
     super(msg);
   }
+
   public CBRegistryException(String msg, Throwable cause) {
     super(msg, cause);
   }
+
   public CBRegistryException(Throwable cause) {
     super(cause);
   }

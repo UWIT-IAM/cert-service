@@ -18,182 +18,189 @@
 package edu.washington.iam.ws.cabroker.registry;
 
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 /* Certificate broker certificate */
 
 public class CBCertificate {
-   public int id;            // my id
-   public int ca;           // 1=uw, 2=incommon
-   public int caId;         // ca's id
-   public String cn;           // CN from cert
-   public String dn;           // DN from cert
-   public List<String> names;  // cn (1st)  + altnames
-   public List<String> formNames;  // altnames from the form
-   public String revokePass;
-   public String renewId;
-   public int status;
-   public int certType;
-   public int serverType;
-   public int lifetime;
-   public int numServer;
-   public Date issued;
-   public Date expires;
-   public List<String> owners;   // netids
-   public String pemRequest;
-   public String pemCert;
-   public String serialNumber;
-   public String remHash;
-   public CBRegistry registry;
-   public String dnC;   // country code
-   public String dnST;  // state 
-   public String dnO;   // org 
-   public int keySize;
-   public List<CBHistory> history;
-   public String requestor;
-   public String sigAlg;
+  public int id; // my id
+  public int ca; // 1=uw, 2=incommon
+  public int caId; // ca's id
+  public String cn; // CN from cert
+  public String dn; // DN from cert
+  public List<String> names; // cn (1st)  + altnames
+  public List<String> formNames; // altnames from the form
+  public String revokePass;
+  public String renewId;
+  public int status;
+  public int certType;
+  public int serverType;
+  public int lifetime;
+  public int numServer;
+  public Date issued;
+  public Date expires;
+  public List<String> owners; // netids
+  public String pemRequest;
+  public String pemCert;
+  public String serialNumber;
+  public String remHash;
+  public CBRegistry registry;
+  public String dnC; // country code
+  public String dnST; // state
+  public String dnO; // org
+  public int keySize;
+  public List<CBHistory> history;
+  public String requestor;
+  public String sigAlg;
 
-   public static final String UW_CA_KEY = "uw";
-   public static final String IC_CA_KEY = "ic";
-   public static final int UW_CA = 1;
-   public static final int IC_CA = 2;
+  public static final String UW_CA_KEY = "uw";
+  public static final String IC_CA_KEY = "ic";
+  public static final int UW_CA = 1;
+  public static final int IC_CA = 2;
 
-   public static final int CERT_STATUS_UNKNOWN = 0;
-   public static final int CERT_STATUS_REQUESTED = 1;
-   public static final int CERT_STATUS_ISSUED = 2;
-   public static final int CERT_STATUS_RENEWING = 3;
-   public static final int CERT_STATUS_REVOKED = 4;
-   public static final int CERT_STATUS_EXPIRED = 5;
-   public static final int CERT_STATUS_DECLINED = 6;
-   public static final int CERT_STATUS_GONE = 7;
+  public static final int CERT_STATUS_UNKNOWN = 0;
+  public static final int CERT_STATUS_REQUESTED = 1;
+  public static final int CERT_STATUS_ISSUED = 2;
+  public static final int CERT_STATUS_RENEWING = 3;
+  public static final int CERT_STATUS_REVOKED = 4;
+  public static final int CERT_STATUS_EXPIRED = 5;
+  public static final int CERT_STATUS_DECLINED = 6;
+  public static final int CERT_STATUS_GONE = 7;
 
-   public CBCertificate() {
-      names = new Vector();
-      owners = new Vector();
-      formNames = new Vector();
-      cn = "";
-      dn = "";
-      revokePass = "";
-      renewId = "";
-      expires = null;
-      sigAlg = "unknown";
-   }
+  public CBCertificate() {
+    names = new Vector();
+    owners = new Vector();
+    formNames = new Vector();
+    cn = "";
+    dn = "";
+    revokePass = "";
+    renewId = "";
+    expires = null;
+    sigAlg = "unknown";
+  }
 
-   public int getId() {
-      return id;
-   }
-   public String getCn() {
-      return cn;
-   }
-   public String getDn() {
-      return dn;
-   }
-   public String getCleanDn() {
-      if (dn!=null) return dn.replaceAll("<","").replaceAll(">","").replaceAll("&","");
-      return null;
-   }
-  
-   public int getCaId() {
-      return caId;
-   }
-   public int getCa() {
-      return ca;
-   }
+  public int getId() {
+    return id;
+  }
 
-   public List<String> getNames() {
-      if (names.size()==0) registry.getNames(this);
-      return names;
-   }
+  public String getCn() {
+    return cn;
+  }
 
-   public List<String> getOwners() {
-      if (owners.size()==0) registry.getOwners(this);
-      return owners;
-   }
+  public String getDn() {
+    return dn;
+  }
 
-   public boolean isOwner(String id) {
-      List<String> onrs = getOwners();
-      for (int i=0;i<onrs.size();i++) if (id.equals(onrs.get(i))) return true;
-      return false;
-   }
-   public String getCaName() {
-      if (ca==1) return "UWCA";
-      if (ca==2) return "InCommon";
-      return "---";
-   }
+  public String getCleanDn() {
+    if (dn != null) return dn.replaceAll("<", "").replaceAll(">", "").replaceAll("&", "");
+    return null;
+  }
 
-   public int getStatus() {
-      return status;
-   }
+  public int getCaId() {
+    return caId;
+  }
 
-   public String getStatusText() {
-      if (status==0) return "unknown";
-      if (status==1) return "requested";
-      if (status==2) return "issued";
-      if (status==3) return "renewing";
-      if (status==4) return "revoked";
-      if (status==5) return "expired";
-      if (status==6) return "declined";
-      if (status==6) return "gone";
-      return "unknown";
-   }
+  public int getCa() {
+    return ca;
+  }
 
-   public String getPemCert() {
-      return pemCert;
-   }
-   
-   public String getSerialNumber() {
-      return serialNumber;
-   }
+  public List<String> getNames() {
+    if (names.size() == 0) registry.getNames(this);
+    return names;
+  }
 
-   public void setSerialNumber(BigInteger serialNum) {
-      StringBuilder result = new StringBuilder();
-      for (byte bb : serialNum.toByteArray()) {
-         result.append(String.format("%02x:", bb));
-      }
-      this.serialNumber = result.toString().substring(0, result.length() - 1);
-   }
+  public List<String> getOwners() {
+    if (owners.size() == 0) registry.getOwners(this);
+    return owners;
+  }
 
-   public String getRenewId() {
-      return renewId;
-   }
-   public Date getExpires() {
-      return expires;
-   }
-   public int getTerm() {
-      //returns the cert validity period in days
-      if (expires != null && issued != null) {
-         long period = expires.getTime() - issued.getTime();
-         long days = TimeUnit.DAYS.convert(period, TimeUnit.MILLISECONDS);
-         return (int) days;
-      }
-      else return 0;  //if expires or issued is missing this is probably a renewal
-   }
-   public int getKeySize() {
-      return keySize;
-   }
-   public String getSigAlg() {
-      return sigAlg;
-   }
-   public boolean isSha1() {
-      if (sigAlg.startsWith("SHA1")) return true;
-      return false;
-   }
+  public boolean isOwner(String id) {
+    List<String> onrs = getOwners();
+    for (int i = 0; i < onrs.size(); i++) if (id.equals(onrs.get(i))) return true;
+    return false;
+  }
 
+  public String getCaName() {
+    if (ca == 1) return "UWCA";
+    if (ca == 2) return "InCommon";
+    return "---";
+  }
 
-   public void updateDB() {
-      registry.updateCertificate(this);
-   }
+  public int getStatus() {
+    return status;
+  }
 
-   public List<CBHistory> getHistory() {
-      if (history==null) registry.getHistory(this);
-      return history;
-   }
+  public String getStatusText() {
+    if (status == 0) return "unknown";
+    if (status == 1) return "requested";
+    if (status == 2) return "issued";
+    if (status == 3) return "renewing";
+    if (status == 4) return "revoked";
+    if (status == 5) return "expired";
+    if (status == 6) return "declined";
+    if (status == 6) return "gone";
+    return "unknown";
+  }
 
-   public int addHistory(int status, Date date, String user) {
-      return registry.addHistory(this, status, date, user);
-   } 
+  public String getPemCert() {
+    return pemCert;
+  }
+
+  public String getSerialNumber() {
+    return serialNumber;
+  }
+
+  public void setSerialNumber(BigInteger serialNum) {
+    StringBuilder result = new StringBuilder();
+    for (byte bb : serialNum.toByteArray()) {
+      result.append(String.format("%02x:", bb));
+    }
+    this.serialNumber = result.toString().substring(0, result.length() - 1);
+  }
+
+  public String getRenewId() {
+    return renewId;
+  }
+
+  public Date getExpires() {
+    return expires;
+  }
+
+  public int getTerm() {
+    // returns the cert validity period in days
+    if (expires != null && issued != null) {
+      long period = expires.getTime() - issued.getTime();
+      long days = TimeUnit.DAYS.convert(period, TimeUnit.MILLISECONDS);
+      return (int) days;
+    } else return 0; // if expires or issued is missing this is probably a renewal
+  }
+
+  public int getKeySize() {
+    return keySize;
+  }
+
+  public String getSigAlg() {
+    return sigAlg;
+  }
+
+  public boolean isSha1() {
+    if (sigAlg.startsWith("SHA1")) return true;
+    return false;
+  }
+
+  public void updateDB() {
+    registry.updateCertificate(this);
+  }
+
+  public List<CBHistory> getHistory() {
+    if (history == null) registry.getHistory(this);
+    return history;
+  }
+
+  public int addHistory(int status, Date date, String user) {
+    return registry.addHistory(this, status, date, user);
+  }
 }
-

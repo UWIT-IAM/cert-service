@@ -21,12 +21,15 @@ public class CertificateAuthorityException extends Exception {
   public CertificateAuthorityException() {
     super();
   }
+
   public CertificateAuthorityException(String msg) {
     super(msg);
   }
+
   public CertificateAuthorityException(String msg, Throwable cause) {
     super(msg, cause);
   }
+
   public CertificateAuthorityException(Throwable cause) {
     super(cause);
   }

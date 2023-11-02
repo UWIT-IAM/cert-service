@@ -14,16 +14,16 @@ import org.springframework.web.servlet.view.velocity.VelocityConfig;
  */
 public class IamVelocityConfig implements VelocityConfig {
 
-    private VelocityEngine velocityEngine;
+  private VelocityEngine velocityEngine;
 
-    public IamVelocityConfig() {}
+  public IamVelocityConfig() {}
 
-    @Override
-    public VelocityEngine getVelocityEngine() {
-        return velocityEngine;
-    }
+  @Override
+  public VelocityEngine getVelocityEngine() {
+    return velocityEngine;
+  }
 
-    public void setVelocityEngine(VelocityEngine velocityEngine) {
-        this.velocityEngine = velocityEngine;
-    }
+  public void setVelocityEngine(VelocityEngine velocityEngine) {
+    this.velocityEngine = velocityEngine;
+  }
 }

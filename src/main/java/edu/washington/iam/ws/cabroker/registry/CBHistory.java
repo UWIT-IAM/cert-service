@@ -22,22 +22,23 @@ import java.util.Date;
 /* Certificate broker history */
 
 public class CBHistory {
-   public static final int CB_HIST_REQ = 1; 
-   public static final int CB_HIST_REN = 2; 
-   public static final int CB_HIST_REV = 3; 
+  public static final int CB_HIST_REQ = 1;
+  public static final int CB_HIST_REN = 2;
+  public static final int CB_HIST_REV = 3;
 
-   public int event;
-   public Date eventTime;
-   public String netid;
+  public int event;
+  public Date eventTime;
+  public String netid;
 
-   public int getEvent() {
-      return event;
-   }
-   public Date getEventTime() {
-      return eventTime;
-   }
-   public String getNetid() {
-      return netid;
-   }
+  public int getEvent() {
+    return event;
+  }
+
+  public Date getEventTime() {
+    return eventTime;
+  }
+
+  public String getNetid() {
+    return netid;
+  }
 }
-

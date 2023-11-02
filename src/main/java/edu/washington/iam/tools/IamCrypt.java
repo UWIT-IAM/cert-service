@@ -19,104 +19,98 @@
 
 package edu.washington.iam.tools;
 
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchProviderException;
-import javax.crypto.IllegalBlockSizeException;
+import java.security.Security;
 import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.Security;
-import java.security.Key;
-import javax.crypto.KeyGenerator;
-import javax.crypto.Cipher;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Hex;
 import org.bouncycastle.util.encoders.Base64;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class IamCrypt {
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+  static {
+    Security.addProvider(new BouncyCastleProvider());
+  }
 
-    private static String cryptKey;
+  private static String cryptKey;
   private static MessageDigest messageDigest;
   private static Key key;
   private static Cipher cipher;
   private static Base64 b64;
-  private static Logger log =  LoggerFactory.getLogger(IamCrypt.class);
-  private final static  String MDAlgorithm = "MD5";
+  private static Logger log = LoggerFactory.getLogger(IamCrypt.class);
+  private static final String MDAlgorithm = "MD5";
 
   public static void init(String secretKey) {
-     cryptKey = secretKey;
-     b64 = new Base64();
-     String key16 = secretKey + "xxxxxxxxxxxxxxxxxxxxxxx";
-     try {
-        key = new SecretKeySpec(key16.getBytes(), 0, 16, "AES");
-        cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
-        messageDigest = MessageDigest.getInstance("SHA-1");
-     } catch (NoSuchAlgorithmException e) {
-        log.error("no algorithm? " + e);
-     } catch (NoSuchProviderException e) {
-        log.error("no BC? " + e);
-     } catch (NoSuchPaddingException e) {
-        log.error("no BC? " + e);
-     }
+    cryptKey = secretKey;
+    b64 = new Base64();
+    String key16 = secretKey + "xxxxxxxxxxxxxxxxxxxxxxx";
+    try {
+      key = new SecretKeySpec(key16.getBytes(), 0, 16, "AES");
+      cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
+      messageDigest = MessageDigest.getInstance("SHA-1");
+    } catch (NoSuchAlgorithmException e) {
+      log.error("no algorithm? " + e);
+    } catch (NoSuchProviderException e) {
+      log.error("no BC? " + e);
+    } catch (NoSuchPaddingException e) {
+      log.error("no BC? " + e);
+    }
   }
 
   public static synchronized String genMD(String in) {
-     messageDigest.reset();
-     byte[] bt = in.getBytes();
-     // messageDigest.update(bt);
-     String md = new String( b64.encode(messageDigest.digest(bt)));
-     // log.debug("md of " + in + " = " + md);
-     messageDigest.reset();
-     return (md);
+    messageDigest.reset();
+    byte[] bt = in.getBytes();
+    // messageDigest.update(bt);
+    String md = new String(b64.encode(messageDigest.digest(bt)));
+    // log.debug("md of " + in + " = " + md);
+    messageDigest.reset();
+    return (md);
   }
 
   public static synchronized String encode(String in) {
-     byte[] bt = in.getBytes();
-     try {
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        String out = new String(b64.encode(cipher.doFinal(bt)));
-        // log.debug("encode: " + in + " to " + out);
-        return out;
-     } catch (InvalidKeyException e) {
-        log.error("encode: " + e);
-        return null;
-     } catch (IllegalBlockSizeException e) {
-        log.error("encode: " + e);
-        return null;
-     } catch (BadPaddingException e) {
-        log.error("encode: " + e);
-        return null;
-     }
+    byte[] bt = in.getBytes();
+    try {
+      cipher.init(Cipher.ENCRYPT_MODE, key);
+      String out = new String(b64.encode(cipher.doFinal(bt)));
+      // log.debug("encode: " + in + " to " + out);
+      return out;
+    } catch (InvalidKeyException e) {
+      log.error("encode: " + e);
+      return null;
+    } catch (IllegalBlockSizeException e) {
+      log.error("encode: " + e);
+      return null;
+    } catch (BadPaddingException e) {
+      log.error("encode: " + e);
+      return null;
+    }
   }
 
   public static synchronized String decode(String in) {
-     byte[] inb = b64.decode(in);
-     try {
-        cipher.init(Cipher.DECRYPT_MODE, key);
-        String out = new String(cipher.doFinal(inb));
-        // log.debug("decode: " + in + " to " + out);
-        return out;
-     } catch (InvalidKeyException e) {
-        log.error("encode: " + e);
-        return null;
-     } catch (IllegalBlockSizeException e) {
-        log.error("encode: " + e);
-        return null;
-     } catch (BadPaddingException e) {
-        log.error("encode: " + e);
-        return null;
-     }
+    byte[] inb = b64.decode(in);
+    try {
+      cipher.init(Cipher.DECRYPT_MODE, key);
+      String out = new String(cipher.doFinal(inb));
+      // log.debug("decode: " + in + " to " + out);
+      return out;
+    } catch (InvalidKeyException e) {
+      log.error("encode: " + e);
+      return null;
+    } catch (IllegalBlockSizeException e) {
+      log.error("encode: " + e);
+      return null;
+    } catch (BadPaddingException e) {
+      log.error("encode: " + e);
+      return null;
+    }
   }
-
 }
-

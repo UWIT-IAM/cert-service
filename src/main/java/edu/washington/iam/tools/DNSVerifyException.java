@@ -21,12 +21,15 @@ public class DNSVerifyException extends Exception {
   public DNSVerifyException() {
     super();
   }
+
   public DNSVerifyException(String msg) {
     super(msg);
   }
+
   public DNSVerifyException(String msg, Throwable cause) {
     super(msg, cause);
   }
+
   public DNSVerifyException(Throwable cause) {
     super(cause);
   }

@@ -22,5 +22,6 @@ repos:
     rev: v0.3.3
     hooks:
     # Project compiles and passes unit tests
+    -   id: maven-spotless-apply
     -   id: maven-compile
     -   id: maven-test

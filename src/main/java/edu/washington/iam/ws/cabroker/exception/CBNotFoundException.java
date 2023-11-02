@@ -21,12 +21,15 @@ public class CBNotFoundException extends Exception {
   public CBNotFoundException() {
     super();
   }
+
   public CBNotFoundException(String msg) {
     super(msg);
   }
+
   public CBNotFoundException(String msg, Throwable cause) {
     super(msg, cause);
   }
+
   public CBNotFoundException(Throwable cause) {
     super(cause);
   }

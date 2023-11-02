@@ -21,12 +21,15 @@ public class CertificateManagerException extends Exception {
   public CertificateManagerException() {
     super();
   }
+
   public CertificateManagerException(String msg) {
     super(msg);
   }
+
   public CertificateManagerException(String msg, Throwable cause) {
     super(msg, cause);
   }
+
   public CertificateManagerException(Throwable cause) {
     super(cause);
   }

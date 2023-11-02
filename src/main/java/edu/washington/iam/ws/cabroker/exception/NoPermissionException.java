@@ -21,12 +21,15 @@ public class NoPermissionException extends Exception {
   public NoPermissionException() {
     super();
   }
+
   public NoPermissionException(String msg) {
     super(msg);
   }
+
   public NoPermissionException(String msg, Throwable cause) {
     super(msg, cause);
   }
+
   public NoPermissionException(Throwable cause) {
     super(cause);
   }
