@@ -2,6 +2,9 @@
 
 The certificate service allows users to find and create certs using one of our two cert provides, Incommon and UWCA.
 
+SLO: 90% availability. This is a developer-facing tool, and callers are usually willing to wait or
+email us if any issues come up.
+
 Links:
 
 *   Prod endpoint: https://iam-tools.u.washington.edu/cs/
