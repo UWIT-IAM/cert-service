@@ -37,6 +37,7 @@ debug=0
 target=
 limit=
 gettools=1
+force=0
 
 # limited args to playbook
 OPTIND=1
@@ -56,6 +57,8 @@ while getopts 'h?l:Hvd' opt; do
        ;;
     q) gettools=0
        ;;
+    y) force=1
+       ;;
   esac
 done
 
@@ -66,6 +69,21 @@ eval product="\${$OPTIND}"
 (( OPTIND += 1 ))
 eval target="\${$OPTIND}"
 [[ -z $target ]] && usage
+
+if [[ $target =~ "prod" && force -eq 0 ]]
+then
+   target=
+   read -p "Are you sure you want to push prod? [yN] " -r -n1
+   echo
+   if [[ $REPLY =~ ^[Yy]$ ]]
+   then
+      target="prod"
+   else
+      echo "Aborting"
+      exit 1
+   fi
+fi
+
 echo "Installing $product to $target"
 playbook="install-${product}.yml"
 
@@ -92,7 +110,7 @@ playbook="install-${product}.yml"
    }
 }
 
-# run the installer 
+# run the installer
 
 vars=
 (( verb>0 )) && vars="$vars -v "
@@ -102,4 +120,3 @@ vars=
    vars="$vars -l $limit "
 }
 ansible-playbook ${playbook} $vars -i ./hosts  --extra-vars "target=${target}"
-
