@@ -18,8 +18,8 @@ repos:
     -   id: check-yaml
     -   id: check-xml
 
--   repo: https://github.com/ejba/pre-commit-maven
-    rev: v0.3.3
+-   repo: https://github.com/stea-uw/pre-commit-maven
+    rev: 3f5d775
     hooks:
     # Project compiles and passes unit tests
     -   id: maven-spotless-apply

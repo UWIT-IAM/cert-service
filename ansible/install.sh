@@ -73,7 +73,7 @@ eval target="\${$OPTIND}"
 if [[ $target =~ "prod" && force -eq 0 ]]
 then
    target=
-   read -p "Are you sure you want to push prod? [yN] " -r -n1
+   read -p "Are you sure you want to push $product to prod? [yN] " -r -n1
    echo
    if [[ $REPLY =~ ^[Yy]$ ]]
    then
