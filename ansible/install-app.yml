@@ -60,12 +60,12 @@
       group: iam-dev
       mode: 0664
       backup: true
-    register: warfile
 
     # unpack the cs.war file
   - name: unpack cs.war
-    shell: "rm -rf /data/webapps/cs; mkdir /data/webapps/cs; cd /data/webapps/cs; jar xf /data/local/wars/cs.war"
-    when: warfile.changed
+    # When unzipping, use -DD to update the last modified time of each extracted file
+    # Otherwise, the browser cache will not pick up the new version of the file!
+    shell: "rm -rf /data/webapps/cs; mkdir /data/webapps/cs; cd /data/webapps/cs; unzip -DD /data/local/wars/cs.war"
     notify:
       - restart tomcat
 
