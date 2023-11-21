@@ -17,10 +17,10 @@
   - name: check for secrets file
     stat: path="{{ cs_root }}/cs-secrets.properties"
     register: cssecrets
-  - name: fail if secrets file not found 
+  - name: fail if secrets file not found
     fail: msg="secrets file not preloaded on target"
     when: not cssecrets.stat.exists
-      
+
   # copy cs properties file
   # change restarts tomcat
   - name: copy properties file
@@ -48,10 +48,10 @@
       group: iam-dev
       mode: 0664
     notify: restart apache
-    
+
   # update the cs.war file
   - name: copy cs.war
-    copy: 
+    copy:
       src: "{{ proj_root }}/target/cs.war"
       dest: /data/local/wars/cs.war
       group: iam-dev
@@ -65,7 +65,7 @@
     notify:
       - restart tomcat
 
-    # run any handlers 
+    # run any handlers
   - meta: flush_handlers
 
   handlers:
@@ -84,6 +84,3 @@
     shell: "c=0;while [ $c -lt 20 ]; do [[ \"`curl -k -f https://localhost/tomcatmanager/text/list 2>/dev/null  | grep 'cs'`\" =~ 'cs' ]] && exit 0; let c=c+1;sleep 5; done; exit 1"
     register: wait_result
     failed_when: "wait_result.rc != 0"
-
-
-
