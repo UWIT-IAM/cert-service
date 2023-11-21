@@ -1,0 +1,8 @@
+# MIT's Sectigo REST client
+# See https://github.com/broadinstitute/python-cert_manager
+cert_manager @ git+https://github.com/stea-uw/python-cert_manager
+
+dnspython >= 2.4.2
+pylint >= 3.0.2
+python-dotenv >= 1.0.0
+requests >= 2.31.0

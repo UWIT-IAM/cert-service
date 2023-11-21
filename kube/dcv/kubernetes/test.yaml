@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dcv-batch
+spec:
+  schedule: "19 10 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: dcv-batch
+            image: uwiam/dcv-batch:latest
+            imagePullPolicy: IfNotPresent
+          restartPolicy: OnFailure
