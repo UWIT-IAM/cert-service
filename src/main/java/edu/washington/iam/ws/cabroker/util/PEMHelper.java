@@ -111,7 +111,7 @@ public final class PEMHelper {
 
     } catch (Exception e) {
       log.debug("request DN parse exception: " + e);
-      throw new CBParseException("e.getMessage()");
+      throw new CBParseException(e.getMessage());
     }
     // see if we've got alt names (in extensions)
 
@@ -136,7 +136,7 @@ public final class PEMHelper {
         }
       } catch (Exception e) {
         log.debug("ignoring request ATTR parse exception: " + e);
-        // throw new CBParseException("e.getMessage()");
+        // throw new CBParseException(e.getMessage());
       }
     }
 
@@ -154,7 +154,7 @@ public final class PEMHelper {
 
     } catch (Exception e) {
       log.debug("request KEY parse exception: " + e);
-      throw new CBParseException("e.getMessage()");
+      throw new CBParseException(e.getMessage());
     }
     return 1;
   }
