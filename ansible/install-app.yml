@@ -29,6 +29,7 @@
       dest: "{{ cs_root }}/cs.properties"
       group: iam-dev
       mode: 0664
+      backup: true
     notify: restart tomcat
 
   # update http and https config
@@ -39,6 +40,7 @@
       dest: /data/conf/apache.conf.d/http.cs
       group: iam-dev
       mode: 0664
+      backup: true
     notify: restart apache
 
   - name: copy https apache config
@@ -47,6 +49,7 @@
       dest: /data/conf/apache.conf.d/https.cs
       group: iam-dev
       mode: 0664
+      backup: true
     notify: restart apache
 
   # update the cs.war file
@@ -56,6 +59,7 @@
       dest: /data/local/wars/cs.war
       group: iam-dev
       mode: 0664
+      backup: true
     register: warfile
 
     # unpack the cs.war file
