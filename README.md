@@ -12,7 +12,8 @@ Links:
 
 ## Cloning
 
-This repo uses submodules for its dependencies, so to clone the repo use `git clone --recurse-submodules`.
+Use `git clone --recurse-submodules` to clone this repo, because it uses
+[submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 
 ## Configure
 
