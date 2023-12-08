@@ -10,13 +10,13 @@ Links:
 *   Prod endpoint: https://iam-tools.u.washington.edu/cs/
 *   Test endpoint: https://iam-tools-test.u.washington.edu/cs/
 
+## Cloning
+
+This repo uses submodules for its dependencies, so to clone the repo use `git clone --recurse-submodules`.
+
 ## Configure
 
 Create cs.properties.[dev|eval] and cs.properties.prod from cs.properties.tmpl
-
-## Dependencies
-
-See README.dependencies for information on a special step needed to prepare dependencies for the build.
 
 ## Build
 
