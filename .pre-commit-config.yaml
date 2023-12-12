@@ -6,7 +6,7 @@
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.1.0
+    rev: v4.5.0
     hooks:
     # Avoid trailing whitespace, see Java style guide
     -   id: trailing-whitespace
@@ -18,10 +18,15 @@ repos:
     -   id: check-yaml
     -   id: check-xml
 
--   repo: https://github.com/stea-uw/pre-commit-maven
-    rev: 3f5d775
+-   repo: https://github.com/ejba/pre-commit-maven
+    rev: v0.3.4
     hooks:
     # Project compiles and passes unit tests
     -   id: maven-spotless-apply
     -   id: maven-compile
     -   id: maven-test
+
+-   repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+    -   id: detect-secrets
