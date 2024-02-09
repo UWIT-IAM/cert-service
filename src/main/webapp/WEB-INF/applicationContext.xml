@@ -45,7 +45,7 @@
     <bean id="csDataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql://${cs.db.url}"/>
+        <property name="url" value="jdbc:postgresql://${cs.db.host}.${cs.db.name}"/>
         <property name="username" value="${cs.db.username}"/>
         <property name="password" value="${cs.db.password}"/>
         <property name="connectionProperties">
