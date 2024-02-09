@@ -42,11 +42,24 @@
         <property name="refreshInterval" value="1800" />
     </bean>
 
+    <bean id="csDataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://${cs.db.url}"/>
+        <property name="username" value="${cs.db.username}"/>
+        <property name="password" value="${cs.db.password}"/>
+        <property name="connectionProperties">
+            <props>
+                <prop key="sslrootcert">${cs.db.sslrootcert}</prop>
+                <prop key="sslcert">${cs.db.sslcert}</prop>
+                <prop key="sslkey">${cs.db.sslkey}</prop>
+                <prop key="sslpassword">${cs.db.sslpassword}</prop>
+            </props>
+        </property>
+    </bean>
+
     <bean id="cbRegistry" init-method="init" class="edu.washington.iam.ws.cabroker.registry.CBRegistry">
-        <property name="serverName" value="${cs.db.host}" />
-        <property name="databaseName" value="${cs.db.name}" />
-        <property name="user" value="${cs.db.user}" />
-        <property name="password" value="${cs.db.password}" />
+        <property name="dataSource" ref="csDataSource" />
     </bean>
 
 

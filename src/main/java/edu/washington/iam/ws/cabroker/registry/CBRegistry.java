@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import org.postgresql.jdbc3.Jdbc3PoolingDataSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class CBRegistry {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
 
-  private Jdbc3PoolingDataSource dataSource;
+  private DriverManagerDataSource dataSource;
   private String serverName = "localhost";
   private String databaseName = "cbregistry";
   private String user;
@@ -564,16 +565,13 @@ public class CBRegistry {
     password = v;
   }
 
+  public void setDataSource(DriverManagerDataSource dataSource) {
+    this.dataSource = dataSource;
+  }
+
   /* init */
   public void init() {
-    dataSource = new Jdbc3PoolingDataSource();
-    dataSource.setDataSourceName("CB source");
-    dataSource.setServerName(serverName);
-    dataSource.setDatabaseName(databaseName);
-    dataSource.setUser(user);
-    dataSource.setPassword(password);
-    dataSource.setMaxConnections(10);
-    log.debug("datasource initialized");
+    // No operations. The data source is now configured and set via Spring configuration.
   }
 
   public void cleanup() {}
