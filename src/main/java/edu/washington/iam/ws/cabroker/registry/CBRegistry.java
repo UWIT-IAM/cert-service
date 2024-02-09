@@ -30,7 +30,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import org.postgresql.jdbc3.Jdbc3PoolingDataSource;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +39,7 @@ public class CBRegistry {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
 
-  private DriverManagerDataSource dataSource;
+  private Jdbc3PoolingDataSource dataSource;
   private String serverName = "localhost";
   private String databaseName = "cbregistry";
   private String user;
@@ -565,7 +564,7 @@ public class CBRegistry {
     password = v;
   }
 
-  public void setDataSource(DriverManagerDataSource dataSource) {
+  public void setDataSource(Jdbc3PoolingDataSource dataSource) {
     this.dataSource = dataSource;
   }
 
