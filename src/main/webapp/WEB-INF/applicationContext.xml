@@ -52,7 +52,6 @@
         <property name="sslCert" value="${cs.db.sslcert}" />
         <property name="sslKey" value="${cs.db.sslkey}" />
         <property name="sslPassword" value="${cs.db.sslpassword}" />
-        <property name="sslfactory" value="org.postgresql.ssl.NonValidatingFactory" />
     </bean>
 
     <bean id="cbRegistry" init-method="init" class="edu.washington.iam.ws.cabroker.registry.CBRegistry">
