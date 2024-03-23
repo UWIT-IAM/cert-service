@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-import org.postgresql.jdbc3.Jdbc3PoolingDataSource;
+import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public class CBRegistry {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
 
-  private Jdbc3PoolingDataSource dataSource;
+  private DataSource dataSource;
   private String serverName = "localhost";
   private String databaseName = "cbregistry";
   private String user;
@@ -564,7 +564,7 @@ public class CBRegistry {
     password = v;
   }
 
-  public void setDataSource(Jdbc3PoolingDataSource dataSource) {
+  public void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 
