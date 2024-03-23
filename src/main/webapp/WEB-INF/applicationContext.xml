@@ -42,16 +42,12 @@
         <property name="refreshInterval" value="1800" />
     </bean>
 
-    <bean id="csDataSource" class="org.postgresql.jdbc3.Jdbc3PoolingDataSource">
-        <property name="serverName" value="${cs.db.host}" />
-        <property name="databaseName" value="${cs.db.name}" />
-        <property name="user" value="${cs.db.username}" />
-        <property name="password" value="${cs.db.password}" />
-        <property name="sslMode" value="verify-ca" />
-        <property name="sslRootCert" value="${cs.db.sslrootcert}" />
-        <property name="sslCert" value="${cs.db.sslcert}" />
-        <property name="sslKey" value="${cs.db.sslkey}" />
-        <property name="sslPassword" value="${cs.db.sslpassword}" />
+    <bean id="csDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="org.postgresql.Driver"/>
+        <property name="jdbcUrl" value="jdbc:postgresql://${cs.db.host}/${cs.db.name}?sslmode=verify-ca&amp;sslrootcert=${cs.db.sslrootcert}&amp;sslcert=${cs.db.sslcert}&amp;sslkey=${cs.db.sslkey}"/>
+        <property name="user" value="${cs.db.username}"/>
+        <property name="password" value="${cs.db.password}"/>
+        <property name="testConnectionOnCheckout" value="true"/>
     </bean>
 
     <bean id="cbRegistry" init-method="init" class="edu.washington.iam.ws.cabroker.registry.CBRegistry">
