@@ -10,12 +10,12 @@ cs.versionDate=2024-04-10
 cs.root=/data/local/cs
 
 # database parameters
-cs.db.host=35.199.173.195
+cs.db.host=34.168.149.69
 cs.db.name=certservice_eval
 cs.db.username=app_certservice_eval
-cs.db.sslrootcert=/data/local/cs/prodDb/iamtools-prod-server-ca.pem
-cs.db.sslcert=/data/local/cs/prodDb/iamtools-prod-client-cert.pem
-cs.db.sslkey=/data/local/cs/prodDb/iamtools-prod-client-key.pem.raw
+cs.db.sslrootcert=/data/local/cs/iamtools-server-ca.pem
+cs.db.sslcert=/data/local/cs/iamtools-client-cert.pem
+cs.db.sslkey=/data/local/cs/iamtools-client-key.pem.raw
 
 # remote ca parameters
 cs.uwca.url=https://certs.cac.washington.edu/rest/
