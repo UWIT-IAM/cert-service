@@ -1,6 +1,6 @@
 # get available cert types
 
-# wsdl 
+# wsdl
 from suds.client import Client
 
 from comodo_lib import ComodoSSLClient

@@ -58,14 +58,14 @@ h2 {font-family: "Helvetica","Arial",sans-serif;
     margin: 8px 0 8px 4px;
     padding: 0 0 0 0;
 }
-   
+
 h3 {font-family: "Helvetica","Arial",sans-serif;
     color: #303030;
     font-size: 1.3em;
     margin: 8px 0 8px 4px;
     padding: 0 0 0 0;
 }
-   
+
 h4 {font-family: "Helvetica","Arial",sans-serif;
     color: #303030;
     font-size: 1.1em;
@@ -99,7 +99,7 @@ fieldset .h3 {font-family: "Helvetica","Arial",sans-serif;
     margin: 6px 0 2px 4px;
     padding: 0 0 0 0;
 }
-   
+
 fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
     color: #303030;
     font-size: 1.0em;
@@ -361,7 +361,7 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
 #banner #subbanner .dijitTextBox {
     width: 120px;
 }
-    
+
 #banner #subbanner .dijitButtonNode {
     color: #000000;
     font-size: medium;
@@ -369,7 +369,7 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
     background: transparent;
     border: 2px;
 }
-    
+
 #banner #zzzsubbanner  ul li a {
     color: #000000;
     display: inline;
@@ -814,7 +814,7 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
 .tabbox .dijitTextBox {
     width: 120px;
 }
-    
+
 .tabbox .dijitButtonNode {
     color: #000000;
     font-size: medium;
@@ -822,7 +822,7 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
     background: transparent;
     border: 2px;
 }
-    
+
 .tabbox  ul {
     white-space: nowrap;
     margin: 2px 0 1px 10px;
@@ -985,7 +985,7 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
 .claro .xbutton .dijitButtonText {
    padding:0 .25em 0 .25em
 }
-   
+
 .iamtable {
     border-collapse: collapse;
     border: 0 0 0 0;
@@ -1069,7 +1069,7 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
     font-family: monospace;
     font-size:xx-small;
     color: #404000;
-}   
+}
 .iamtable .altname {
     font-style: italic;
     font-size: 1.0em;
@@ -1129,7 +1129,7 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
 }
 
 .friendlyname {
-    font-size:90% 
+    font-size:90%
 }
 
 .plaintable td a:link, td .plaintable a:visited, td .plaintable a:hover, td .plaintable a:active {
@@ -1172,11 +1172,11 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
 }
 
 .ca_uw {
-    color: #300740; 
+    color: #300740;
 }
 
 .ca_uw {
-    color: #300740; 
+    color: #300740;
 }
 .ca_ic {
     color: #004032;
@@ -1209,8 +1209,8 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
     font-family: monospace;
     font-size:.5em;
     color: #404000;
-}   
-    
+}
+
 .plainlink a:link a:visited a:active {color: #00008b;
    font-style: italic;
    text-decoration: underline;
@@ -1242,5 +1242,3 @@ fieldset .h4 {font-family: "Helvetica","Arial",sans-serif;
     margin:2px 0;
     padding:5px 0;
 }
-
-

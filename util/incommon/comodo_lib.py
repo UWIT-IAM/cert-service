@@ -2,7 +2,7 @@
 
 import sys
 
-# wsdl 
+# wsdl
 from suds.client import Client
 
 # xml parser
@@ -45,5 +45,3 @@ def getOneArg(req, argtext):
 
    if len(sys.argv)==1: return None
    return sys.argv[1]
-
-

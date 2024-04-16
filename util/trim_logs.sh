@@ -8,4 +8,3 @@ cd /logs/cs
 find . -maxdepth 1 -name 'process-*.log' -mtime +30 -delete
 
 # any other run logs?
-

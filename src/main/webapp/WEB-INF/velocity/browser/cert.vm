@@ -16,7 +16,7 @@
  *#
 
 ##
-## cert detail 
+## cert detail
 ##
 
 
@@ -111,7 +111,7 @@ $!{cert.pemCert}
        </script>
       </button>
       <button id="pkcsButton" dojoType="dijit.form.Button" type="button">
-       Get PKCS7 
+       Get PKCS7
        <script type="dojo/method" event="onClick" args="evt">
           window.location = "$root$vers/pkcs7/${cert.cn}.pkcs7?id=${cert.id}"
        </script>
@@ -153,10 +153,10 @@ $!{cert.pemCert}
   #set ( $displayEv = $dateFormatter.format($ev.eventTime) )
   <tr><td>$displayEv</td><td>
   #if ($ev.event==1)
-   Requested by 
+   Requested by
   #end
   #if ($ev.event==2)
-   Renewed by 
+   Renewed by
   #end
   #if ($ev.event==3)
    Revoked by
@@ -165,6 +165,3 @@ $!{cert.pemCert}
 #end
 </table>
 #end
-
-
-

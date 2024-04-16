@@ -36,7 +36,7 @@ def warn_expiring():
                 print(cert[1] + '\n')
 
 
-#  
+#
 # ---------------- warn main -------------------------
 #
 

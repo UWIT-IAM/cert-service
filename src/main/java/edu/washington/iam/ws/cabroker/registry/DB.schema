@@ -1,5 +1,5 @@
 --
--- certificate broker 
+-- certificate broker
 ---
 
 create table certificate (
@@ -51,4 +51,3 @@ create table db_ts (
   cert_update_time bigint
 );
 ALTER TABLE public.db_ts OWNER TO ca;
-

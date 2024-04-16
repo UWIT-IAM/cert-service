@@ -10,7 +10,7 @@ function cron_status {
 
    do
       [[ $peer < $self ]] && {
-         ct="`ssh $peer 'crontab -l' | egrep -e \"^[^#].*/$1\"`" 
+         ct="`ssh $peer 'crontab -l' | egrep -e \"^[^#].*/$1\"`"
          [[ -n $ct ]] && {
              echo "backup"
              return
@@ -36,4 +36,3 @@ function exit_if_not_master {
 function send_mail {
    echo "$3" | /usr/bin/Mail -s "$2" $1
 }
-

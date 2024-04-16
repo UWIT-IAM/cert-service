@@ -7,8 +7,8 @@ class=$1
    exit 1
 }
 
-case $class in 
-  *Exception ) 
+case $class in
+  *Exception )
      ;;
   *)   class="${class}Exception";
      ;;
@@ -51,4 +51,3 @@ public class $class extends Exception {
   }
 }
 END
-

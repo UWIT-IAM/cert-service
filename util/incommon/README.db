@@ -31,5 +31,3 @@ note the new id = 9870
 
 [ history ]
 # insert into history values (9870, 1, '07/29/2017', 'morgen');
-
-

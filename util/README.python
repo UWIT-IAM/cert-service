@@ -3,5 +3,3 @@ These tools need python3 as follows:
 $ virtualenv -p python3 env
 $ . ./env/bin/activate
 $ pip -install -r requirements.txt
-
-

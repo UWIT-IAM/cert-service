@@ -13,7 +13,7 @@ apps="cs"
 ansible_ssh_group=iam-dev
 
 
-[eval] 
+[eval]
 iamtools-test11.s.uw.edu idle_wait_sec=10 wd_cron_offset=01
 
 [eval:vars]

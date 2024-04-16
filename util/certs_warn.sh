@@ -35,5 +35,3 @@ then
 fi
 
 send_mail cert-dev@uw.edu "expire certs notices" "$certs"
-
-

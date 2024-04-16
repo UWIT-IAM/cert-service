@@ -25,5 +25,3 @@
 #set ( $nowrap = 'nowrap="nowrap"' )
 #set ( $waitCursor = 'document.body.style.cursor="wait";' )
 #set ( $defaultCursor = 'document.body.style.cursor="default";' )
-
-

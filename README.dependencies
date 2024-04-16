@@ -34,5 +34,3 @@ and configure our Maven build environments to read from that repository. However
 ever needed a local package included in our builds and we do not have a local repository solution in place. The use
 of the local cache for this is a reasonable approach for now given that this application is only built locally by
 a few users who have access to the build server.
-
-

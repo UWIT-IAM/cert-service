@@ -27,7 +27,7 @@ On the target:
    /logs/cs/
    /www/ (?)
    /data/local/cs
-  
+
 3) tomcat config
    a) configure tomcat to run as user=iamcert
    b) assure that /etc/daemons/tomcat includes: -Dcs.properties.path=file:/data/local/cs
@@ -42,17 +42,16 @@ On the target:
 Install
 --------
 
-   
+
 1) Make the package.  In base product directory:  ( with a java 1.8 compiler )
 
    $ mvn clean package
 
-2) To install the service: 
+2) To install the service:
    ( host_type = eval | prod )
-  
+
    $ ./install.sh app <host_type>
 
 3) To install the utilities:
 
    $ ./install.sh util <host_type>
-

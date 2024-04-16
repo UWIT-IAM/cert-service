@@ -52,6 +52,3 @@
 
   - name: pw notify crontab
     cron: name="pwnotify" disabled={{cluster_type != 'prod'}} hour="01" minute="01" day="01" month="1,3,5,7,9,11" job="{{ cs_root }}/util/pw-notify.sh >> /dev/null 2>&1"
-
-
-

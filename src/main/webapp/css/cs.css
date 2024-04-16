@@ -31,7 +31,7 @@
 #rightsubbanner .dijitTextBox {
     width: 120px;
 }
-    
+
 #rightsubbanner .dijitButtonNode {
     color: #000000;
     font-size: 9pt;
@@ -39,7 +39,7 @@
     background: transparent;
     border: 2px;
 }
-    
+
 #rightsubbanner .sublist a {
     color: #00006b;
     font-style: normal;
@@ -72,5 +72,3 @@
     margin-top: 12px;
     margin: 6px 0 0 0;
 }
-
-

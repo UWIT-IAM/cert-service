@@ -74,7 +74,7 @@ public class WebClient {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final ReentrantReadWriteLock locker = new ReentrantReadWriteLock();
-    
+
     // connection params
     private String certFile = null;
     private String keyFile = null;
@@ -85,16 +85,16 @@ public class WebClient {
     private boolean initialized = false;
     private DocumentBuilder documentBuilder;
 
-    // 
-    private String soapHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
-        "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " + 
-          "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" " + 
-          "xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" " + 
+    //
+    private String soapHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+          "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
+          "xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" " +
           "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">" +
         "<soap:Body>";
     private String soapTrailer = "</soap:Body></soap:Envelope>";
 
-          // "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" + 
+          // "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
           // "xmlns:tns=\"http://ssl.ws.epki.comodo.com/\" " +
 
 
@@ -104,7 +104,7 @@ public class WebClient {
        connectionManager.closeIdleConnections(30, TimeUnit.SECONDS);
     }
 
-    
+
     public Element doSoapRequest(String url, String action, String body)
           throws SocketTimeoutException, WebClientException {
 
@@ -116,7 +116,7 @@ public class WebClient {
           HttpConnectionParams.setConnectionTimeout(httpParams, queryTimeLimit);
           HttpConnectionParams.setSoTimeout(httpParams, queryTimeLimit);
           DefaultHttpClient httpclient = new DefaultHttpClient((ClientConnectionManager)connectionManager, httpParams);
-          // httpclient.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false); 
+          // httpclient.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
 
           // log.debug(" url: " + url);
           // log.debug("content: [" + soapHeader + body + soapTrailer + "]");
@@ -126,14 +126,14 @@ public class WebClient {
 
           StringEntity strent= new StringEntity(soapHeader + body + soapTrailer);
           strent.setContentType("text/xml; charset=utf-8");
-          httppost.setEntity(strent); 
+          httppost.setEntity(strent);
 
           HttpResponse response = httpclient.execute(httppost);
 
           if (response.getStatusLine().getStatusCode()>=400) {
               log.error("soap error: "  + response.getStatusLine().getStatusCode() + " = " + response.getStatusLine().getReasonPhrase());
               return null;
-          } 
+          }
           HttpEntity entity = response.getEntity();
 
           // null is error - should get something
@@ -144,7 +144,7 @@ public class WebClient {
           // log.debug("got " + entity.getContentLength() + " bytes");
           // parse response text
           Document doc = documentBuilder.parse(entity.getContent());
-          
+
           Element ele = XMLHelper.getElementByName(doc.getDocumentElement(), "Body");
           if (ele == null) {
              log.error("no body element");
@@ -293,7 +293,7 @@ public class WebClient {
           String feature = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
           domFactory.setFeature(feature, false);
           documentBuilder = domFactory.newDocumentBuilder();
-    
+
        } catch (ParserConfigurationException e) {
           log.error("javax.xml.parsers.ParserConfigurationException: " + e);
        }
@@ -335,4 +335,3 @@ public class WebClient {
     }
 
 }
-

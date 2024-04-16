@@ -54,7 +54,7 @@ require([
    "dojo/dom-construct",
    "dojo/query",
    "dijit/focus",
-   "dojo/cookie", 
+   "dojo/cookie",
     "dojo/dom-geometry",
     "dojo/dom-style",
     "dojo/request/xhr",
@@ -83,9 +83,9 @@ String.prototype.trim = function () {
 }
 
 
-/** 
+/**
  ** Standard dialog and alert tools
- ** 
+ **
  **/
 
 // safe focus
@@ -117,7 +117,7 @@ function iam_hideTheDialog(d) {
 function iam_loadTheDialog(d, html) {
    var cdiv = d + 'Content';
    iam_getRequest(html, {'Accept': 'text/xml'}, 'text', function(data, args) {
-        // set the container height 
+        // set the container height
         var bx = dojoWindow.getBox();
         var bh2 = (bx.h)/2;
         var fdd = dojoDom.byId(cdiv);
@@ -190,7 +190,7 @@ function iam_bannerNotice(msg) {
       }).play();
     });
 }
-   
+
 // better alert tools
 
 // show a formatted message
@@ -224,8 +224,8 @@ function iam_makeOkXml(str) {
    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&apos;').replace(/"/g,'&quot;');
 }
 
-/** 
- **   Hash tools 
+/**
+ **   Hash tools
  **/
 
 var _hashCookie = 'iamhash';
@@ -252,7 +252,7 @@ function iam_hashSetCurrent(t, v) {
    if (n) {
       console.log('setting hash cookie');
       dojoDoc.location.hash = _hashCurrentTab + _hashCurrentValue;
-      dojoCookie(_hashCookie, '#' + _hashCurrentTab + _hashCurrentValue, {path:'/'}); 
+      dojoCookie(_hashCookie, '#' + _hashCurrentTab + _hashCurrentValue, {path:'/'});
    }
 }
 
@@ -261,7 +261,7 @@ function iam_hashSetCurrent(t, v) {
 
 function iam_hashHandler(hsh) {
    console.log('iamhashhandler: ' + hsh);
-   if (_hashHandler==null) return; 
+   if (_hashHandler==null) return;
 
    if ( typeof(hsh) == 'undefined') hsh = '';
    // var h = dojoDoc.location.hash;
@@ -298,7 +298,7 @@ require(["dojo/hash", "dojo/topic"], function(hash, topic){
 
 
 
-/** 
+/**
  **    Ajax requests
  **/
 
@@ -400,7 +400,7 @@ function iam_deleteRequest(url, headers, handleas, postRequest) {
 }
 
 
-/** 
+/**
  ** Basic window part sizing
  ** ( Index on left, display on right )
  **/
@@ -419,7 +419,7 @@ function iam_setPanelSizes() {
      var fh = dojoGeom.position(dojoDom.byId('footer'),true).h;
      console.log('vh='+v_viewport.h+' vw='+v_viewport.w+' tbh='+tbh+' bh='+bh+' fh='+fh);
 
-     var ch = v_viewport.h - tbh - bh - fh; 
+     var ch = v_viewport.h - tbh - bh - fh;
      var cw = v_viewport.w;
      var ct = tbh + bh + 30;
      console.log('ch='+ch+' cw='+cw+' ct='+ct);
@@ -475,4 +475,3 @@ function iam_set(p, v) {
    if (p=='hashCookie') _hashCookie = v;
    if (p=='hashHandler') _hashHandler = v;
 }
-

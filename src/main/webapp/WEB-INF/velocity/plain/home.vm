@@ -16,7 +16,7 @@
  *#
 
 ##
-## Template for API home page 
+## Template for API home page
 ##
 
   <div>
@@ -28,4 +28,3 @@
 
 
 <div class="status">$!{status}</div>
-

@@ -13,4 +13,3 @@ res="`python getCertTypes.py | grep 'InCommon Wildcard SSL Certificate'`"
 }
 echo "password fails"
 exit 1
-

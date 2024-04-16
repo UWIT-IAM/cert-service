@@ -37,4 +37,3 @@ certificateHelper = CertificateHelper(settings)
 owners = certificateHelper.find_dns_owners(options.dnsname)
 for owner in owners:
    print(owner)
-

@@ -16,7 +16,7 @@
  *#
 
 ##
-## new incommon request 
+## new incommon request
 ##
 
 ## InCommon cert request
@@ -26,7 +26,7 @@
 
  <tr><th colspan="3">Request InCommon certificate</th></tr>
  <tr><td title="The PEM text of yout certificate request">CSR (PEM)</td>
-    <td><input class="csrbox" label="iclabel" title="ictitle"  id="ic_csr" rows="6" cols="66" dojoType="dijit.form.SimpleTextarea" 
+    <td><input class="csrbox" label="iclabel" title="ictitle"  id="ic_csr" rows="6" cols="66" dojoType="dijit.form.SimpleTextarea"
           style="border: 1px inset #202020;">
         </input></td>
      <td></tr>
@@ -116,4 +116,3 @@
 <div id="icResult"></div>
 
 </div>
-

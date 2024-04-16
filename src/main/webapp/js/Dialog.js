@@ -125,10 +125,10 @@ define([
                  });
               } else console.log('over node not found');
             }
-            
+
             // show and position
             this.inherited(arguments);
-            
+
             if (placeNode!=null) {
                ds.set(this.domNode, {
                   right: '40px'
@@ -137,7 +137,7 @@ define([
             var dw = dp.position(this.domNode,true).w;
             var dx = dp.position(this.domNode,true).x;
             console.log('dialog show complete x=' + dx + ' w=' + dw);
- 
+
             // drop buttons if not wanted
             if (this.submitLabel=='') {
                ds.set(this.submitButtonNode, {
@@ -160,4 +160,3 @@ define([
          }
    });
 });
-

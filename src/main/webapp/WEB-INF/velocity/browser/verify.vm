@@ -29,7 +29,7 @@
        <script type="dojo/on" data-dojo-event="keyup" args="evt">
          checkDnsLookup();
        </script>
-         
+
         </input></td>
   </tr>
   <tr><td>Status</td>
@@ -44,4 +44,3 @@
        </script>
       </button>
 </div>
-
