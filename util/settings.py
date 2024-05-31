@@ -19,7 +19,7 @@ def init(props, secrets):
     cp = configparser.RawConfigParser()
     cp.read_file(pfp)
     db_access = 'host=%s dbname=%s user=%s password=%s' % \
-                (cp.get('base', 'cs.db.host'), cp.get('base', 'cs.db.name'), cp.get('base', 'cs.db.user'),
+                (cp.get('base', 'cs.db.host'), cp.get('base', 'cs.db.name'), cp.get('base', 'cs.db.username'),
                  cp.get('secrets', 'cs.db.password'))
     http_cert_file = cp.get('base', 'cs.webclient.certFile')
     http_key_file = cp.get('base', 'cs.webclient.keyFile')
