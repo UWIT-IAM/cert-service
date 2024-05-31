@@ -18,9 +18,11 @@ def init(props, secrets):
     pfp = io.StringIO('[base]\n' + open(props, 'r').read() + '\n[secrets]\n' + open(secrets, 'r').read())
     cp = configparser.RawConfigParser()
     cp.read_file(pfp)
-    db_access = 'host=%s dbname=%s user=%s password=%s' % \
+    ssl_key = cp.get('base', 'cs.db.sslkey').replace('.raw', '')
+    db_access = 'host=%s dbname=%s user=%s password=%s sslkey=%s sslcert=%s sslrootcert=%s sslmode=require' % \
                 (cp.get('base', 'cs.db.host'), cp.get('base', 'cs.db.name'), cp.get('base', 'cs.db.username'),
-                 cp.get('secrets', 'cs.db.password'))
+                 cp.get('secrets', 'cs.db.password'), ssl_key, cp.get('base', 'cs.db.sslcert'),
+                 cp.get('base', 'cs.db.sslrootcert'))
     http_cert_file = cp.get('base', 'cs.webclient.certFile')
     http_key_file = cp.get('base', 'cs.webclient.keyFile')
     gws_url_template = cp.get('base', 'cs.gws.urltemplate')
