@@ -1,6 +1,6 @@
-python-dateutil
-psycopg2
-psycopg2-binary
-urllib3
-six
-suds-py3
+psycopg2-binary==2.8.6
+python-dateutil==2.8.1
+six==1.15.0
+suds-jurko==0.6
+suds-py3==1.4.1.0
+urllib3==1.25.10
