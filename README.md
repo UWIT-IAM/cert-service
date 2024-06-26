@@ -7,8 +7,8 @@ email us if any issues come up.
 
 Links:
 
-*   Prod endpoint: https://iam-tools.u.washington.edu/cs/
-*   Test endpoint: https://iam-tools-test.u.washington.edu/cs/
+* Prod endpoint: <https://iam-tools.u.washington.edu/cs/>
+* Test endpoint: <https://iam-tools-test.u.washington.edu/cs/>
 
 ## Cloning
 
@@ -21,27 +21,28 @@ Create cs.properties.[dev|eval] and cs.properties.prod from cs.properties.tmpl
 
 ## Build
 
-```
-$> mvn clean compile package
+```bash
+mvn clean compile package
 ```
 
 ## Install
 
-```
-$> cd ansible
+Get access to SSH into the `iamcert` user with an SSH key, then run:
 
+```bash
+cd ansible
 # see the README for configuration steps
-
-$> ./install.sh -h (target)
+./install.sh -h (target)
 ```
 
 ## tools install
 
-```
-$> cd util
+Get access to SSH into the `iamcert` user with an SSH key, then run:
 
-#see the README for configuration steps
-$> ./install.sh -h (target)
+```bash
+cd util
+# see the README for configuration steps
+./install.sh -h (target)
 ```
 
 ## Best practices
