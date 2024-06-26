@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout "recursive" config so we compile in `deps/velocity-spring`
     - uses: actions/checkout@v3
       with:
         submodules: recursive
